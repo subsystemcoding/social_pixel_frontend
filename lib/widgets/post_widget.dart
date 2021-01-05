@@ -8,6 +8,7 @@ class PostWidget extends StatelessWidget {
   final String caption;
   final List<ImageProvider<Object>> otherUsers;
   final String status;
+  final String gpsTag;
 
   const PostWidget({
     Key key,
@@ -18,6 +19,7 @@ class PostWidget extends StatelessWidget {
     this.status,
     this.caption,
     this.userName,
+    this.gpsTag,
   }) : super(key: key);
 
   @override
@@ -46,6 +48,7 @@ class PostWidget extends StatelessWidget {
           SizedBox(
             height: 12.0,
           ),
+          getGpsTag(text: this.gpsTag),
           getCaption(context),
           SizedBox(
             height: 12.0,
@@ -79,7 +82,7 @@ class PostWidget extends StatelessWidget {
             Text(
               this.userName,
               textAlign: TextAlign.left,
-              style: Theme.of(context).primaryTextTheme.headline2,
+              style: Theme.of(context).primaryTextTheme.headline3,
             ),
             Text(
               datePosted,
@@ -194,6 +197,25 @@ class PostWidget extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: children,
+    );
+  }
+
+  Widget getGpsTag({String text}) {
+    return Container(
+      height: 50,
+      alignment: Alignment.centerRight,
+      child: Row(
+        children: [
+          Icon(Icons.location_pin, color: Colors.blue),
+          SizedBox(
+            width: 4,
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: 16.0, color: Colors.blue),
+          )
+        ],
+      ),
     );
   }
 }

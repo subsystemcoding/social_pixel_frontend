@@ -19,7 +19,8 @@ class PostManagement {
               "https://png.pngtree.com/thumb_back/fh260/background/20190827/pngtree-random-energy-wave-background-image_307670.jpg"
             ],
             status: "76 upvotes   2 comments",
-            caption: "Ugly dog i found on my strret."),
+            caption: "Ugly dog i found on my strret.",
+            gpsTag: "Abu Dhabi"),
         Post(
             postId: 3,
             userName: "Benjamin",
@@ -34,7 +35,8 @@ class PostManagement {
               "https://www.computerhope.com/jargon/r/random-dice.jpg"
             ],
             status: "94562 upvotes   456 comments",
-            caption: "Believe or not, I ate this guy"),
+            caption: "Believe or not, I ate this guy",
+            gpsTag: "Dubai"),
       ];
     });
   }

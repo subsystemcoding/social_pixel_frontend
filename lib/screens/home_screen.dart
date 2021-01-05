@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     final postBloc = BlocProvider.of<PostBloc>(context);
     postBloc.add(GetPost());
     return Scaffold(
-      appBar: MenuBar() as PreferredSizeWidget,
+      appBar: MenuBar().appbar,
       bottomNavigationBar: BottomNavBar(),
       body: Container(
         child: Column(
@@ -74,6 +74,7 @@ class HomeScreen extends StatelessWidget {
               .toList(),
           status: post.status,
           caption: post.caption,
+          gpsTag: post.gpsTag,
         );
       },
     );
