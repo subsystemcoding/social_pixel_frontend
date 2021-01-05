@@ -20,7 +20,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     if (event is GetMessage) {
       List<Message> messages = await messageManagement.fetchMessages();
       yield MessageLoaded(messages);
-    } else if (event is PostMessage) {}
+    } else if (event is PostMessage) {
+      yield MessageSent();
+    }
     // TODO: implement mapEventToState
   }
 }
