@@ -18,14 +18,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 28.0),
-              child: Text(
-                "Home",
-                textAlign: TextAlign.left,
-                style: Theme.of(context).primaryTextTheme.headline1,
-              ),
-            ),
+            MenuBar().titleBar(context, title: "Home"),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () {

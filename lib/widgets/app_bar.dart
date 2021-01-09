@@ -15,6 +15,17 @@ class MenuBar {
     ),
   );
 
+  Widget titleBar(BuildContext context, {String title = "Home"}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 28.0),
+      child: Text(
+        title,
+        textAlign: TextAlign.left,
+        style: Theme.of(context).primaryTextTheme.headline1,
+      ),
+    );
+  }
+
   AppBar messageAppBar(BuildContext context,
       {ImageProvider<Object> image, String username}) {
     return AppBar(
