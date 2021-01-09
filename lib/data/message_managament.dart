@@ -3,6 +3,12 @@ import 'package:socialpixel/data/models/message.dart';
 class MessageManagement {
   MessageManagement();
 
+  Future<List<Message>> fetchUserList() {
+    return Future.delayed(Duration(seconds: 1), () {
+      return [];
+    });
+  }
+
   Future<List<Message>> fetchMessages() {
     return Future.delayed(Duration(seconds: 1), () {
       return [
