@@ -20,3 +20,8 @@ class PostError extends PostState {
   final String message;
   PostError(this.message);
 }
+
+class GamePostLoaded extends PostState {
+  final List<Game> games;
+  GamePostLoaded(this.games);
+}

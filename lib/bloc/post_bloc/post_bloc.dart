@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/post_management.dart';
 
@@ -18,13 +19,22 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     PostEvent event,
   ) async* {
     yield PostLoading();
-    if (event is GetPost) {
-      try {
+
+    try {
+      if (event is GetPost) {
         final posts = await postManagement.fetchPosts();
         yield PostLoaded(posts);
-      } catch (e) {
-        yield PostError("Could not find posts");
+      } else if (event is GetPostAndGame) {
+        final posts = await postManagement.fetchPosts();
+        yield PostLoaded(posts);
+        final games = await postManagement.fetchGamePosts();
+        yield GamePostLoaded(games);
+      } else if (event is GetGame) {
+        final games = await postManagement.fetchGamePosts();
+        yield GamePostLoaded(games);
       }
+    } catch (e) {
+      yield PostError("Could not find posts");
     }
     // TODO: implement mapEventToState
   }
