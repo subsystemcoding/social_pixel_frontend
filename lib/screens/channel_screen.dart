@@ -7,7 +7,6 @@ import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/game_widget.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
-import 'package:socialpixel/widgets/sliver_header.dart';
 
 class ChannelScreen extends StatelessWidget {
   final ImageProvider<Object> coverImage;

@@ -82,7 +82,7 @@ class PostWidget extends StatelessWidget {
             Text(
               this.userName,
               textAlign: TextAlign.left,
-              style: Theme.of(context).primaryTextTheme.headline3,
+              style: Theme.of(context).primaryTextTheme.headline4,
             ),
             Text(
               datePosted,
