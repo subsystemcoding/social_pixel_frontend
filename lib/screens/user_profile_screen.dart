@@ -9,6 +9,7 @@ class UserProfileScreen extends StatelessWidget {
   final bool isVerified;
   final String points;
   final String followers;
+  final bool isUser;
   const UserProfileScreen({
     Key key,
     this.coverImage,
@@ -18,6 +19,7 @@ class UserProfileScreen extends StatelessWidget {
     this.isVerified = true,
     this.points = '0',
     this.followers,
+    this.isUser = false,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,9 @@ class UserProfileScreen extends StatelessWidget {
                   height: 12.0,
                 ),
                 buildButtons(context),
+                SizedBox(
+                  height: 12.0,
+                ),
                 buildPosts(context),
               ],
             ),
@@ -97,22 +102,23 @@ class UserProfileScreen extends StatelessWidget {
             ),
             isVerified
                 ? Container(
-                    decoration: BoxDecoration(
-                      color: TinyColor(Theme.of(context).accentColor)
-                          .lighten(30)
-                          .color,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
-                      ),
-                    ),
+                    margin: EdgeInsets.only(bottom: 8.0),
                     padding:
                         EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      color: TinyColor(Theme.of(context).accentColor)
+                          .lighten(35)
+                          .color,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12.0),
+                      ),
+                    ),
                     child: Text(
                       "Verified",
                       style: TextStyle(
                           fontSize: 16.0,
                           color: TinyColor(Theme.of(context).accentColor)
-                              .lighten(5)
+                              .lighten(0)
                               .color),
                     ),
                   )
@@ -139,38 +145,53 @@ class UserProfileScreen extends StatelessWidget {
   }
 
   Widget buildButtons(BuildContext context) {
+    List<Widget> buttons = isUser
+        ? [
+            buildButton(
+              context,
+              "Edit Profile",
+              primaryColor:
+                  TinyColor(Theme.of(context).accentColor).lighten(10).color,
+              backgroundColor:
+                  TinyColor(Theme.of(context).accentColor).lighten(38).color,
+            ),
+            buildButton(context, "Stats"),
+          ]
+        : [
+            buildButton(context, "Follow"),
+            buildButton(context, "Message"),
+            buildButton(context, "Stats"),
+          ];
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 28.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         //mainAxisSize: MainAxisSize.min,
-        children: [
-          buildButton(context, "Follow"),
-          buildButton(context, "Message"),
-          buildButton(context, "Stats"),
-        ],
+        children: buttons,
       ),
     );
   }
 
-  Widget buildButton(
-    BuildContext context,
-    String text,
-  ) {
-    return TextButton(
-      onPressed: () {},
-      style: TextButton.styleFrom(
-        primary: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).accentColor,
-        textStyle: Theme.of(context).primaryTextTheme.subtitle2,
-        minimumSize: Size(100, 0),
-        //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25.0),
+  Widget buildButton(BuildContext context, String text,
+      {Color primaryColor, Color backgroundColor}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      child: TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(
+          primary: primaryColor ?? Theme.of(context).primaryColor,
+          backgroundColor: backgroundColor ?? Theme.of(context).accentColor,
+          textStyle: Theme.of(context).primaryTextTheme.subtitle1,
+          minimumSize: Size(100, 0),
+          //padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
         ),
-      ),
-      child: Text(
-        text,
+        child: Text(
+          text,
+        ),
       ),
     );
   }
@@ -216,9 +237,12 @@ class UserProfileScreen extends StatelessWidget {
     return Expanded(
       child: AspectRatio(
         aspectRatio: 1,
-        child: Image(
-          fit: BoxFit.cover,
-          image: image,
+        child: Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: Image(
+            fit: BoxFit.cover,
+            image: image,
+          ),
         ),
       ),
     );
