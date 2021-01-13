@@ -107,8 +107,11 @@ class MessageListScreen extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(25.0),
+              ),
+            ),
             padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
             child: Text(
               notification,
