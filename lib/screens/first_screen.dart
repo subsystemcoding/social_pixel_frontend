@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:socialpixel/widgets/RaisedTextButton.dart';
+import 'package:socialpixel/widgets/raised_container.dart';
 
 class FirstScreen extends StatelessWidget {
   const FirstScreen({Key key}) : super(key: key);
@@ -31,62 +31,41 @@ class FirstScreen extends StatelessWidget {
           SizedBox(
             height: 60,
           ),
-          RaisedTextButton(
-            backgroundColor: Theme.of(context).accentColor,
-            textColor: Theme.of(context).primaryColor,
-            text: "Login",
+          RaisedContainer(
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  backgroundColor: Theme.of(context).accentColor,
+                  primary: Theme.of(context).primaryColor),
+              child: Text(
+                "Login",
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {},
+            ),
           ),
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 28.0),
-          //   child: TextButton(
-          //     style: TextButton.styleFrom(
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(25.0),
-          //         ),
-          //         backgroundColor: Theme.of(context).accentColor,
-          //         primary: Theme.of(context).primaryColor),
-          //     child: Text(
-          //       "Login",
-          //       style: TextStyle(fontSize: 20),
-          //     ),
-          //     onPressed: () {},
-          //   ),
-          // ),
           SizedBox(
             height: 20,
           ),
-          RaisedTextButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            textColor: Theme.of(context).accentColor,
-            text: "Register",
+          RaisedContainer(
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  primary: Theme.of(context).accentColor),
+              child: Text(
+                "Register",
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {},
+            ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 28.0),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(25.0),
-          //         boxShadow: [
-          //           BoxShadow(
-          //             color: Colors.grey[300],
-          //             blurRadius: 20.0,
-          //             spreadRadius: 5.0,
-          //           )
-          //         ]),
-          //     child: TextButton(
-          //       style: TextButton.styleFrom(
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(25.0),
-          //           ),
-          //           primary: Theme.of(context).accentColor,
-          //           backgroundColor: Theme.of(context).primaryColor),
-          //       child: Text(
-          //         "Register",
-          //         style: TextStyle(fontSize: 20),
-          //       ),
-          //       onPressed: () {},
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
