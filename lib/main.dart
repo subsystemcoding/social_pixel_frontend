@@ -3,9 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/screens/channel_screen.dart';
+import 'package:socialpixel/screens/first_screen.dart';
+import 'package:socialpixel/screens/forget_screen.dart';
 import 'package:socialpixel/screens/home_screen.dart';
+import 'package:socialpixel/screens/leaderboard_screen.dart';
+import 'package:socialpixel/screens/login_screen.dart';
 import 'package:socialpixel/screens/message_list_screen.dart';
 import 'package:socialpixel/screens/message_screen.dart';
+import 'package:socialpixel/screens/register_screen.dart';
+import 'package:socialpixel/screens/search_screen.dart';
+import 'package:socialpixel/screens/user_profile_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,6 +32,7 @@ class MyApp extends StatelessWidget {
         disabledColor: Color(0x1a7041ee),
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        //Special case thems
         textTheme: TextTheme(
           bodyText1: TextStyle(
               fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
@@ -37,15 +45,21 @@ class MyApp extends StatelessWidget {
           headline1: TextStyle(
               fontSize: 36.0, fontWeight: FontWeight.w700, color: Colors.black),
           headline2: TextStyle(
-              fontSize: 24.0, fontWeight: FontWeight.w500, color: Colors.black),
+              fontSize: 24.0, fontWeight: FontWeight.w700, color: Colors.black),
           headline3: TextStyle(
-              fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.black),
+              fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.black),
           headline4: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),
+              fontSize: 16.0, fontWeight: FontWeight.w700, color: Colors.black),
           subtitle1: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
-              color: Color(0xff9597a1)),
+            fontSize: 14.0,
+            fontWeight: FontWeight.w400,
+            color: Color(0xff9597a1),
+          ),
+          subtitle2: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w400,
+            color: Color(0xff9597a1),
+          ),
           bodyText1: TextStyle(
               fontSize: 18, fontWeight: FontWeight.w400, color: Colors.black),
           bodyText2: TextStyle(
@@ -68,14 +82,7 @@ class MyApp extends StatelessWidget {
             create: (context) => MessageBloc(),
           ),
         ],
-        child: ChannelScreen(
-          coverImage: NetworkImage(
-              "https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/"),
-          avatarImage: NetworkImage(
-              "https://miro.medium.com/max/5000/1*jFyawcsqoYctkTuZg6wQ1A.jpeg"),
-          title: "Muda channel",
-          description: "This channel for mudas and no one elses",
-        ),
+        child: ForgetScreen(),
       ),
     );
   }
