@@ -7,6 +7,7 @@ import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/game_widget.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
+import 'package:socialpixel/widgets/tabbar.dart';
 
 class ChannelScreen extends StatelessWidget {
   final ImageProvider<Object> coverImage;
@@ -41,14 +42,14 @@ class ChannelScreen extends StatelessWidget {
                 //floating: true,
                 //pinned: true,
                 flexibleSpace: buildImages(context),
-                bottom: TabBar(
-                  labelPadding: EdgeInsets.symmetric(vertical: 16.0),
-                  tabs: [Text("Posts"), Text("Rooms")],
-                  labelStyle: Theme.of(context).tabBarTheme.labelStyle,
-                  unselectedLabelStyle:
-                      Theme.of(context).tabBarTheme.unselectedLabelStyle,
+                bottom: CustomTabBar().tabBar(
+                  context,
+                  tabs: [
+                    Text("Posts"),
+                    Text("Rooms"),
+                  ],
                 ),
-              )
+              ),
               // title: Column(
               //   children: [
               // buildImages(context),

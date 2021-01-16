@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/search_bar.dart';
 
 class MessageListScreen extends StatelessWidget {
   const MessageListScreen({Key key}) : super(key: key);
@@ -14,36 +15,7 @@ class MessageListScreen extends StatelessWidget {
         children: [
           MenuBar().titleBar(context, title: "Messages"),
           SizedBox(height: 16.0),
-          Container(
-            height: 40,
-            margin: EdgeInsets.symmetric(horizontal: 28.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              color: Color(0x199597a1),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 12.0,
-                ),
-                Icon(
-                  Icons.search_outlined,
-                  color: Colors.grey,
-                ),
-                SizedBox(
-                  width: 8.0,
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Search",
-                        hintStyle: TextStyle(color: Colors.grey)),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          SearchBar(),
           SizedBox(height: 24.0),
           Expanded(
             child: Container(
