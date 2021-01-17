@@ -94,6 +94,9 @@ class MessageListScreen extends StatelessWidget {
           )
         ],
       ),
+      onTap: () {
+        Navigator.of(context).pushNamed('/message');
+      },
     );
   }
 }

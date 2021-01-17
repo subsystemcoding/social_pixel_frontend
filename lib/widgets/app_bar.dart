@@ -32,14 +32,6 @@ class MenuBar {
       toolbarHeight: 100.0,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: Padding(
-        padding: const EdgeInsets.only(top: 24.0, left: 24.0),
-        child: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
-          size: 40.0,
-        ),
-      ),
       title: Padding(
         padding: const EdgeInsets.only(top: 24.0, left: 24.0),
         child: Row(

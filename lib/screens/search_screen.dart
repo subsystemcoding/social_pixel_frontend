@@ -106,67 +106,72 @@ class SearchScreen extends StatelessWidget {
     ImageProvider<Object> image,
     bool isVerified = false,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: image,
-            radius: 25,
-          ),
-          SizedBox(
-            width: 12.0,
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      username,
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).primaryTextTheme.headline4,
-                    ),
-                    isVerified
-                        ? Container(
-                            margin: EdgeInsets.only(bottom: 8.0),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2.0, horizontal: 8.0),
-                            decoration: BoxDecoration(
-                              color: TinyColor(Theme.of(context).accentColor)
-                                  .lighten(35)
-                                  .color,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12.0),
-                              ),
-                            ),
-                            child: Text(
-                              "Verified",
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  color:
-                                      TinyColor(Theme.of(context).accentColor)
-                                          .lighten(0)
-                                          .color),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-                Text(
-                  description,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: true,
-                  style: Theme.of(context).primaryTextTheme.bodyText2,
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/profile');
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: image,
+              radius: 25,
             ),
-          ),
-        ],
+            SizedBox(
+              width: 12.0,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        username,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).primaryTextTheme.headline4,
+                      ),
+                      isVerified
+                          ? Container(
+                              margin: EdgeInsets.only(bottom: 8.0),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 2.0, horizontal: 8.0),
+                              decoration: BoxDecoration(
+                                color: TinyColor(Theme.of(context).accentColor)
+                                    .lighten(35)
+                                    .color,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12.0),
+                                ),
+                              ),
+                              child: Text(
+                                "Verified",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color:
+                                        TinyColor(Theme.of(context).accentColor)
+                                            .lighten(0)
+                                            .color),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  Text(
+                    description,
+                    maxLines: 1,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style: Theme.of(context).primaryTextTheme.bodyText2,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -276,36 +281,41 @@ class SearchScreen extends StatelessWidget {
     ImageProvider<Object> image,
     String subscribers,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: image,
-            radius: 25,
-          ),
-          SizedBox(
-            width: 12.0,
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  channelName,
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).primaryTextTheme.headline4,
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Text(subscribers + " subscribers",
-                    style: Theme.of(context).primaryTextTheme.subtitle2),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/channel');
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: image,
+              radius: 25,
             ),
-          ),
-        ],
+            SizedBox(
+              width: 12.0,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    channelName,
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).primaryTextTheme.headline4,
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(subscribers + " subscribers",
+                      style: Theme.of(context).primaryTextTheme.subtitle2),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
