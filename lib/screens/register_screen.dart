@@ -7,6 +7,10 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
       backgroundColor: Color(0xfffafbfd),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,7 +50,7 @@ class RegisterScreen extends StatelessWidget {
                   backgroundColor: Theme.of(context).accentColor,
                   primary: Theme.of(context).primaryColor),
               child: Text(
-                "Login",
+                "Register",
                 style: TextStyle(fontSize: 20),
               ),
               onPressed: () {},

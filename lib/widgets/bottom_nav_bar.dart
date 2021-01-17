@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key key}) : super(key: key);
+  final String currentRoute;
+  const BottomNavBar({
+    Key key,
+    this.currentRoute,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,36 +18,78 @@ class BottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(
-            Icons.home_outlined,
-            color: Colors.white,
-            size: 28,
+          GestureDetector(
+            child: Icon(
+              Icons.home_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              if (currentRoute != '/home') {
+                Navigator.of(context).pushNamed('/home');
+              }
+            },
           ),
-          Icon(
-            Icons.search_outlined,
-            color: Colors.white,
-            size: 28,
+          GestureDetector(
+            child: Icon(
+              Icons.search_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              if (currentRoute != '/search') {
+                Navigator.of(context).pushNamed('/search');
+              }
+            },
           ),
-          Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 28,
+          GestureDetector(
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              // if (currentRoute != '/post') {
+              //   Navigator.of(context).pushNamed('/post');
+              // }
+            },
           ),
-          Icon(
-            Icons.map_outlined,
-            color: Colors.white,
-            size: 28,
+          GestureDetector(
+            child: Icon(
+              Icons.map_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              // if (currentRoute != '/map') {
+              //   Navigator.of(context).pushNamed('/map');
+              // }
+            },
           ),
-          Icon(
-            Icons.message_outlined,
-            color: Colors.white,
-            size: 28,
+          GestureDetector(
+            child: Icon(
+              Icons.message_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              if (currentRoute != '/message_list') {
+                Navigator.of(context).pushNamed('/message_list');
+              }
+            },
           ),
-          Icon(
-            Icons.notifications_outlined,
-            color: Colors.white,
-            size: 28,
-          )
+          GestureDetector(
+            child: Icon(
+              Icons.notifications_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              // if (currentRoute != '/notification') {
+              //   Navigator.of(context).pushNamed('/notification');
+              // }
+            },
+          ),
         ],
       ),
     );

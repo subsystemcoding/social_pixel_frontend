@@ -48,7 +48,9 @@ class MessageListScreen extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(
+        currentRoute: '/message_list',
+      ),
     );
   }
 

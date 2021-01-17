@@ -13,7 +13,9 @@ class HomeScreen extends StatelessWidget {
     postBloc.add(GetPost());
     return Scaffold(
       appBar: MenuBar().appbar,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(
+        currentRoute: '/home',
+      ),
       body: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
+import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 import 'package:tinycolor/tinycolor.dart';
@@ -11,6 +12,9 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MenuBar().appbar,
+      bottomNavigationBar: BottomNavBar(
+        currentRoute: '/search',
+      ),
       body: DefaultTabController(
         length: 3,
         child: Column(

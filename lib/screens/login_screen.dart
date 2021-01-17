@@ -7,6 +7,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
       backgroundColor: Color(0xfffafbfd),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,16 +64,23 @@ class LoginScreen extends StatelessWidget {
                 "Login",
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/home');
+              },
             ),
           ),
           SizedBox(
             height: 12.0,
           ),
-          Text(
-            "Forget password?",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).primaryTextTheme.bodyText2,
+          GestureDetector(
+            child: Text(
+              "Forget password?",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed('/forget');
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -78,10 +89,15 @@ class LoginScreen extends StatelessWidget {
                 "New around here? ",
                 style: Theme.of(context).primaryTextTheme.bodyText2,
               ),
-              Text(
-                "Sign In",
-                style: TextStyle(
-                    fontSize: 16.0, color: Theme.of(context).accentColor),
+              GestureDetector(
+                child: Text(
+                  "Sign In",
+                  style: TextStyle(
+                      fontSize: 16.0, color: Theme.of(context).accentColor),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/register');
+                },
               ),
             ],
           ),

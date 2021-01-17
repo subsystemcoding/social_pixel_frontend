@@ -44,7 +44,9 @@ class FirstScreen extends StatelessWidget {
                 "Login",
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/login');
+              },
             ),
           ),
           SizedBox(
@@ -63,7 +65,9 @@ class FirstScreen extends StatelessWidget {
                 "Register",
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/register');
+              },
             ),
           ),
         ],
