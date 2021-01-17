@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/route_generator.dart';
 import 'package:socialpixel/screens/channel_screen.dart';
 import 'package:socialpixel/screens/first_screen.dart';
 import 'package:socialpixel/screens/forget_screen.dart';
@@ -73,17 +74,19 @@ class MyApp extends StatelessWidget {
             labelColor: Colors.black,
             unselectedLabelColor: Colors.grey),
       ),
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<PostBloc>(
-            create: (context) => PostBloc(),
-          ),
-          BlocProvider<MessageBloc>(
-            create: (context) => MessageBloc(),
-          ),
-        ],
-        child: ForgetScreen(),
-      ),
+      onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
+      initialRoute: '/',
+      // home: MultiBlocProvider(
+      //   providers: [
+      //     BlocProvider<PostBloc>(
+      //       create: (context) => PostBloc(),
+      //     ),
+      //     BlocProvider<MessageBloc>(
+      //       create: (context) => MessageBloc(),
+      //     ),
+      //   ],
+      //   child: ForgetScreen(),
+      // ),
     );
   }
 }
