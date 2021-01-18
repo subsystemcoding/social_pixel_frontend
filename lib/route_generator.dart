@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/bloc/profile_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/screens/channel_screen.dart';
@@ -70,17 +71,11 @@ class RouteGenerator {
         );
       case '/profile':
         return MaterialPageRoute(
-          builder: (_) => UserProfileScreen(
-            coverImage: NetworkImage(
-                "https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/"),
-            avatarImage: NetworkImage(
-                "https://miro.medium.com/max/5000/1*jFyawcsqoYctkTuZg6wQ1A.jpeg"),
-            userName: "Pikachu",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacinia ultrices vestibulum. Integer leo elit, mollis vitae turpis non, fringilla vulputate diam. Vestibulum a urna lorem. Aliquam ut laoreet nisl. Vivamus tellus sem, aliquam sed hendrerit in, consectetur ac enim. Integer felis augue, sollicitudin eget eros non, gravida euismod tellus. Mauris eget luctus orci. Nunc tincidunt tempus tortor, sit amet tincidunt orci vestibulum in.",
-            isVerified: true,
-            points: '897',
-            followers: '12',
+          builder: (_) => BlocProvider<ProfileBloc>(
+            create: (context) => ProfileBloc(),
+            child: UserProfileScreen(
+              userId: 12,
+            ),
           ),
         );
     }

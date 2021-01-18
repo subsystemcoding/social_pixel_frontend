@@ -1,61 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/bloc/profile_bloc.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  final ImageProvider<Object> coverImage;
-  final ImageProvider<Object> avatarImage;
-  final String userName;
-  final String description;
-  final bool isVerified;
-  final String points;
-  final String followers;
-  final bool isUser;
+  final int userId;
   const UserProfileScreen({
     Key key,
-    this.coverImage,
-    this.avatarImage,
-    this.userName,
-    this.description,
-    this.isVerified = true,
-    this.points = '0',
-    this.followers,
-    this.isUser = false,
+    this.userId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ProfileBloc>(context).add(GetProfile(userId));
     return Container(
       child: Scaffold(
-        body: Center(
-          child: NestedScrollView(
-            headerSliverBuilder: (context, bool) {
-              return [
-                SliverAppBar(
-                  expandedHeight: 200,
-                  flexibleSpace: buildImages(context),
+        body: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoaded) {
+              return Center(
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, bool) {
+                    return [
+                      SliverAppBar(
+                        expandedHeight: 200,
+                        flexibleSpace: buildImages(
+                          context,
+                          state.profile.userCoverImage,
+                          state.profile.userAvatarImage,
+                        ),
+                      ),
+                    ];
+                  },
+                  body: Column(
+                    children: [
+                      buildInfo(
+                        context,
+                        state.profile.username,
+                        state.profile.isVerified,
+                        state.profile.points.toString(),
+                        state.profile.followers.toString(),
+                      ),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      buildButtons(context, userId == 12),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      buildPosts(context),
+                    ],
+                  ),
                 ),
-              ];
-            },
-            body: Column(
-              children: [
-                buildInfo(context),
-                SizedBox(
-                  height: 12.0,
-                ),
-                buildButtons(context),
-                SizedBox(
-                  height: 12.0,
-                ),
-                buildPosts(context),
-              ],
-            ),
-          ),
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget buildImages(BuildContext context) {
+  Widget buildImages(
+      BuildContext context, String coverImage, String avatarImage) {
     double radius = 50;
     double coverImageHeight = 150;
     return Container(
@@ -68,7 +77,7 @@ class UserProfileScreen extends StatelessWidget {
               height: coverImageHeight,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
-              image: this.coverImage,
+              image: NetworkImage(coverImage),
               color: Color(0x66000000),
               colorBlendMode: BlendMode.darken,
             ),
@@ -77,7 +86,7 @@ class UserProfileScreen extends StatelessWidget {
             top: coverImageHeight - radius,
             left: MediaQuery.of(context).size.width / 2 - radius,
             child: CircleAvatar(
-              backgroundImage: this.avatarImage,
+              backgroundImage: NetworkImage(avatarImage),
               radius: radius,
             ),
           ),
@@ -86,7 +95,13 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget buildInfo(BuildContext context) {
+  Widget buildInfo(
+    BuildContext context,
+    String username,
+    bool isVerified,
+    String points,
+    String followers,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -94,7 +109,7 @@ class UserProfileScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              this.userName,
+              username,
               style: Theme.of(context).primaryTextTheme.headline3,
             ),
             SizedBox(
@@ -144,7 +159,7 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget buildButtons(BuildContext context) {
+  Widget buildButtons(BuildContext context, bool isUser) {
     List<Widget> buttons = isUser
         ? [
             buildButton(
