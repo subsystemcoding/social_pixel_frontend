@@ -37,7 +37,7 @@ class RouteGenerator {
       case '/channel':
         return MaterialPageRoute(
           builder: (_) => ChannelScreen(
-            channelId: 12,
+            channelId: args,
           ),
         );
       case '/leaderboard':
@@ -53,7 +53,7 @@ class RouteGenerator {
       case '/profile':
         return MaterialPageRoute(
           builder: (_) => UserProfileScreen(
-            userId: 12,
+            userId: args,
           ),
         );
     }

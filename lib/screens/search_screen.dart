@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
@@ -10,6 +14,9 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
+    BlocProvider.of<ChannelBloc>(context).add(GetChannelList());
+    BlocProvider.of<PostBloc>(context).add(GetPost());
     return Scaffold(
       appBar: MenuBar().appbar,
       bottomNavigationBar: BottomNavBar(
@@ -47,60 +54,97 @@ class SearchScreen extends StatelessWidget {
   }
 
   Widget buildPeopleSection() {
-    return ListView.builder(
-      itemCount: 5 * 2,
-      itemBuilder: (context, i) {
-        if (i % 2 == 0) {
-          return buildUser(
-            context,
-            username: "UserName",
-            description: "some description",
-            image: NetworkImage(
-                "https://i.picsum.photos/id/691/200/300.jpg?hmac=1nouilaOHm3p-SqXPrCLcCcFEtJ60GlDAwkLAHq4x-c"),
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileListLoaded) {
+          return ListView.builder(
+            itemCount: state.profiles.length * 2,
+            itemBuilder: (context, i) {
+              if (i % 2 == 0) {
+                int index = i == 0 ? i : (i ~/ 2);
+                return buildUser(
+                  context,
+                  userId: state.profiles[index].userId,
+                  username: state.profiles[index].username,
+                  description: state.profiles[index].description,
+                  image: NetworkImage(state.profiles[index].userAvatarImage),
+                );
+              }
+              return Divider();
+            },
+          );
+        } else if (state is ProfileLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
         }
-        return Divider();
+        return Container();
       },
     );
   }
 
   Widget buildPostSection() {
-    return ListView.builder(
-      itemCount: 5 * 2,
-      itemBuilder: (context, i) {
-        if (i % 2 == 0) {
-          return buildPost(
-            context,
-            username: "UserName",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacinia ultrices vestibulum. Integer leo elit, mollis vitae turpis non, fringilla vulputate diam. Vestibulum a urna lorem. Aliquam ut laoreet nisl. Vivamus tellus sem, aliquam sed hendrerit in, consectetur ac enim. Integer felis augue, sollicitudin eget eros non, gravida euismod tellus. Mauris eget luctus orci. Nunc tincidunt tempus tortor, sit amet tincidunt orci vestibulum in.",
-            image: NetworkImage(
-                "https://i.picsum.photos/id/691/200/300.jpg?hmac=1nouilaOHm3p-SqXPrCLcCcFEtJ60GlDAwkLAHq4x-c"),
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
+        if (state is PostLoaded) {
+          return ListView.builder(
+            itemCount: state.posts.length * 2,
+            itemBuilder: (context, i) {
+              if (i % 2 == 0) {
+                int index = i == 0 ? i : (i ~/ 2);
+                return buildPost(
+                  context,
+                  username: state.posts[index].userName,
+                  description: state.posts[index].caption,
+                  image: NetworkImage(state.posts[index].postImageLink),
+                );
+              }
+              return Divider();
+            },
+          );
+        } else if (state is PostLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
         }
-        return Divider();
+        return Container();
       },
     );
   }
 
   Widget buildChannelSection() {
-    return ListView.builder(
-      itemCount: 5 * 2,
-      itemBuilder: (context, i) {
-        if (i % 2 == 0) {
-          return buildChannel(context,
-              channelName: "UserName",
-              image: NetworkImage(
-                  "https://i.picsum.photos/id/691/200/300.jpg?hmac=1nouilaOHm3p-SqXPrCLcCcFEtJ60GlDAwkLAHq4x-c"),
-              subscribers: "12.4k");
+    return BlocBuilder<ChannelBloc, ChannelState>(
+      builder: (context, state) {
+        if (state is ChannelListLoaded) {
+          return ListView.builder(
+            itemCount: state.channels.length * 2,
+            itemBuilder: (context, i) {
+              if (i % 2 == 0) {
+                int index = i == 0 ? i : i ~/ 2;
+                return buildChannel(
+                  context,
+                  channelId: state.channels[index].id,
+                  channelName: state.channels[index].name,
+                  image: NetworkImage(state.channels[index].avatarImageLink),
+                  subscribers: state.channels[index].subscribers.toString(),
+                );
+              }
+              return Divider();
+            },
+          );
+        } else if (state is ChannelLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        return Divider();
+        return Container();
       },
     );
   }
 
   Widget buildUser(
     BuildContext context, {
+    int userId,
     String username,
     String description,
     ImageProvider<Object> image,
@@ -108,7 +152,10 @@ class SearchScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed('/profile');
+        Navigator.of(context).pushNamed(
+          '/profile',
+          arguments: userId,
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
@@ -277,13 +324,14 @@ class SearchScreen extends StatelessWidget {
 
   Widget buildChannel(
     BuildContext context, {
+    int channelId,
     String channelName,
     ImageProvider<Object> image,
     String subscribers,
   }) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed('/channel');
+        Navigator.of(context).pushNamed('/channel', arguments: channelId);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
