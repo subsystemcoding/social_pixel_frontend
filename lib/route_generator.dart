@@ -30,33 +30,23 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ForgetScreen());
       case '/home':
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<PostBloc>(
-            create: (context) => PostBloc(),
-            child: HomeScreen(),
-          ),
+          builder: (_) => HomeScreen(),
         );
       case '/search':
         return MaterialPageRoute(builder: (_) => SearchScreen());
       case '/message_list':
         return MaterialPageRoute(builder: (_) => MessageListScreen());
       case '/message':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider<MessageBloc>(
-                  create: (context) => MessageBloc(),
-                  child: MessageScreen(),
-                ));
+        return MaterialPageRoute(builder: (_) => MessageScreen());
       case '/channel':
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<PostBloc>(
-            create: (context) => PostBloc(),
-            child: ChannelScreen(
-              coverImage: NetworkImage(
-                  "https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/"),
-              avatarImage: NetworkImage(
-                  "https://miro.medium.com/max/5000/1*jFyawcsqoYctkTuZg6wQ1A.jpeg"),
-              title: "Muda channel",
-              description: "This channel for mudas and no one elses",
-            ),
+          builder: (_) => ChannelScreen(
+            coverImage: NetworkImage(
+                "https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/"),
+            avatarImage: NetworkImage(
+                "https://miro.medium.com/max/5000/1*jFyawcsqoYctkTuZg6wQ1A.jpeg"),
+            title: "Muda channel",
+            description: "This channel for mudas and no one elses",
           ),
         );
       case '/leaderboard':
@@ -71,18 +61,8 @@ class RouteGenerator {
         );
       case '/profile':
         return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider<PostBloc>(
-                create: (context) => PostBloc(),
-              ),
-              BlocProvider<ProfileBloc>(
-                create: (context) => ProfileBloc(),
-              ),
-            ],
-            child: UserProfileScreen(
-              userId: 12,
-            ),
+          builder: (_) => UserProfileScreen(
+            userId: 12,
           ),
         );
     }
