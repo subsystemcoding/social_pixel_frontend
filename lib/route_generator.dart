@@ -71,8 +71,15 @@ class RouteGenerator {
         );
       case '/profile':
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<ProfileBloc>(
-            create: (context) => ProfileBloc(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<PostBloc>(
+                create: (context) => PostBloc(),
+              ),
+              BlocProvider<ProfileBloc>(
+                create: (context) => ProfileBloc(),
+              ),
+            ],
             child: UserProfileScreen(
               userId: 12,
             ),

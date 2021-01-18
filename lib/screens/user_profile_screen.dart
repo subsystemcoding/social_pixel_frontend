@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/bloc/profile_bloc.dart';
+import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class UserProfileScreen extends StatelessWidget {
@@ -212,19 +213,44 @@ class UserProfileScreen extends StatelessWidget {
   }
 
   Widget buildPosts(context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          "Pictures Posted",
-          style: Theme.of(context).primaryTextTheme.headline4,
-        ),
-        SizedBox(
-          height: 8.0,
-        ),
-        buildPostsRow(),
-        buildPostsRow(),
-      ]),
+    List<Widget> posts = [];
+    BlocProvider.of<PostBloc>(context).add(GetPost());
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "Pictures Posted",
+            style: Theme.of(context).primaryTextTheme.headline4,
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Expanded(
+            child: BlocBuilder<PostBloc, PostState>(
+              builder: (context, state) {
+                if (state is PostLoaded) {
+                  print(state);
+                  posts = state.posts
+                      .map((post) =>
+                          buildPostImage(NetworkImage(post.postImageLink)))
+                      .toList();
+                } else if (state is PostLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return GridView.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 1.0,
+                  crossAxisSpacing: 1.0,
+                  children: posts,
+                );
+              },
+            ),
+          ),
+        ]),
+      ),
     );
   }
 
@@ -249,16 +275,10 @@ class UserProfileScreen extends StatelessWidget {
   }
 
   Widget buildPostImage(ImageProvider<Object> image) {
-    return Expanded(
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Image(
-            fit: BoxFit.cover,
-            image: image,
-          ),
-        ),
+    return GridTile(
+      child: Image(
+        fit: BoxFit.cover,
+        image: image,
       ),
     );
   }
