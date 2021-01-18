@@ -8,3 +8,5 @@ class GetProfile extends ProfileEvent {
 
   GetProfile(this.userId);
 }
+
+class GetProfileList extends ProfileEvent {}

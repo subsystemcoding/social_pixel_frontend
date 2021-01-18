@@ -25,6 +25,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } catch (e) {
       yield ProfileError("The profile does not exist");
     }
+    try {
+      if (event is GetProfileList) {
+        final profiles = await profileRepository.fetchProfileList();
+        yield ProfileListLoaded(profiles);
+      }
+    } catch (e) {
+      yield ProfileError("No users found");
+    }
     // TODO: implement mapEventToState
   }
 }

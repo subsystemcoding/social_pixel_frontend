@@ -13,6 +13,12 @@ class ProfileLoaded extends ProfileState {
   ProfileLoaded(this.profile);
 }
 
+class ProfileListLoaded extends ProfileState {
+  final List<Profile> profiles;
+
+  ProfileListLoaded(this.profiles);
+}
+
 class ProfileError extends ProfileState {
   final String message;
 
