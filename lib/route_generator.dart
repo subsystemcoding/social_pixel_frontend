@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:socialpixel/bloc/bloc/profile_bloc.dart';
+import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/screens/channel_screen.dart';
