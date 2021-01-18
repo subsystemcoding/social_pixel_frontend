@@ -5,17 +5,6 @@ import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/route_generator.dart';
-import 'package:socialpixel/screens/channel_screen.dart';
-import 'package:socialpixel/screens/first_screen.dart';
-import 'package:socialpixel/screens/forget_screen.dart';
-import 'package:socialpixel/screens/home_screen.dart';
-import 'package:socialpixel/screens/leaderboard_screen.dart';
-import 'package:socialpixel/screens/login_screen.dart';
-import 'package:socialpixel/screens/message_list_screen.dart';
-import 'package:socialpixel/screens/message_screen.dart';
-import 'package:socialpixel/screens/register_screen.dart';
-import 'package:socialpixel/screens/search_screen.dart';
-import 'package:socialpixel/screens/user_profile_screen.dart';
 
 void main() {
   runApp(MyApp());

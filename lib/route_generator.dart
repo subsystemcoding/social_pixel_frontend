@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
-import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
-import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/screens/channel_screen.dart';
 import 'package:socialpixel/screens/first_screen.dart';
 import 'package:socialpixel/screens/forget_screen.dart';
@@ -41,12 +37,7 @@ class RouteGenerator {
       case '/channel':
         return MaterialPageRoute(
           builder: (_) => ChannelScreen(
-            coverImage: NetworkImage(
-                "https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/"),
-            avatarImage: NetworkImage(
-                "https://miro.medium.com/max/5000/1*jFyawcsqoYctkTuZg6wQ1A.jpeg"),
-            title: "Muda channel",
-            description: "This channel for mudas and no one elses",
+            channelId: 12,
           ),
         );
       case '/leaderboard':

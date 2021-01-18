@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -10,17 +11,11 @@ import 'package:socialpixel/widgets/post_widget.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 
 class ChannelScreen extends StatelessWidget {
-  final ImageProvider<Object> coverImage;
-  final ImageProvider<Object> avatarImage;
-  final String title;
-  final String description;
+  final int channelId;
 
   const ChannelScreen({
     Key key,
-    this.coverImage,
-    this.avatarImage,
-    this.title,
-    this.description,
+    this.channelId,
   }) : super(key: key);
 
   @override
@@ -28,46 +23,64 @@ class ChannelScreen extends StatelessWidget {
     List<Post> posts = [];
     List<Game> games = [];
     final postBloc = BlocProvider.of<PostBloc>(context);
+    BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
     postBloc.add(GetPostAndGame());
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverAppBar(
-                expandedHeight: 300,
-                collapsedHeight: 260,
-                //floating: true,
-                //pinned: true,
-                flexibleSpace: buildImages(context),
-                bottom: CustomTabBar().tabBar(
-                  context,
-                  tabs: [
-                    Text("Posts"),
-                    Text("Rooms"),
+      body: BlocBuilder<ChannelBloc, ChannelState>(
+        builder: (context, state) {
+          if (state is ChannelLoaded) {
+            return DefaultTabController(
+              length: 2,
+              child: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    SliverAppBar(
+                      expandedHeight: 300,
+                      collapsedHeight: 260,
+                      //floating: true,
+                      //pinned: true,
+                      flexibleSpace: buildImages(
+                        context,
+                        NetworkImage(state.channel.coverImageLink),
+                        NetworkImage(state.channel.avatarImageLink),
+                        state.channel.name,
+                        state.channel.description,
+                      ),
+                      bottom: CustomTabBar().tabBar(
+                        context,
+                        tabs: [
+                          Text("Posts"),
+                          Text("Rooms"),
+                        ],
+                      ),
+                    ),
+                    // title: Column(
+                    //   children: [
+                    // buildImages(context),
+                    // buildInfo(context),
+                    // SizedBox(
+                    //   height: 12.0,
+                    // ),
+                    //   ],
+                    // ),
+                  ];
+                },
+                body: TabBarView(
+                  children: [
+                    buildPostSection(context),
+                    buildRooms(context),
                   ],
                 ),
               ),
-              // title: Column(
-              //   children: [
-              // buildImages(context),
-              // buildInfo(context),
-              // SizedBox(
-              //   height: 12.0,
-              // ),
-              //   ],
-              // ),
-            ];
-          },
-          body: TabBarView(
-            children: [
-              buildPostSection(context),
-              buildRooms(context),
-            ],
-          ),
-        ),
+            );
+          } else if (state is ChannelLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Container();
+        },
       ),
     );
   }
@@ -141,7 +154,13 @@ class ChannelScreen extends StatelessWidget {
     );
   }
 
-  Widget buildImages(BuildContext context) {
+  Widget buildImages(
+    BuildContext context,
+    ImageProvider<Object> coverImage,
+    ImageProvider<Object> avatarImage,
+    String title,
+    String description,
+  ) {
     double radius = 50;
     double coverImageHeight = 150;
     return Container(
@@ -154,7 +173,7 @@ class ChannelScreen extends StatelessWidget {
               height: coverImageHeight,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
-              image: this.coverImage,
+              image: coverImage,
               color: Color(0x66000000),
               colorBlendMode: BlendMode.darken,
             ),
@@ -163,32 +182,31 @@ class ChannelScreen extends StatelessWidget {
             top: coverImageHeight - radius,
             left: MediaQuery.of(context).size.width / 2 - radius,
             child: CircleAvatar(
-              backgroundImage: this.avatarImage,
+              backgroundImage: avatarImage,
               radius: radius,
             ),
           ),
           Positioned(
             top: coverImageHeight + radius,
             width: MediaQuery.of(context).size.width,
-            child: buildInfo(context),
+            child: buildInfo(context, title, description),
           ),
         ],
       ),
     );
   }
 
-  Widget buildInfo(BuildContext context) {
+  Widget buildInfo(BuildContext context, String title, String description) {
     return Column(
       children: [
         SizedBox(
           height: 12,
         ),
         Text(
-          this.title,
+          title,
           style: Theme.of(context).primaryTextTheme.headline3,
         ),
-        Text(this.description,
-            style: Theme.of(context).primaryTextTheme.subtitle1)
+        Text(description, style: Theme.of(context).primaryTextTheme.subtitle1)
       ],
     );
   }
