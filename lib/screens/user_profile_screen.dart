@@ -45,7 +45,7 @@ class UserProfileScreen extends StatelessWidget {
                       SizedBox(
                         height: 12.0,
                       ),
-                      buildButtons(context, userId == 12),
+                      buildButtons(context, userId == this.userId),
                       SizedBox(
                         height: 12.0,
                       ),
