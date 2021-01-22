@@ -1,9 +1,12 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:photofilters/photofilters.dart';
+import 'package:path/path.dart';
+import 'package:image/image.dart' as imageLib;
+import 'package:socialpixel/widgets/raised_container.dart';
 
 class PostPreviewScreen extends StatefulWidget {
   final String path;
@@ -40,32 +43,55 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
           ),
           Expanded(
             flex: 1,
-            child: Center(
-              child: ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                scrollDirection: Axis.horizontal,
-                children: [
-                  buildIcon(
-                    context,
-                    text: 'Crop',
-                    iconData: Icons.crop,
-                    onTap: () {
-                      _cropImage();
-                    },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 150,
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      buildIcon(
+                        context,
+                        text: 'Crop',
+                        iconData: Icons.crop,
+                        onTap: () {
+                          _cropImage(context);
+                        },
+                      ),
+                      buildIcon(
+                        context,
+                        text: 'Filter',
+                        iconData: Icons.filter,
+                        onTap: () {
+                          _filterImage(context);
+                        },
+                      ),
+                    ],
                   ),
-                  buildIcon(
-                    context,
-                    text: 'Filter',
-                    iconData: Icons.filter,
+                ),
+                SizedBox(
+                  height: 4.0,
+                ),
+                Center(
+                  child: RaisedContainer(
+                    color: Theme.of(context).accentColor,
+                    width: 150,
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
                   ),
-                  buildIcon(
-                    context,
-                    text: 'Home',
-                    iconData: Icons.home,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -110,7 +136,7 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
     );
   }
 
-  Future<Null> _cropImage() async {
+  Future<Null> _cropImage(BuildContext context) async {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: imageFile.path,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
@@ -130,6 +156,30 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
     if (croppedFile != null) {
       setState(() {
         imageFile = croppedFile;
+      });
+    }
+  }
+
+  Future<void> _filterImage(BuildContext context) async {
+    Map filteredImagefile = await Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => new PhotoFilterSelector(
+          title: Text("Photo Filter"),
+          appBarColor: Theme.of(context).accentColor,
+          image: imageLib.decodeImage(imageFile.readAsBytesSync()),
+          filters: presetFiltersList,
+          filename: basename(imageFile.path),
+          loader: Center(child: CircularProgressIndicator()),
+          fit: BoxFit.contain,
+          circleShape: false,
+        ),
+      ),
+    );
+    if (filteredImagefile != null &&
+        filteredImagefile.containsKey('image_filtered')) {
+      setState(() {
+        imageFile = filteredImagefile['image_filtered'];
       });
     }
   }

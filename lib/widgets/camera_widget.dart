@@ -109,12 +109,12 @@ class _CameraWidgetState extends State<CameraWidget> {
                   ),
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                child: ClipRRect(
-                  child: Image.network(
-                    "https://data4.origin.com/asset/content/dam/originx/web/app/programs/About/aboutorigin_3840x2160_battlefield1.jpg/27051ac9-d3c0-49e3-9979-3dc1058a69f5/original.jpg",
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // child: ClipRRect(
+                //   child: Image.network(
+                //     "https://data4.origin.com/asset/content/dam/originx/web/app/programs/About/aboutorigin_3840x2160_battlefield1.jpg/27051ac9-d3c0-49e3-9979-3dc1058a69f5/original.jpg",
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
               ),
               GestureDetector(
                 onTap: () async {
