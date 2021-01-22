@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
+import 'package:image/image.dart' as imageLib;
 
 class CameraWidget extends StatefulWidget {
   CameraWidget({Key key}) : super(key: key);
@@ -69,6 +73,25 @@ class _CameraWidgetState extends State<CameraWidget> {
             },
           ),
         ),
+        Positioned.fill(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Expanded(
+              child: Container(
+                color: Colors.black.withOpacity(0.3),
+              ),
+            ),
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(),
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.black.withOpacity(0.3),
+              ),
+            ),
+          ]),
+        ),
         Positioned(
           bottom: 50,
           left: 20,
@@ -97,8 +120,17 @@ class _CameraWidgetState extends State<CameraWidget> {
                 onTap: () async {
                   try {
                     await _initializeControllerFuture;
+                    //take the picture
+                    XFile xfile = await _controller.takePicture();
+                    //Fix the image rotation
+                    File file =
+                        await FlutterExifRotation.rotateImage(path: xfile.path);
 
-                    final file = await _controller.takePicture();
+                    var image = imageLib.decodeImage(file.readAsBytesSync());
+
+                    image = imageLib.copyResizeCropSquare(image, image.width);
+
+                    file.writeAsBytesSync(imageLib.encodePng(image));
 
                     //push
                     Navigator.of(context).pushNamed(
@@ -106,7 +138,7 @@ class _CameraWidgetState extends State<CameraWidget> {
                       arguments: file.path,
                     );
                   } catch (e) {
-                    throw SnackBar(content: Text("Could not take picture"));
+                    print(e);
                   }
                 },
                 child: Container(

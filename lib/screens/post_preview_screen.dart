@@ -29,10 +29,10 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            flex: 3,
+          AspectRatio(
+            aspectRatio: 1,
             child: Image.file(
               imageFile,
               fit: BoxFit.scaleDown,
@@ -113,17 +113,19 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
   Future<Null> _cropImage() async {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: imageFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
             toolbarColor: Theme.of(context).accentColor,
             toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true),
         iosUiSettings: IOSUiSettings(
           title: 'Cropper',
+          rotateButtonsHidden: false,
+          resetButtonHidden: false,
+          aspectRatioLockEnabled: true,
+          aspectRatioPickerButtonHidden: true,
         ));
     if (croppedFile != null) {
       setState(() {
