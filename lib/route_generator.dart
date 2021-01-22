@@ -64,9 +64,7 @@ class RouteGenerator {
         );
       case '/post_preview':
         return MaterialPageRoute(
-          builder: (_) => PostPreviewScreen(
-            imagePath: args,
-          ),
+          builder: (_) => PostPreviewScreen(path: args),
         );
     }
   }
