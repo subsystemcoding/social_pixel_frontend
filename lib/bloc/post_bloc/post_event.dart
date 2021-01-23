@@ -8,3 +8,9 @@ class GetPost extends PostEvent {}
 class GetPostAndGame extends PostEvent {}
 
 class GetGame extends PostEvent {}
+
+class SendPost extends PostEvent {
+  final Post post;
+
+  SendPost(this.post);
+}

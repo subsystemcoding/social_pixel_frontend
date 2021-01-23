@@ -32,6 +32,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       } else if (event is GetGame) {
         final games = await postManagement.fetchGamePosts();
         yield GamePostLoaded(games);
+      } else if (event is SendPost) {
+        final value =
+            await postManagement.sendPost(event.post, PostSending.Successful);
+        yield PostSent(value);
       }
     } catch (e) {
       yield PostError("Could not find posts");

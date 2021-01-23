@@ -25,3 +25,8 @@ class GamePostLoaded extends PostState {
   final List<Game> games;
   GamePostLoaded(this.games);
 }
+
+class PostSent extends PostState {
+  final PostSending value;
+  PostSent(this.value);
+}

@@ -1,8 +1,25 @@
+import 'dart:math';
+
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/game.dart';
 
+enum PostSending {
+  Successful,
+  Unsuccessful,
+  NoInternet,
+}
+
 class PostManagement {
-  PostManagement();
+  Random random;
+  PostManagement() {
+    random = Random();
+  }
+
+  Future<PostSending> sendPost(Post post, PostSending value) {
+    return Future.delayed(Duration(milliseconds: 500), () {
+      return value;
+    });
+  }
 
   Future<List<Game>> fetchGamePosts() {
     return Future.delayed(Duration(seconds: 1), () {
