@@ -75,11 +75,15 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                 SizedBox(
                   height: 4.0,
                 ),
-                Center(
-                  child: RaisedContainer(
-                    color: Theme.of(context).accentColor,
-                    width: 150,
-                    height: 40,
+                Container(
+                  width: 150,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
                     child: Center(
                       child: Text(
                         "Next",
@@ -89,6 +93,12 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                             fontWeight: FontWeight.w600),
                       ),
                     ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        '/post_details',
+                        arguments: this.imageFile,
+                      );
+                    },
                   ),
                 ),
               ],

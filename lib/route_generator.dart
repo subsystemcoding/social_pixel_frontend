@@ -8,6 +8,7 @@ import 'package:socialpixel/screens/leaderboard_screen.dart';
 import 'package:socialpixel/screens/login_screen.dart';
 import 'package:socialpixel/screens/message_list_screen.dart';
 import 'package:socialpixel/screens/message_screen.dart';
+import 'package:socialpixel/screens/post_details_screen.dart';
 import 'package:socialpixel/screens/post_preview_screen.dart';
 import 'package:socialpixel/screens/register_screen.dart';
 import 'package:socialpixel/screens/search_screen.dart';
@@ -65,6 +66,10 @@ class RouteGenerator {
       case '/post_preview':
         return MaterialPageRoute(
           builder: (_) => PostPreviewScreen(path: args),
+        );
+      case '/post_details':
+        return MaterialPageRoute(
+          builder: (_) => PostDetailScreen(imageFile: args),
         );
     }
   }
