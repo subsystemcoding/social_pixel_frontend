@@ -23,16 +23,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Curent App state management solution
   flutter_bloc: any
+  # Color package add more functionality
   tinycolor: ^1.0.3
   camera:
+  # Used for path generating functions for the images captured
   path:
   path_provider:
+  # Image cropper that has both cropping and rotating functionailty
   image_cropper: ^1.3.1
+  # imagelibrary providing more control of images
   image: ^2.1.19
+  # Fixes Rotation
   flutter_exif_rotation: ^0.3.2
+  # Allows reading the metadata of the picture
+  flutter_exif: ^1.0.1
   photofilters: ^2.0.1
+  # Geolocation detection
   geolocator: ^6.1.14
+  # Date and time format and usage
   intl: ^0.16.1
 
   # The following adds the Cupertino Icons font to your application.
