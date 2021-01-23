@@ -10,7 +10,13 @@ class GetPostAndGame extends PostEvent {}
 class GetGame extends PostEvent {}
 
 class SendPost extends PostEvent {
-  final Post post;
+  final File imageFile;
+  final String caption;
+  final bool addLocation;
 
-  SendPost(this.post);
+  SendPost({
+    this.imageFile,
+    this.addLocation,
+    this.caption,
+  });
 }

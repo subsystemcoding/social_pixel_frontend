@@ -16,7 +16,6 @@ class PostDetailScreen extends StatefulWidget {
 class _PostDetailScreenState extends State<PostDetailScreen> {
   bool addLocation;
   String caption;
-  String location;
 
   @override
   void initState() {
@@ -68,6 +67,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     hintText: 'Write a caption...',
                     border: InputBorder.none,
                   ),
+                  onSubmitted: (value) {
+                    setState(() {
+                      this.caption = value;
+                    });
+                  },
                 ),
               ),
               ListTile(
@@ -106,7 +110,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                   ),
                   onPressed: () {
-                    //BlocProvider.of<PostBloc>(context).add(SendPost(Post(),),);
+                    BlocProvider.of<PostBloc>(context).add(
+                      SendPost(
+                        imageFile: this.widget.imageFile,
+                        addLocation: this.addLocation,
+                        caption: caption,
+                      ),
+                    );
                   },
                 ),
               ),
