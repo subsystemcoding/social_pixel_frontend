@@ -38,7 +38,7 @@ dependencies:
   # Fixes Rotation
   flutter_exif_rotation: ^0.3.2
   # Allows reading the metadata of the picture
-  flutter_exif: ^1.0.1
+  exif: ^1.0.3
   photofilters: ^2.0.1
   # Geolocation detection
   geolocator: ^6.1.14
