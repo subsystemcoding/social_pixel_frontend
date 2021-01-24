@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:image/image.dart' as imageLib;
 
@@ -99,48 +100,19 @@ class _CameraWidgetState extends State<CameraWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 35,
-                width: 35,
-                decoration: BoxDecoration(
-                  border: Border.all(
+              // Icon to take picture from library
+              GestureDetector(
+                onTap: () => galleryPictureHandler(context),
+                child: Container(
+                  child: Icon(
+                    Icons.photo_library,
                     color: Theme.of(context).accentColor,
-                    width: 2,
+                    size: 30,
                   ),
-                  borderRadius: BorderRadius.circular(5.0),
                 ),
-                // child: ClipRRect(
-                //   child: Image.network(
-                //     "https://data4.origin.com/asset/content/dam/originx/web/app/programs/About/aboutorigin_3840x2160_battlefield1.jpg/27051ac9-d3c0-49e3-9979-3dc1058a69f5/original.jpg",
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
               ),
               GestureDetector(
-                onTap: () async {
-                  try {
-                    await _initializeControllerFuture;
-                    //take the picture
-                    XFile xfile = await _controller.takePicture();
-                    //Fix the image rotation
-                    File file =
-                        await FlutterExifRotation.rotateImage(path: xfile.path);
-
-                    var image = imageLib.decodeImage(file.readAsBytesSync());
-
-                    image = imageLib.copyResizeCropSquare(image, image.width);
-
-                    file.writeAsBytesSync(imageLib.encodePng(image));
-
-                    //push
-                    Navigator.of(context).pushNamed(
-                      "/post_preview",
-                      arguments: file.path,
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                },
+                onTap: () => takePictureHandler(context),
                 child: Container(
                   height: 50,
                   width: 50,
@@ -154,6 +126,7 @@ class _CameraWidgetState extends State<CameraWidget> {
                   ),
                 ),
               ),
+              // Icon to flip camera
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -172,5 +145,43 @@ class _CameraWidgetState extends State<CameraWidget> {
         ),
       ],
     );
+  }
+
+  void galleryPictureHandler(BuildContext context) async {
+    try {
+      var pickedFile =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+
+      Navigator.of(context).pushNamed(
+        "/post_preview",
+        arguments: pickedFile.path,
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void takePictureHandler(BuildContext context) async {
+    try {
+      await _initializeControllerFuture;
+      //take the picture
+      XFile xfile = await _controller.takePicture();
+      //Fix the image rotation
+      File file = await FlutterExifRotation.rotateImage(path: xfile.path);
+
+      var image = imageLib.decodeImage(file.readAsBytesSync());
+
+      image = imageLib.copyResizeCropSquare(image, image.width);
+
+      file.writeAsBytesSync(imageLib.encodePng(image));
+
+      //push
+      Navigator.of(context).pushNamed(
+        "/post_preview",
+        arguments: file.path,
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }
