@@ -38,7 +38,7 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
             aspectRatio: 1,
             child: Image.file(
               imageFile,
-              fit: BoxFit.scaleDown,
+              fit: BoxFit.cover,
             ),
           ),
           Expanded(
