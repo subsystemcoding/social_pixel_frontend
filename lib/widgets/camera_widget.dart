@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -168,12 +169,6 @@ class _CameraWidgetState extends State<CameraWidget> {
       XFile xfile = await _controller.takePicture();
       //Fix the image rotation
       File file = await FlutterExifRotation.rotateImage(path: xfile.path);
-
-      var image = imageLib.decodeImage(file.readAsBytesSync());
-
-      image = imageLib.copyResizeCropSquare(image, image.width);
-
-      file.writeAsBytesSync(imageLib.encodePng(image));
 
       //push
       Navigator.of(context).pushNamed(
