@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -34,8 +35,8 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AspectRatio(
-            aspectRatio: 1,
+          Container(
+            height: MediaQuery.of(context).size.width,
             child: Image.file(
               imageFile,
               fit: BoxFit.cover,
@@ -78,6 +79,7 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                 Container(
                   width: 150,
                   child: ElevatedButton(
+                    onPressed: () => onPressedNext(context),
                     style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor,
                       shape: RoundedRectangleBorder(
@@ -93,12 +95,6 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                             fontWeight: FontWeight.w600),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        '/post_details',
-                        arguments: this.imageFile,
-                      );
-                    },
                   ),
                 ),
               ],
@@ -106,6 +102,23 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void onPressedNext(BuildContext context) async {
+    var image = imageLib.decodeImage(await this.imageFile.readAsBytes());
+
+    if (image.height > image.width) {
+      print("height > width");
+      image = imageLib.copyResizeCropSquare(image, image.width);
+    } else if (image.height < image.width) {
+      print("height < width");
+      image = imageLib.copyResizeCropSquare(image, image.height);
+    }
+
+    Navigator.of(context).pushNamed(
+      '/post_details',
+      arguments: image,
     );
   }
 
