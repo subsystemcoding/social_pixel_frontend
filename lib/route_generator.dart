@@ -69,7 +69,7 @@ class RouteGenerator {
         );
       case '/post_details':
         return MaterialPageRoute(
-          builder: (_) => PostDetailScreen(imageFile: args),
+          builder: (_) => PostDetailScreen(image: args),
         );
     }
   }
