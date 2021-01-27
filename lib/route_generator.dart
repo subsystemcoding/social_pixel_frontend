@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:socialpixel/screens/post_screen/camera_screen.dart';
-import 'package:socialpixel/screens/channel_screen.dart';
-import 'package:socialpixel/screens/first_screen.dart';
-import 'package:socialpixel/screens/forget_screen.dart';
 import 'package:socialpixel/screens/home_screen.dart';
-import 'package:socialpixel/screens/leaderboard_screen.dart';
-import 'package:socialpixel/screens/login_screen.dart';
-import 'package:socialpixel/screens/message_list_screen.dart';
-import 'package:socialpixel/screens/message_screen.dart';
-import 'package:socialpixel/screens/post_screen/post_details_screen.dart';
+import 'package:socialpixel/screens/authorization_screen/login_screen.dart';
+import 'package:socialpixel/screens/authorization_screen/first_screen.dart';
+import 'package:socialpixel/screens/authorization_screen/forget_screen.dart';
+import 'package:socialpixel/screens/authorization_screen/register_screen.dart';
+import 'package:socialpixel/screens/channel_screen/channel_screen.dart';
+import 'package:socialpixel/screens/channel_screen/leaderboard_screen.dart';
+import 'package:socialpixel/screens/message_screen/message_list_screen.dart';
+import 'package:socialpixel/screens/message_screen/message_screen.dart';
+import 'package:socialpixel/screens/post_screen/camera_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_preview_screen.dart';
-import 'package:socialpixel/screens/register_screen.dart';
+import 'package:socialpixel/screens/post_screen/post_details_screen.dart';
 import 'package:socialpixel/screens/search_screen.dart';
 import 'package:socialpixel/screens/user_profile_screen.dart';
 
