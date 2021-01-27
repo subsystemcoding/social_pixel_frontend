@@ -8,6 +8,7 @@ import 'package:photofilters/photofilters.dart';
 import 'package:path/path.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:socialpixel/data/Converter.dart';
+import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/widgets/raised_container.dart';
 
 class PostPreviewScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
   File imageFile;
   bool gotInfo;
   imageLib.Image image;
+  DateTime date;
+  Location location;
 
   @override
   void initState() {
@@ -124,26 +127,11 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
 
   void getInfo() async {
     final data = await readExifFromBytes(imageLib.encodeJpg(this.image));
-    DateTime date;
-    String location;
     if (data.containsKey('Image DateTime')) {
-      date = Converter.exifToDate(data);
-      print(date.toString());
+      this.date = Converter.exifToDate(data);
     }
     if (data.containsKey('GPS GPSLatitude')) {
-      var lat = data['GPS GPSLatitude']
-          .toString()
-          .replaceAll('[', '')
-          .replaceAll(']', '')
-          .replaceAll(',', '');
-      var long = data['GPS GPSLongitude']
-          .toString()
-          .replaceAll('[', '')
-          .replaceAll(']', '')
-          .replaceAll(',', '');
-      location = '$lat $long';
-
-      print(location);
+      this.location = Converter.exifToLocation(data);
     }
 
     setState(() {
