@@ -9,10 +9,8 @@ class LoginSuccessful extends AuthState {}
 
 class LoginUnsuccessful extends AuthState {}
 
-class LoginWait extends AuthState {}
-
 class RegistrationSuccessful extends AuthState {}
 
 class RegistrationUnsuccessful extends AuthState {}
 
-class RegistrationWait extends AuthState {}
+class AuthWait extends AuthState {}
