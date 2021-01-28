@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:socialpixel/data/channel_repository.dart';
+import 'package:socialpixel/data/repos/channel_repository.dart';
 import 'package:socialpixel/data/models/channel.dart';
 
 part 'channel_event.dart';

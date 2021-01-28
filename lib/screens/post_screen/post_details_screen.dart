@@ -11,7 +11,7 @@ import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:exif/exif.dart';
-import 'package:socialpixel/data/post_management.dart';
+import 'package:socialpixel/data/repos/post_management.dart';
 
 enum LoadLocation {
   Found,

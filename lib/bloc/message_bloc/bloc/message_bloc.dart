@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:socialpixel/data/message_managament.dart';
+import 'package:socialpixel/data/repos/message_managament.dart';
 import 'package:socialpixel/data/models/message.dart';
 
 part 'message_event.dart';

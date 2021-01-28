@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:socialpixel/data/leaderboard_repository.dart';
+import 'package:socialpixel/data/repos/leaderboard_repository.dart';
 import 'package:socialpixel/data/models/leaderboard.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';

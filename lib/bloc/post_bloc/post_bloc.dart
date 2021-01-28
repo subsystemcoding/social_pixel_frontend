@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
-import 'package:socialpixel/data/post_management.dart';
+import 'package:socialpixel/data/repos/post_management.dart';
 import 'package:exif/exif.dart';
 
 part 'post_event.dart';

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:socialpixel/data/models/profile.dart';
-import 'package:socialpixel/data/profile_repository.dart';
+import 'package:socialpixel/data/repos/profile_repository.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
