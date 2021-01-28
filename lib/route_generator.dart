@@ -64,13 +64,27 @@ class RouteGenerator {
           builder: (_) => CameraScreen(),
         );
       case '/post_preview':
-        return MaterialPageRoute(
-          builder: (_) => PostPreviewScreen(path: args),
-        );
+        return MaterialPageRoute(builder: (_) {
+          if (args is Map) {
+            return PostPreviewScreen(
+              path: args['path'],
+              isCamera: args['isCamera'],
+            );
+          }
+          return null;
+        });
       case '/post_details':
-        return MaterialPageRoute(
-          builder: (_) => PostDetailScreen(image: args),
-        );
+        return MaterialPageRoute(builder: (_) {
+          if (args is Map) {
+            return PostDetailScreen(
+              image: args['image'],
+              location: args['location'],
+              photoDate: args['date'],
+              isCamera: args['isCamera'],
+            );
+          }
+          return null;
+        });
     }
   }
 }
