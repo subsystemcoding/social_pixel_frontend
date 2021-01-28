@@ -363,8 +363,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   void onPressedPostHandler(context) {
     BlocProvider.of<PostBloc>(context).add(
       SendPost(
-        //imagePath: this.widget.imagePath,
-        //location: this.location,
+        image: this.widget.image,
+        location: this.foundLocation,
+        photoDate: this.foundTime,
         caption: caption,
       ),
     );

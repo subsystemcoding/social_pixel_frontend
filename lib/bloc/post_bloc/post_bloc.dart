@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:image/image.dart' as imageLib;
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/post_management.dart';
 import 'package:exif/exif.dart';
@@ -22,8 +24,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     PostEvent event,
   ) async* {
     yield PostLoading();
-    String gpsPosition;
-
     try {
       if (event is GetPost) {
         final posts = await postManagement.fetchPosts();
@@ -38,7 +38,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         yield GamePostLoaded(games);
       } else if (event is SendPost) {
         //await postManagement.sendPost(post, PostSending.Successful);
-        //yield PostSent(value);
+        // TODO
+        yield PostSent(PostSending.Successful);
       }
     } catch (e) {
       yield PostError("Could not find posts");
