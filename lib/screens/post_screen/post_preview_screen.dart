@@ -13,7 +13,9 @@ import 'package:socialpixel/widgets/raised_container.dart';
 
 class PostPreviewScreen extends StatefulWidget {
   final String path;
-  const PostPreviewScreen({Key key, this.path}) : super(key: key);
+  final bool isCamera;
+  const PostPreviewScreen({Key key, this.path, this.isCamera})
+      : super(key: key);
 
   @override
   _PostPreviewScreenState createState() => _PostPreviewScreenState();
@@ -148,10 +150,19 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
       image = imageLib.copyResizeCropSquare(image, image.height);
     }
 
-    Navigator.of(context).pushNamed(
-      '/post_details',
-      arguments: image,
-    );
+    Map<String, dynamic> args = {
+      'image': image,
+      'location': location,
+      'date': date,
+      'isCamera': this.widget.isCamera
+    };
+    // PostDetailScreen(
+    //           image: args['image'],
+    //           location: args['location'],
+    //           photoDate: args['date'],
+    //           isCamera: args['isCamera'],
+    //         );
+    Navigator.of(context).pushNamed('/post_details', arguments: args);
   }
 
   Widget buildIcon(context,

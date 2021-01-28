@@ -153,9 +153,14 @@ class _CameraWidgetState extends State<CameraWidget> {
       var pickedFile =
           await ImagePicker().getImage(source: ImageSource.gallery);
 
+      //arg[0] = imagePath
+      //arg[1] = isCamera (picture taken from camera?)
       Navigator.of(context).pushNamed(
         "/post_preview",
-        arguments: pickedFile.path,
+        arguments: {
+          'path': pickedFile.path,
+          'isCamera': false,
+        },
       );
     } catch (e) {
       print(e);
@@ -170,10 +175,14 @@ class _CameraWidgetState extends State<CameraWidget> {
       //Fix the image rotation
       File file = await FlutterExifRotation.rotateImage(path: xfile.path);
 
-      //push
+      //arg[0] = imagePath
+      //arg[1] = isCamera (picture taken from camera?)
       Navigator.of(context).pushNamed(
         "/post_preview",
-        arguments: file.path,
+        arguments: {
+          'path': file.path,
+          'isCamera': true,
+        },
       );
     } catch (e) {
       print(e);
