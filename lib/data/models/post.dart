@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:socialpixel/data/models/comment.dart';
+import 'package:socialpixel/data/models/profile.dart';
+
+import 'location.dart';
 
 class Post {
   final int postId;
@@ -11,11 +14,11 @@ class Post {
   final String datePosted;
   final String postImageLink;
   final String caption;
-  final List<String> otherUsers;
+  final List<Profile> otherUsers;
   final int upvotes;
-  final List<Comment> commentCount;
+  final int commentCount;
   final List<Comment> comments;
-  final String gpsTag;
+  final Location location;
   Post({
     this.postId,
     this.userName,
@@ -27,7 +30,7 @@ class Post {
     this.upvotes,
     this.commentCount,
     this.comments,
-    this.gpsTag,
+    this.location,
   });
 
   Post copyWith({
@@ -37,11 +40,11 @@ class Post {
     String datePosted,
     String postImageLink,
     String caption,
-    List<String> otherUsers,
+    List<Profile> otherUsers,
     int upvotes,
-    List<Comment> commentCount,
+    int commentCount,
     List<Comment> comments,
-    String gpsTag,
+    Location location,
   }) {
     return Post(
       postId: postId ?? this.postId,
@@ -54,7 +57,7 @@ class Post {
       upvotes: upvotes ?? this.upvotes,
       commentCount: commentCount ?? this.commentCount,
       comments: comments ?? this.comments,
-      gpsTag: gpsTag ?? this.gpsTag,
+      location: location ?? this.location,
     );
   }
 
@@ -66,17 +69,17 @@ class Post {
       'datePosted': datePosted,
       'postImageLink': postImageLink,
       'caption': caption,
-      'otherUsers': otherUsers,
+      'otherUsers': otherUsers?.map((x) => x?.toMap())?.toList(),
       'upvotes': upvotes,
-      'commentCount': commentCount?.map((x) => x?.toMap())?.toList(),
+      'commentCount': commentCount,
       'comments': comments?.map((x) => x?.toMap())?.toList(),
-      'gpsTag': gpsTag,
+      'location': location?.toMap(),
     };
   }
 
   factory Post.fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
-
+  
     return Post(
       postId: map['postId'],
       userName: map['userName'],
@@ -84,13 +87,11 @@ class Post {
       datePosted: map['datePosted'],
       postImageLink: map['postImageLink'],
       caption: map['caption'],
-      otherUsers: List<String>.from(map['otherUsers']),
+      otherUsers: List<Profile>.from(map['otherUsers']?.map((x) => Profile.fromMap(x))),
       upvotes: map['upvotes'],
-      commentCount: List<Comment>.from(
-          map['commentCount']?.map((x) => Comment.fromMap(x))),
-      comments:
-          List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
-      gpsTag: map['gpsTag'],
+      commentCount: map['commentCount'],
+      comments: List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
+      location: Location.fromMap(map['location']),
     );
   }
 
@@ -100,7 +101,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, gpsTag: $gpsTag)';
+    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location)';
   }
 
   @override
@@ -116,9 +117,9 @@ class Post {
         o.caption == caption &&
         listEquals(o.otherUsers, otherUsers) &&
         o.upvotes == upvotes &&
-        listEquals(o.commentCount, commentCount) &&
+        o.commentCount == commentCount &&
         listEquals(o.comments, comments) &&
-        o.gpsTag == gpsTag;
+        o.location == location;
   }
 
   @override
@@ -133,6 +134,6 @@ class Post {
         upvotes.hashCode ^
         commentCount.hashCode ^
         comments.hashCode ^
-        gpsTag.hashCode;
+        location.hashCode;
   }
 }
