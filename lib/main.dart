@@ -4,6 +4,7 @@ import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
+import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/route_generator.dart';
 import 'package:flutter/services.dart';
 
@@ -11,8 +12,35 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    GraphqlClient();
+    GraphqlClient().query("""
+    query{
+      posts{
+        postId
+        image
+        author{
+          username
+        }
+      }
+    }""");
+  }
+
+  @override
+  void dispose() {
+    GraphqlClient().client.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -112,7 +140,7 @@ class MyApp extends StatelessWidget {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/camera',
+          initialRoute: '/',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(
