@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialpixel/data/models/location.dart';
 
 class PostWidget extends StatelessWidget {
   final String userName;
@@ -7,8 +8,9 @@ class PostWidget extends StatelessWidget {
   final ImageProvider<Object> postImage;
   final String caption;
   final List<ImageProvider<Object>> otherUsers;
-  final String status;
-  final String gpsTag;
+  final int upvotes;
+  final int comments;
+  final Location location;
 
   const PostWidget({
     Key key,
@@ -16,10 +18,11 @@ class PostWidget extends StatelessWidget {
     this.datePosted,
     this.postImage,
     this.otherUsers,
-    this.status,
     this.caption,
     this.userName,
-    this.gpsTag,
+    this.upvotes,
+    this.comments,
+    this.location,
   }) : super(key: key);
 
   @override
@@ -48,7 +51,7 @@ class PostWidget extends StatelessWidget {
           SizedBox(
             height: 12.0,
           ),
-          getGpsTag(text: this.gpsTag),
+          getGpsTag(text: this.location.toString()),
           getCaption(context),
           SizedBox(
             height: 12.0,
@@ -172,7 +175,7 @@ class PostWidget extends StatelessWidget {
           child: getavatars(context, images: this.otherUsers, radius: 20),
         ),
         Text(
-          this.status,
+          this.upvotes.toString() + " " + this.comments.toString() ?? '',
           style: Theme.of(context).primaryTextTheme.subtitle1,
         )
       ],
