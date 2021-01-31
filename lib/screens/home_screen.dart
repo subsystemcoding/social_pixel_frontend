@@ -65,11 +65,10 @@ class HomeScreen extends StatelessWidget {
           datePosted: post.datePosted,
           postImage: NetworkImage(post.postImageLink),
           otherUsers: post.otherUsers
-              .map((imageLink) => NetworkImage(imageLink))
+              .map((user) => NetworkImage(user.userAvatarImage))
               .toList(),
-          status: post.status,
           caption: post.caption,
-          gpsTag: post.gpsTag,
+          location: post.location,
         );
       },
     );
