@@ -1058,4 +1058,208 @@ class TestData {
     {"leaderboardId":1,"rows":[{"user":{"userId":92,"userAvatarImage":"http://dummyimage.com/75x75.bmp/dddddd/000000","username":"Chrisse"},"points":28},{"user":{"userId":78,"userAvatarImage":"http://dummyimage.com/75x75.png/5fa2dd/ffffff","username":"Alonzo"},"points":17},{"user":{"userId":20,"userAvatarImage":"http://dummyimage.com/75x75.png/cc0000/ffffff","username":"Hillel"},"points":48},{"user":{"userId":82,"userAvatarImage":"http://dummyimage.com/75x75.bmp/ff4444/ffffff","username":"Adolphus"},"points":15},{"user":{"userId":64,"userAvatarImage":"http://dummyimage.com/75x75.jpg/ff4444/ffffff","username":"Webb"},"points":90},{"user":{"userId":54,"userAvatarImage":"http://dummyimage.com/75x75.jpg/5fa2dd/ffffff","username":"Yul"},"points":29},{"user":{"userId":35,"userAvatarImage":"http://dummyimage.com/75x75.bmp/5fa2dd/ffffff","username":"Rowen"},"points":15},{"user":{"userId":85,"userAvatarImage":"http://dummyimage.com/75x75.jpg/cc0000/ffffff","username":"Gavin"},"points":6},{"user":{"userId":1,"userAvatarImage":"http://dummyimage.com/75x75.bmp/5fa2dd/ffffff","username":"Kerby"},"points":69},{"user":{"userId":92,"userAvatarImage":"http://dummyimage.com/75x75.png/ff4444/ffffff","username":"Micheil"},"points":65},{"user":{"userId":59,"userAvatarImage":"http://dummyimage.com/75x75.png/dddddd/000000","username":"Kimball"},"points":42},{"user":{"userId":45,"userAvatarImage":"http://dummyimage.com/75x75.jpg/cc0000/ffffff","username":"Manny"},"points":52},{"user":{"userId":70,"userAvatarImage":"http://dummyimage.com/75x75.jpg/cc0000/ffffff","username":"Izak"},"points":45},{"user":{"userId":64,"userAvatarImage":"http://dummyimage.com/75x75.png/dddddd/000000","username":"Saxon"},"points":63},{"user":{"userId":77,"userAvatarImage":"http://dummyimage.com/75x75.png/5fa2dd/ffffff","username":"Kirby"},"points":45},{"user":{"userId":64,"userAvatarImage":"http://dummyimage.com/75x75.png/dddddd/000000","username":"Pearce"},"points":10},{"user":{"userId":14,"userAvatarImage":"http://dummyimage.com/75x75.jpg/ff4444/ffffff","username":"Olivero"},"points":3},{"user":{"userId":13,"userAvatarImage":"http://dummyimage.com/75x75.jpg/ff4444/ffffff","username":"Ase"},"points":71},{"user":{"userId":29,"userAvatarImage":"http://dummyimage.com/75x75.bmp/5fa2dd/ffffff","username":"Torr"},"points":59},{"user":{"userId":5,"userAvatarImage":"http://dummyimage.com/75x75.bmp/ff4444/ffffff","username":"Gregorius"},"points":10},{"user":{"userId":49,"userAvatarImage":"http://dummyimage.com/75x75.bmp/cc0000/ffffff","username":"Rockey"},"points":36},{"user":{"userId":45,"userAvatarImage":"http://dummyimage.com/75x75.jpg/5fa2dd/ffffff","username":"Erhart"},"points":3},{"user":{"userId":13,"userAvatarImage":"http://dummyimage.com/75x75.jpg/5fa2dd/ffffff","username":"Salvador"},"points":2},{"user":{"userId":7,"userAvatarImage":"http://dummyimage.com/75x75.bmp/ff4444/ffffff","username":"Hyman"},"points":15},{"user":{"userId":52,"userAvatarImage":"http://dummyimage.com/75x75.jpg/5fa2dd/ffffff","username":"Andrej"},"points":19},{"user":{"userId":29,"userAvatarImage":"http://dummyimage.com/75x75.png/cc0000/ffffff","username":"Johnnie"},"points":10},{"user":{"userId":16,"userAvatarImage":"http://dummyimage.com/75x75.jpg/cc0000/ffffff","username":"Redford"},"points":82},{"user":{"userId":29,"userAvatarImage":"http://dummyimage.com/75x75.png/5fa2dd/ffffff","username":"Isadore"},"points":37},{"user":{"userId":35,"userAvatarImage":"http://dummyimage.com/75x75.bmp/5fa2dd/ffffff","username":"Carlin"},"points":19},{"user":{"userId":37,"userAvatarImage":"http://dummyimage.com/75x75.bmp/ff4444/ffffff","username":"Jedediah"},"points":3}]}
     ''';
   }
+
+  static String profileListData() {
+    return '''
+    [{
+  "userId": 1,
+  "username": "lferriere0",
+  "userAvatarImage": "http://dummyimage.com/150x150.jpg/5fa2dd/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.bmp/5fa2dd/ffffff",
+  "email": "eholcroft0@hao123.com",
+  "description": "Humerus injury op NOS",
+  "points": 6900,
+  "followers": 468,
+  "createDate": "9/10/2020",
+  "isVerified": false
+}, {
+  "userId": 2,
+  "username": "gperchard1",
+  "userAvatarImage": "http://dummyimage.com/150x150.bmp/ff4444/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.jpg/cc0000/ffffff",
+  "email": "dbrittles1@google.com",
+  "description": "Trabeculotomy ab externo",
+  "points": 2138,
+  "followers": 304,
+  "createDate": "7/22/2020",
+  "isVerified": false
+}, {
+  "userId": 3,
+  "username": "sstrooband2",
+  "userAvatarImage": "http://dummyimage.com/150x150.jpg/dddddd/000000",
+  "userCoverImage": "http://dummyimage.com/500x500.bmp/5fa2dd/ffffff",
+  "email": "lfuggles2@utexas.edu",
+  "description": "Cataract frag/aspir NEC",
+  "points": 86,
+  "followers": 548,
+  "createDate": "12/14/2020",
+  "isVerified": true
+}, {
+  "userId": 4,
+  "username": "mmactrustie3",
+  "userAvatarImage": "http://dummyimage.com/150x150.png/5fa2dd/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.bmp/cc0000/ffffff",
+  "email": "ckersting3@cnet.com",
+  "description": "Brain repair",
+  "points": 4141,
+  "followers": 743,
+  "createDate": "4/21/2020",
+  "isVerified": false
+}, {
+  "userId": 5,
+  "username": "blinton4",
+  "userAvatarImage": "http://dummyimage.com/150x150.png/cc0000/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.jpg/cc0000/ffffff",
+  "email": "sellison4@ibm.com",
+  "description": "Lap res transverse colon",
+  "points": 988,
+  "followers": 551,
+  "createDate": "2/28/2020",
+  "isVerified": false
+}, {
+  "userId": 6,
+  "username": "edickerline5",
+  "userAvatarImage": "http://dummyimage.com/150x150.png/ff4444/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.png/cc0000/ffffff",
+  "email": "acrookes5@hubpages.com",
+  "description": "Excise bone for gft NEC",
+  "points": 4370,
+  "followers": 152,
+  "createDate": "11/6/2020",
+  "isVerified": true
+}, {
+  "userId": 7,
+  "username": "aocurrane6",
+  "userAvatarImage": "http://dummyimage.com/150x150.jpg/ff4444/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.jpg/5fa2dd/ffffff",
+  "email": "phabgood6@illinois.edu",
+  "description": "Exc/dest hrt lesion open",
+  "points": 4342,
+  "followers": 760,
+  "createDate": "9/26/2020",
+  "isVerified": false
+}, {
+  "userId": 8,
+  "username": "vmarusyak7",
+  "userAvatarImage": "http://dummyimage.com/150x150.png/ff4444/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.jpg/dddddd/000000",
+  "email": "rphelps7@indiegogo.com",
+  "description": "Inject insulin",
+  "points": 8076,
+  "followers": 445,
+  "createDate": "6/19/2020",
+  "isVerified": true
+}, {
+  "userId": 9,
+  "username": "eacton8",
+  "userAvatarImage": "http://dummyimage.com/150x150.bmp/dddddd/000000",
+  "userCoverImage": "http://dummyimage.com/500x500.bmp/cc0000/ffffff",
+  "email": "tbauchop8@ifeng.com",
+  "description": "Percutan bladder aspirat",
+  "points": 6998,
+  "followers": 164,
+  "createDate": "9/24/2020",
+  "isVerified": false
+}, {
+  "userId": 10,
+  "username": "cmeardon9",
+  "userAvatarImage": "http://dummyimage.com/150x150.png/ff4444/ffffff",
+  "userCoverImage": "http://dummyimage.com/500x500.png/dddddd/000000",
+  "email": "sphinn9@twitter.com",
+  "description": "Close gastric fistul NEC",
+  "points": 7835,
+  "followers": 819,
+  "createDate": "4/24/2020",
+  "isVerified": false
+}]
+    ''';
+  }
+
+  static String profileData() {
+    return '''
+    {"userId":1,"username":"ltwelves0","userAvatarImage":"http://dummyimage.com/150x150.bmp/ff4444/ffffff","userCoverImage":"http://dummyimage.com/500x500.jpg/ff4444/ffffff","email":"lelcoate0@blogtalkradio.com","description":"Mumps vaccination","points":2128,"followers":479,"createDate":"6/9/2020","isVerified":false}
+    ''';
+  }
+
+  static String channelData() {
+    return '''
+    {"id":1,"name":"vpoupard0","description":"Sinus lavage thru ostium","subscribers":55,"coverImageLink":"http://dummyimage.com/132x171.bmp/ff4444/ffffff","avatarImageLink":"http://dummyimage.com/239x219.bmp/cc0000/ffffff"}
+    ''';
+  }
+
+  static String channelListData() {
+    return '''
+    [{
+  "id": 1,
+  "name": "rsurman0",
+  "description": "Therapeutc leukopheresis",
+  "subscribers": 48,
+  "coverImageLink": "http://dummyimage.com/206x242.jpg/cc0000/ffffff",
+  "avatarImageLink": "http://dummyimage.com/203x175.png/5fa2dd/ffffff"
+}, {
+  "id": 2,
+  "name": "gshapiro1",
+  "description": "Carporadial fusion",
+  "subscribers": 69,
+  "coverImageLink": "http://dummyimage.com/210x162.bmp/ff4444/ffffff",
+  "avatarImageLink": "http://dummyimage.com/104x203.jpg/cc0000/ffffff"
+}, {
+  "id": 3,
+  "name": "cwebborn2",
+  "description": "Open red-sep epiphy NEC",
+  "subscribers": 30,
+  "coverImageLink": "http://dummyimage.com/213x126.bmp/5fa2dd/ffffff",
+  "avatarImageLink": "http://dummyimage.com/102x180.png/dddddd/000000"
+}, {
+  "id": 4,
+  "name": "mwoodrough3",
+  "description": "Tot face bone ostect NEC",
+  "subscribers": 4,
+  "coverImageLink": "http://dummyimage.com/244x125.bmp/ff4444/ffffff",
+  "avatarImageLink": "http://dummyimage.com/106x166.png/5fa2dd/ffffff"
+}, {
+  "id": 5,
+  "name": "agalbreth4",
+  "description": "Nonexcis debridement wnd",
+  "subscribers": 25,
+  "coverImageLink": "http://dummyimage.com/217x214.bmp/dddddd/000000",
+  "avatarImageLink": "http://dummyimage.com/145x102.jpg/cc0000/ffffff"
+}, {
+  "id": 6,
+  "name": "sfreebury5",
+  "description": "Ptosis rep-levat mus NEC",
+  "subscribers": 46,
+  "coverImageLink": "http://dummyimage.com/171x204.png/cc0000/ffffff",
+  "avatarImageLink": "http://dummyimage.com/221x196.bmp/ff4444/ffffff"
+}, {
+  "id": 7,
+  "name": "thubane6",
+  "description": "Cardiopulm resuscita NOS",
+  "subscribers": 97,
+  "coverImageLink": "http://dummyimage.com/123x186.jpg/5fa2dd/ffffff",
+  "avatarImageLink": "http://dummyimage.com/235x170.jpg/ff4444/ffffff"
+}, {
+  "id": 8,
+  "name": "cchucks7",
+  "description": "Shorten 1 extraoc musc",
+  "subscribers": 4,
+  "coverImageLink": "http://dummyimage.com/158x161.png/dddddd/000000",
+  "avatarImageLink": "http://dummyimage.com/181x234.jpg/dddddd/000000"
+}, {
+  "id": 9,
+  "name": "fmcgourty8",
+  "description": "Conjunctival biopsy",
+  "subscribers": 15,
+  "coverImageLink": "http://dummyimage.com/228x194.jpg/ff4444/ffffff",
+  "avatarImageLink": "http://dummyimage.com/106x190.png/dddddd/000000"
+}, {
+  "id": 10,
+  "name": "acritchlow9",
+  "description": "Rev facet replace device",
+  "subscribers": 32,
+  "coverImageLink": "http://dummyimage.com/151x250.bmp/dddddd/000000",
+  "avatarImageLink": "http://dummyimage.com/250x243.bmp/cc0000/ffffff"
+}]
+    ''';
+  }
 }
