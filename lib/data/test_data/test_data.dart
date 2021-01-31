@@ -1052,4 +1052,254 @@ class TestData {
 }]
     ''';
   }
+
+  static String leaderboardData() {
+    return ''' 
+    [{
+  "leaderboardId": 1,
+  "rows": [
+    {
+      "user": {
+        "userId": 19,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/cc0000/ffffff",
+        "userName": "Stanton"
+      },
+      "points": 32
+    },
+    {
+      "user": {
+        "userId": 50,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/dddddd/000000",
+        "userName": "Hilarius"
+      },
+      "points": 30
+    },
+    {
+      "user": {
+        "userId": 98,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/cc0000/ffffff",
+        "userName": "Myron"
+      },
+      "points": 34
+    },
+    {
+      "user": {
+        "userId": 100,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/ff4444/ffffff",
+        "userName": "Karlis"
+      },
+      "points": 48
+    },
+    {
+      "user": {
+        "userId": 94,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/5fa2dd/ffffff",
+        "userName": "Alexandre"
+      },
+      "points": 82
+    },
+    {
+      "user": {
+        "userId": 55,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/cc0000/ffffff",
+        "userName": "Joshuah"
+      },
+      "points": 32
+    },
+    {
+      "user": {
+        "userId": 93,
+        "userAvatar": "http://dummyimage.com/75x75.png/dddddd/000000",
+        "userName": "Johann"
+      },
+      "points": 51
+    },
+    {
+      "user": {
+        "userId": 57,
+        "userAvatar": "http://dummyimage.com/75x75.png/ff4444/ffffff",
+        "userName": "Theobald"
+      },
+      "points": 71
+    },
+    {
+      "user": {
+        "userId": 20,
+        "userAvatar": "http://dummyimage.com/75x75.png/ff4444/ffffff",
+        "userName": "Grover"
+      },
+      "points": 26
+    },
+    {
+      "user": {
+        "userId": 88,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/cc0000/ffffff",
+        "userName": "Cornall"
+      },
+      "points": 44
+    },
+    {
+      "user": {
+        "userId": 27,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/dddddd/000000",
+        "userName": "Alleyn"
+      },
+      "points": 99
+    },
+    {
+      "user": {
+        "userId": 44,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/cc0000/ffffff",
+        "userName": "Frannie"
+      },
+      "points": 80
+    },
+    {
+      "user": {
+        "userId": 55,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/ff4444/ffffff",
+        "userName": "Bud"
+      },
+      "points": 41
+    },
+    {
+      "user": {
+        "userId": 22,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/ff4444/ffffff",
+        "userName": "Jameson"
+      },
+      "points": 20
+    },
+    {
+      "user": {
+        "userId": 4,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/dddddd/000000",
+        "userName": "Augie"
+      },
+      "points": 22
+    },
+    {
+      "user": {
+        "userId": 72,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/5fa2dd/ffffff",
+        "userName": "Timmie"
+      },
+      "points": 36
+    },
+    {
+      "user": {
+        "userId": 50,
+        "userAvatar": "http://dummyimage.com/75x75.png/dddddd/000000",
+        "userName": "Evered"
+      },
+      "points": 38
+    },
+    {
+      "user": {
+        "userId": 43,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/5fa2dd/ffffff",
+        "userName": "Fabien"
+      },
+      "points": 67
+    },
+    {
+      "user": {
+        "userId": 83,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/cc0000/ffffff",
+        "userName": "Georgi"
+      },
+      "points": 2
+    },
+    {
+      "user": {
+        "userId": 88,
+        "userAvatar": "http://dummyimage.com/75x75.png/cc0000/ffffff",
+        "userName": "Umberto"
+      },
+      "points": 37
+    },
+    {
+      "user": {
+        "userId": 71,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/dddddd/000000",
+        "userName": "Gerick"
+      },
+      "points": 92
+    },
+    {
+      "user": {
+        "userId": 13,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/dddddd/000000",
+        "userName": "Dirk"
+      },
+      "points": 97
+    },
+    {
+      "user": {
+        "userId": 20,
+        "userAvatar": "http://dummyimage.com/75x75.png/dddddd/000000",
+        "userName": "Flin"
+      },
+      "points": 1
+    },
+    {
+      "user": {
+        "userId": 16,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/ff4444/ffffff",
+        "userName": "Carl"
+      },
+      "points": 47
+    },
+    {
+      "user": {
+        "userId": 89,
+        "userAvatar": "http://dummyimage.com/75x75.png/5fa2dd/ffffff",
+        "userName": "Carlo"
+      },
+      "points": 96
+    },
+    {
+      "user": {
+        "userId": 53,
+        "userAvatar": "http://dummyimage.com/75x75.bmp/5fa2dd/ffffff",
+        "userName": "Darrell"
+      },
+      "points": 35
+    },
+    {
+      "user": {
+        "userId": 2,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/ff4444/ffffff",
+        "userName": "Ring"
+      },
+      "points": 57
+    },
+    {
+      "user": {
+        "userId": 40,
+        "userAvatar": "http://dummyimage.com/75x75.jpg/dddddd/000000",
+        "userName": "Gregoor"
+      },
+      "points": 54
+    },
+    {
+      "user": {
+        "userId": 26,
+        "userAvatar": "http://dummyimage.com/75x75.png/ff4444/ffffff",
+        "userName": "Kin"
+      },
+      "points": 70
+    },
+    {
+      "user": {
+        "userId": 72,
+        "userAvatar": "http://dummyimage.com/75x75.png/cc0000/ffffff",
+        "userName": "Terry"
+      },
+      "points": 20
+    }
+  ]
+}]
+    ''';
+  }
 }
