@@ -90,16 +90,13 @@ class ChannelScreen extends StatelessWidget {
     List<Post> posts = [];
     return ListView(
       children: [
-        Container(
-          height: 250,
-          child: BlocBuilder<PostBloc, PostState>(
-            builder: (context, state) {
-              if (state is GamePostLoaded) {
-                games = state.games;
-              }
-              return buildGames(context, games);
-            },
-          ),
+        BlocBuilder<PostBloc, PostState>(
+          builder: (context, state) {
+            if (state is GamePostLoaded) {
+              games = state.games;
+            }
+            return games.isEmpty ? Container() : buildGames(context, games);
+          },
         ),
         BlocListener<PostBloc, PostState>(
           listener: (context, state) {
@@ -123,15 +120,22 @@ class ChannelScreen extends StatelessWidget {
   }
 
   Widget buildGames(BuildContext context, List<Game> games) {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: games
-          .map((game) => GameWidget(
-                title: game.name,
-                description: game.description,
-                backgroundImage: NetworkImage(game.image),
-              ))
-          .toList(),
+    return Container(
+      height: 250,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        ///////////////////Debug///////////////////////////
+        ///Remove itemCount
+        itemCount: 2,
+        itemBuilder: (context, i) {
+          final game = games[i];
+          return GameWidget(
+            title: game.name,
+            description: game.description,
+            backgroundImage: NetworkImage(game.image),
+          );
+        },
+      ),
     );
   }
 
