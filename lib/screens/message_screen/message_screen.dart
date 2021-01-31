@@ -86,8 +86,19 @@ class MessageScreen extends StatelessWidget {
         return MessageBox(
           isUser: message.userId == "001",
           text: message.messageBody,
+          type: messageTypeConverter(message.messageType),
         );
       },
     );
+  }
+
+  MessageType messageTypeConverter(String type) {
+    switch (type) {
+      case "text":
+        return MessageType.Text;
+      case "photo":
+        return MessageType.Photo;
+    }
+    return MessageType.Text;
   }
 }
