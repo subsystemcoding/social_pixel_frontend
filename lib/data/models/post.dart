@@ -2,15 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:socialpixel/data/models/comment.dart';
+
 class Post {
   final int postId;
   final String userName;
   final String userAvatarLink;
   final String datePosted;
   final String postImageLink;
-  final String status;
   final String caption;
   final List<String> otherUsers;
+  final int upvotes;
+  final List<Comment> commentCount;
+  final List<Comment> comments;
   final String gpsTag;
   Post({
     this.postId,
@@ -18,9 +22,11 @@ class Post {
     this.userAvatarLink,
     this.datePosted,
     this.postImageLink,
-    this.status,
     this.caption,
     this.otherUsers,
+    this.upvotes,
+    this.commentCount,
+    this.comments,
     this.gpsTag,
   });
 
@@ -30,9 +36,11 @@ class Post {
     String userAvatarLink,
     String datePosted,
     String postImageLink,
-    String status,
     String caption,
     List<String> otherUsers,
+    int upvotes,
+    List<Comment> commentCount,
+    List<Comment> comments,
     String gpsTag,
   }) {
     return Post(
@@ -41,9 +49,11 @@ class Post {
       userAvatarLink: userAvatarLink ?? this.userAvatarLink,
       datePosted: datePosted ?? this.datePosted,
       postImageLink: postImageLink ?? this.postImageLink,
-      status: status ?? this.status,
       caption: caption ?? this.caption,
       otherUsers: otherUsers ?? this.otherUsers,
+      upvotes: upvotes ?? this.upvotes,
+      commentCount: commentCount ?? this.commentCount,
+      comments: comments ?? this.comments,
       gpsTag: gpsTag ?? this.gpsTag,
     );
   }
@@ -55,9 +65,11 @@ class Post {
       'userAvatarLink': userAvatarLink,
       'datePosted': datePosted,
       'postImageLink': postImageLink,
-      'status': status,
       'caption': caption,
       'otherUsers': otherUsers,
+      'upvotes': upvotes,
+      'commentCount': commentCount?.map((x) => x?.toMap())?.toList(),
+      'comments': comments?.map((x) => x?.toMap())?.toList(),
       'gpsTag': gpsTag,
     };
   }
@@ -71,9 +83,13 @@ class Post {
       userAvatarLink: map['userAvatarLink'],
       datePosted: map['datePosted'],
       postImageLink: map['postImageLink'],
-      status: map['status'],
       caption: map['caption'],
       otherUsers: List<String>.from(map['otherUsers']),
+      upvotes: map['upvotes'],
+      commentCount: List<Comment>.from(
+          map['commentCount']?.map((x) => Comment.fromMap(x))),
+      comments:
+          List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
       gpsTag: map['gpsTag'],
     );
   }
@@ -84,7 +100,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, status: $status, caption: $caption, otherUsers: $otherUsers, gpsTag: $gpsTag)';
+    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, gpsTag: $gpsTag)';
   }
 
   @override
@@ -97,9 +113,11 @@ class Post {
         o.userAvatarLink == userAvatarLink &&
         o.datePosted == datePosted &&
         o.postImageLink == postImageLink &&
-        o.status == status &&
         o.caption == caption &&
         listEquals(o.otherUsers, otherUsers) &&
+        o.upvotes == upvotes &&
+        listEquals(o.commentCount, commentCount) &&
+        listEquals(o.comments, comments) &&
         o.gpsTag == gpsTag;
   }
 
@@ -110,9 +128,11 @@ class Post {
         userAvatarLink.hashCode ^
         datePosted.hashCode ^
         postImageLink.hashCode ^
-        status.hashCode ^
         caption.hashCode ^
         otherUsers.hashCode ^
+        upvotes.hashCode ^
+        commentCount.hashCode ^
+        comments.hashCode ^
         gpsTag.hashCode;
   }
 }
