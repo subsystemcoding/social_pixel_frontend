@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:socialpixel/data/repos/leaderboard_repository.dart';
 import 'package:socialpixel/data/models/leaderboard.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
@@ -20,6 +22,9 @@ class LeaderboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //// Needs to add a valid leaderboardId
+    //// Get Leaderboard Id from the game Screen
+    BlocProvider.of<LeaderboardBloc>(context).add(GetLeaderboard(1));
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: Column(
@@ -121,7 +126,6 @@ class LeaderboardScreen extends StatelessWidget {
   }
 
   Widget buildLeaderboard(BuildContext context) {
-    var exampleLeaderboard = LeaderboardRepository().fetchLeaderboardSync();
     return Expanded(
       child: Column(
         children: [
@@ -135,25 +139,37 @@ class LeaderboardScreen extends StatelessWidget {
             endIndent: 16.0,
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 12.0),
-              itemCount: exampleLeaderboard.rows.length * 2,
-              itemBuilder: (context, i) {
-                if (i % 2 == 0 || i == 0) {
-                  int index = (i / 2).toInt();
-                  return buildListTile(
-                    context,
-                    name: exampleLeaderboard.rows[index].userName,
-                    points: exampleLeaderboard.rows[index].points,
-                    image:
-                        NetworkImage(exampleLeaderboard.rows[index].userAvatar),
-                    rank: index + 1,
+            child: BlocBuilder<LeaderboardBloc, LeaderboardState>(
+              builder: (context, state) {
+                if (state is LeaderboardLoaded) {
+                  return ListView.builder(
+                    padding: EdgeInsets.only(top: 12.0),
+                    itemCount: state.leaderboard.rows.length * 2,
+                    itemBuilder: (context, i) {
+                      if (i % 2 == 0 || i == 0) {
+                        int index = i ~/ 2;
+                        return buildListTile(
+                          context,
+                          name: state.leaderboard.rows[index].user.username,
+                          points: state.leaderboard.rows[index].points,
+                          image: NetworkImage(state
+                              .leaderboard.rows[index].user.userAvatarImage),
+                          rank: index + 1,
+                        );
+                      }
+                      return Divider(
+                        indent: 28.0,
+                        endIndent: 28.0,
+                      );
+                    },
+                  );
+                } else if (state is LeaderboardLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
                   );
                 }
-                return Divider(
-                  indent: 28.0,
-                  endIndent: 28.0,
-                );
+                //// No leaderboard should be displayed
+                return Container();
               },
             ),
           ),

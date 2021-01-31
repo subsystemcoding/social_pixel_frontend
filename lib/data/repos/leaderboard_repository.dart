@@ -8,7 +8,7 @@ import 'package:socialpixel/data/test_data/test_data.dart';
 class LeaderboardRepository {
   LeaderboardRepository();
 
-  Future<Leaderboard> fetchLeaderboard() {
+  Future<Leaderboard> fetchLeaderboard(int leaderboardId) {
     return Future.delayed(
       Duration(seconds: 1),
       () {
