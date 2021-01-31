@@ -4,7 +4,7 @@ class Comment {
   int commentId;
   String commentContent;
   int repliedCommentId;
-  int dateCreated;
+  String dateCreated;
   Comment({
     this.commentId,
     this.commentContent,
