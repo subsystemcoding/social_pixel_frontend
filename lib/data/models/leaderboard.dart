@@ -2,37 +2,29 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:socialpixel/data/models/profile.dart';
+
 class LeaderboardRow {
-  int userId;
-  String userAvatar;
-  String userName;
+  Profile user;
   int points;
   LeaderboardRow({
-    this.userId,
-    this.userAvatar,
-    this.userName,
+    this.user,
     this.points,
   });
 
   LeaderboardRow copyWith({
-    int userId,
-    String userAvatar,
-    String userName,
+    Profile user,
     int points,
   }) {
     return LeaderboardRow(
-      userId: userId ?? this.userId,
-      userAvatar: userAvatar ?? this.userAvatar,
-      userName: userName ?? this.userName,
+      user: user ?? this.user,
       points: points ?? this.points,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
-      'userAvatar': userAvatar,
-      'userName': userName,
+      'user': user?.toMap(),
       'points': points,
     };
   }
@@ -41,9 +33,7 @@ class LeaderboardRow {
     if (map == null) return null;
 
     return LeaderboardRow(
-      userId: map['userId'],
-      userAvatar: map['userAvatar'],
-      userName: map['userName'],
+      user: Profile.fromMap(map['user']),
       points: map['points'],
     );
   }
@@ -54,51 +44,40 @@ class LeaderboardRow {
       LeaderboardRow.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'LeaderboardRow(userId: $userId, userAvatar: $userAvatar, userName: $userName, points: $points)';
-  }
+  String toString() => 'LeaderboardRow(user: $user, points: $points)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is LeaderboardRow &&
-        o.userId == userId &&
-        o.userAvatar == userAvatar &&
-        o.userName == userName &&
-        o.points == points;
+    return o is LeaderboardRow && o.user == user && o.points == points;
   }
 
   @override
-  int get hashCode {
-    return userId.hashCode ^
-        userAvatar.hashCode ^
-        userName.hashCode ^
-        points.hashCode;
-  }
+  int get hashCode => user.hashCode ^ points.hashCode;
 }
 
 class Leaderboard {
-  int gameId;
+  int leaderboardId;
   List<LeaderboardRow> rows;
   Leaderboard({
-    this.gameId,
+    this.leaderboardId,
     this.rows,
   });
 
   Leaderboard copyWith({
-    int gameId,
+    int leaderboardId,
     List<LeaderboardRow> rows,
   }) {
     return Leaderboard(
-      gameId: gameId ?? this.gameId,
+      leaderboardId: leaderboardId ?? this.leaderboardId,
       rows: rows ?? this.rows,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'gameId': gameId,
+      'leaderboardId': leaderboardId,
       'rows': rows?.map((x) => x?.toMap())?.toList(),
     };
   }
@@ -107,7 +86,7 @@ class Leaderboard {
     if (map == null) return null;
 
     return Leaderboard(
-      gameId: map['gameId'],
+      leaderboardId: map['leaderboardId'],
       rows: List<LeaderboardRow>.from(
           map['rows']?.map((x) => LeaderboardRow.fromMap(x))),
     );
@@ -119,15 +98,18 @@ class Leaderboard {
       Leaderboard.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Leaderboard(gameId: $gameId, rows: $rows)';
+  String toString() =>
+      'Leaderboard(leaderboardId: $leaderboardId, rows: $rows)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Leaderboard && o.gameId == gameId && listEquals(o.rows, rows);
+    return o is Leaderboard &&
+        o.leaderboardId == leaderboardId &&
+        listEquals(o.rows, rows);
   }
 
   @override
-  int get hashCode => gameId.hashCode ^ rows.hashCode;
+  int get hashCode => leaderboardId.hashCode ^ rows.hashCode;
 }
