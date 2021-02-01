@@ -17,6 +17,7 @@ enum PostSending {
 
 class PostManagement {
   Random random;
+  int currentPostId = 0;
   PostManagement() {
     random = Random();
   }
@@ -42,13 +43,45 @@ class PostManagement {
     });
   }
 
-  Future<List<Post>> fetchOnlinePosts() async {
+  Future<List<Post>> fetchFirstPosts({int channelId}) async {
     final posts = await _fetchPostsFromInternet();
 
     //delete and add posts in the background
     _deleteAllPostInCache().then((_) async {
       await _addPostsToCache(posts);
     });
+    return posts;
+  }
+
+  Future<List<Post>> fetchMorePosts({int channelId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> fetchNewPosts({int channelId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> fetchSearchedPosts({List<String> hashtags}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> fetchProfilePosts({int userId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
     return posts;
   }
 
@@ -80,7 +113,6 @@ class PostManagement {
   Future<void> _addPostsToCache(List<Post> posts) async {
     final box = await Hive.openBox('posts');
 
-    List<Post> newList = [];
     for (int i = 0; i < posts.length; i++) {
       //convert userAvatarLink to base64
       final post = posts[i];

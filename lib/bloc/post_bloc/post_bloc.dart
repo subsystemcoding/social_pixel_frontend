@@ -26,26 +26,33 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     yield PostLoading();
     try {
       if (event is FetchInitialPost) {
-        yield PostLoaded(await postManagement.fetchCachedPosts());
+        if (event.channelId == 0) {
+          yield PostLoaded(await postManagement.fetchCachedPosts());
+        }
 
         ///if not available due to internet
         ///show no internet connection snackbar
         ///If both are not available then
         ///connect to internet screen
-        yield PostLoaded(await postManagement.fetchOnlinePosts());
+        yield PostLoaded(
+            await postManagement.fetchFirstPosts(channelId: event.channelId));
       } else if (event is FetchMorePost) {
-        yield PostLoaded(await postManagement.fetchOnlinePosts());
+        yield PostLoaded(
+            await postManagement.fetchMorePosts(channelId: event.channelId));
       } else if (event is FetchNewPost) {
         /// if no new post available then show snack bar
-        yield PostLoaded(await postManagement.fetchOnlinePosts());
+        yield PostLoaded(
+            await postManagement.fetchNewPosts(channelId: event.channelId));
       } else if (event is FetchSearchedPost) {
         /// Return searched posts with hashtags
-        yield PostLoaded(await postManagement.fetchOnlinePosts());
+        yield PostLoaded(
+            await postManagement.fetchSearchedPosts(hashtags: event.hashtags));
       } else if (event is FetchProfilePost) {
         /// Return posts that are under user profile
-        yield PostLoaded(await postManagement.fetchOnlinePosts());
+        yield PostLoaded(
+            await postManagement.fetchProfilePosts(userId: event.userId));
       } else if (event is GetPostAndGame) {
-        final posts = await postManagement.fetchOnlinePosts();
+        final posts = await postManagement.fetchFirstPosts();
         yield PostLoaded(posts);
         final games = await postManagement.fetchGamePosts();
         yield GamePostLoaded(games);

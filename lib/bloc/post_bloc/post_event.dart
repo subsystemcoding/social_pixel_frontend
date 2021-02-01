@@ -24,10 +24,18 @@ class FetchNewPost extends PostEvent {
   FetchNewPost({this.channelId = 0});
 }
 
-class FetchSearchedPost extends PostEvent {}
+class FetchSearchedPost extends PostEvent {
+  final List<String> hashtags;
+
+  FetchSearchedPost({this.hashtags});
+}
 
 // Fetch posts in profile
-class FetchProfilePost extends PostEvent {}
+class FetchProfilePost extends PostEvent {
+  final int userId;
+
+  FetchProfilePost(this.userId);
+}
 
 class GetPostAndGame extends PostEvent {}
 
