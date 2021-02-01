@@ -1,15 +1,30 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+part 'profile.g.dart';
+
+@HiveType(typeId: 1)
 class Profile {
+  @HiveField(0)
   final int userId;
+  @HiveField(1)
   final String username;
+  @HiveField(2)
   final String userAvatarImage;
+  @HiveField(3)
   final String userCoverImage;
+  @HiveField(4)
   final String email;
+  @HiveField(5)
   final String description;
+  @HiveField(6)
   final int points;
+  @HiveField(7)
   final int followers;
+  @HiveField(8)
   final String createDate;
+  @HiveField(9)
   final bool isVerified;
 
   Profile({

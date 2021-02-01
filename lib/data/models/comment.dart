@@ -1,9 +1,18 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+part 'comment.g.dart';
+
+@HiveType(typeId: 2)
 class Comment {
+  @HiveField(0)
   int commentId;
+  @HiveField(1)
   String commentContent;
+  @HiveField(2)
   int repliedCommentId;
+  @HiveField(3)
   String dateCreated;
   Comment({
     this.commentId,

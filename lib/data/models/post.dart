@@ -1,23 +1,38 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
 import 'package:socialpixel/data/models/comment.dart';
 import 'package:socialpixel/data/models/profile.dart';
 
 import 'location.dart';
 
+part 'post.g.dart';
+
+@HiveType(typeId:0)
 class Post {
+  @HiveField(0)
   final int postId;
+  @HiveField(1)
   final String userName;
+  @HiveField(2)
   final String userAvatarLink;
+  @HiveField(3)
   final String datePosted;
+  @HiveField(4)
   final String postImageLink;
+  @HiveField(5)
   final String caption;
+  @HiveField(6)
   final List<Profile> otherUsers;
+  @HiveField(7)
   final int upvotes;
+  @HiveField(8)
   final int commentCount;
+  @HiveField(9)
   final List<Comment> comments;
+  @HiveField(10)
   final Location location;
   Post({
     this.postId,
@@ -79,7 +94,7 @@ class Post {
 
   factory Post.fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
-  
+
     return Post(
       postId: map['postId'],
       userName: map['userName'],
@@ -87,10 +102,12 @@ class Post {
       datePosted: map['datePosted'],
       postImageLink: map['postImageLink'],
       caption: map['caption'],
-      otherUsers: List<Profile>.from(map['otherUsers']?.map((x) => Profile.fromMap(x))),
+      otherUsers:
+          List<Profile>.from(map['otherUsers']?.map((x) => Profile.fromMap(x))),
       upvotes: map['upvotes'],
       commentCount: map['commentCount'],
-      comments: List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
+      comments:
+          List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
       location: Location.fromMap(map['location']),
     );
   }
