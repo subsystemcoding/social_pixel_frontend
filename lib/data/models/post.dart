@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
@@ -10,7 +11,7 @@ import 'location.dart';
 
 part 'post.g.dart';
 
-@HiveType(typeId:0)
+@HiveType(typeId: 0)
 class Post {
   @HiveField(0)
   final int postId;
@@ -34,6 +35,13 @@ class Post {
   final List<Comment> comments;
   @HiveField(10)
   final Location location;
+  @HiveField(11)
+  Uint8List userImageBytes;
+  @HiveField(12)
+  Uint8List postImageBytes;
+  @HiveField(13)
+  List<Uint8List> otherUsersImageBytes;
+
   Post({
     this.postId,
     this.userName,

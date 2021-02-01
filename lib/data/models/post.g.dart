@@ -28,13 +28,16 @@ class PostAdapter extends TypeAdapter<Post> {
       commentCount: fields[8] as int,
       comments: (fields[9] as List)?.cast<Comment>(),
       location: fields[10] as Location,
-    );
+    )
+      ..userImageBytes = fields[11] as Uint8List
+      ..postImageBytes = fields[12] as Uint8List
+      ..otherUsersImageBytes = (fields[13] as List)?.cast<Uint8List>();
   }
 
   @override
   void write(BinaryWriter writer, Post obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.postId)
       ..writeByte(1)
@@ -56,7 +59,13 @@ class PostAdapter extends TypeAdapter<Post> {
       ..writeByte(9)
       ..write(obj.comments)
       ..writeByte(10)
-      ..write(obj.location);
+      ..write(obj.location)
+      ..writeByte(11)
+      ..write(obj.userImageBytes)
+      ..writeByte(12)
+      ..write(obj.postImageBytes)
+      ..writeByte(13)
+      ..write(obj.otherUsersImageBytes);
   }
 
   @override
