@@ -14,7 +14,7 @@ class Connectivity {
     // } catch (e) {
     //   return false;
     // }
-    return false;
+    return true;
   }
 
   static Future<String> networkImageToBase64(String imageUrl) async {

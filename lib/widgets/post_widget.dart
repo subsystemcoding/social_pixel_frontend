@@ -183,15 +183,21 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget information(BuildContext context) {
+    print(this.otherUsersBytes);
     return Row(
       children: [
         Container(
           width: 120,
           height: 45,
           child: getavatars(context,
-              images: this.otherUsersBytes == null
-                  ? this.otherUsers
-                  : this.otherUsersBytes,
+              images: (this.otherUsersBytes.isEmpty ||
+                      this.otherUsersBytes == null ||
+                      this.otherUsersBytes[0] == null)
+                  ? this.otherUsers.map((link) => NetworkImage(link)).toList()
+                  : this
+                      .otherUsersBytes
+                      .map((bytes) => MemoryImage(bytes))
+                      .toList(),
               radius: 20),
         ),
         Text(
@@ -202,7 +208,8 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  Widget getavatars(BuildContext context, {images, double radius}) {
+  Widget getavatars(BuildContext context,
+      {List<ImageProvider<Object>> images, double radius}) {
     List<Widget> children = List<Widget>();
     for (var i = 0; i < images.length; i++) {
       children.add(Positioned(
@@ -210,9 +217,7 @@ class PostWidget extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: Theme.of(context).accentColor,
           child: CircleAvatar(
-            backgroundImage: images[i] is String
-                ? NetworkImage(images[i])
-                : MemoryImage(images[i]),
+            backgroundImage: images[i],
             radius: radius - 3,
           ),
         ),

@@ -27,7 +27,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     try {
       if (event is FetchInitialPost) {
         if (event.channelId == 0) {
-          yield PostLoaded(await postManagement.fetchCachedPosts());
+          var cachedPosts = await postManagement.fetchCachedPosts();
+          if (cachedPosts.isNotEmpty) {
+            yield PostLoaded(cachedPosts);
+          }
         }
 
         ///if not available due to internet
