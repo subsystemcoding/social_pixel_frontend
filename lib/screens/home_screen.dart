@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final postBloc = BlocProvider.of<PostBloc>(context);
-    postBloc.add(GetPost());
+    postBloc.add(FetchInitialPost());
     return Scaffold(
       appBar: MenuBar().appbar,
       bottomNavigationBar: BottomNavBar(
@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
               child: RefreshIndicator(
                 onRefresh: () {
                   return Future(() {
-                    postBloc.add(GetPost());
+                    postBloc.add(FetchNewPost());
                   });
                 },
                 child: BlocListener<PostBloc, PostState>(

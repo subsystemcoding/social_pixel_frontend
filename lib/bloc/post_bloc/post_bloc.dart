@@ -25,11 +25,27 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   ) async* {
     yield PostLoading();
     try {
-      if (event is GetPost) {
-        final posts = await postManagement.fetchPosts();
-        yield PostLoaded(posts);
+      if (event is FetchInitialPost) {
+        yield PostLoaded(await postManagement.fetchCachedPosts());
+
+        ///if not available due to internet
+        ///show no internet connection snackbar
+        ///If both are not available then
+        ///connect to internet screen
+        yield PostLoaded(await postManagement.fetchOnlinePosts());
+      } else if (event is FetchMorePost) {
+        yield PostLoaded(await postManagement.fetchOnlinePosts());
+      } else if (event is FetchNewPost) {
+        /// if no new post available then show snack bar
+        yield PostLoaded(await postManagement.fetchOnlinePosts());
+      } else if (event is FetchSearchedPost) {
+        /// Return searched posts with hashtags
+        yield PostLoaded(await postManagement.fetchOnlinePosts());
+      } else if (event is FetchProfilePost) {
+        /// Return posts that are under user profile
+        yield PostLoaded(await postManagement.fetchOnlinePosts());
       } else if (event is GetPostAndGame) {
-        final posts = await postManagement.fetchPosts();
+        final posts = await postManagement.fetchOnlinePosts();
         yield PostLoaded(posts);
         final games = await postManagement.fetchGamePosts();
         yield GamePostLoaded(games);
@@ -42,6 +58,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         yield PostSent(PostSending.Successful);
       }
     } catch (e) {
+      print(e);
       yield PostError("Could not find posts");
     }
     // TODO: implement mapEventToState

@@ -16,7 +16,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
     BlocProvider.of<ChannelBloc>(context).add(GetChannelList());
-    BlocProvider.of<PostBloc>(context).add(GetPost());
+    BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
     return Scaffold(
       appBar: MenuBar().appbar,
       bottomNavigationBar: BottomNavBar(
