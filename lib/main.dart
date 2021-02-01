@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/bloc/leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
+import 'package:socialpixel/data/repos/hive_repository.dart';
 import 'package:socialpixel/route_generator.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveRepository().init();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    HiveRepository().dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -31,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<MessageBloc>(
           create: (context) => MessageBloc(),
+        ),
+        BlocProvider<LeaderboardBloc>(
+          create: (context) => LeaderboardBloc(),
         ),
       ],
       child: GestureDetector(
@@ -112,7 +130,7 @@ class MyApp extends StatelessWidget {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/camera',
+          initialRoute: '/home',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(

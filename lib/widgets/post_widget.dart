@@ -1,16 +1,23 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:socialpixel/data/models/location.dart';
 
 class PostWidget extends StatelessWidget {
   final String userName;
-  final ImageProvider<Object> userAvatar;
+  final String userAvatar;
   final String datePosted;
-  final ImageProvider<Object> postImage;
+  final String postImage;
   final String caption;
-  final List<ImageProvider<Object>> otherUsers;
+  final List<String> otherUsers;
   final int upvotes;
   final int comments;
   final Location location;
+  final Uint8List userAvatarBytes;
+  final Uint8List postImageBytes;
+  final List<Uint8List> otherUsersBytes;
 
   const PostWidget({
     Key key,
@@ -23,6 +30,9 @@ class PostWidget extends StatelessWidget {
     this.upvotes,
     this.comments,
     this.location,
+    this.userAvatarBytes,
+    this.postImageBytes,
+    this.otherUsersBytes,
   }) : super(key: key);
 
   @override
@@ -70,9 +80,12 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget profile(BuildContext context) {
+    print(this.userAvatar);
     return Row(children: [
       CircleAvatar(
-        backgroundImage: this.userAvatar,
+        backgroundImage: this.userAvatarBytes != null
+            ? MemoryImage(this.userAvatarBytes)
+            : NetworkImage(this.userAvatar),
         radius: 30,
       ),
       SizedBox(
@@ -99,12 +112,15 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget post() {
+    print(this.postImageBytes.toString());
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 300.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),
         child: Image(
-          image: this.postImage,
+          image: this.postImageBytes != null
+              ? MemoryImage(this.postImageBytes)
+              : NetworkImage(this.postImage),
           fit: BoxFit.scaleDown,
         ),
       ),
@@ -172,7 +188,11 @@ class PostWidget extends StatelessWidget {
         Container(
           width: 120,
           height: 45,
-          child: getavatars(context, images: this.otherUsers, radius: 20),
+          child: getavatars(context,
+              images: this.otherUsersBytes == null
+                  ? this.otherUsers
+                  : this.otherUsersBytes,
+              radius: 20),
         ),
         Text(
           this.upvotes.toString() + " " + this.comments.toString() ?? '',
@@ -182,8 +202,7 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  Widget getavatars(BuildContext context,
-      {List<ImageProvider<Object>> images, double radius}) {
+  Widget getavatars(BuildContext context, {images, double radius}) {
     List<Widget> children = List<Widget>();
     for (var i = 0; i < images.length; i++) {
       children.add(Positioned(
@@ -191,7 +210,9 @@ class PostWidget extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: Theme.of(context).accentColor,
           child: CircleAvatar(
-            backgroundImage: images[i],
+            backgroundImage: images[i] is String
+                ? NetworkImage(images[i])
+                : MemoryImage(images[i]),
             radius: radius - 3,
           ),
         ),

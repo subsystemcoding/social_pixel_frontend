@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:hive/hive.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/repos/connectivity.dart';
@@ -44,10 +45,15 @@ class PostManagement {
     if (await Connectivity.hasConnection()) {
       //fetch posts from internet
       final posts = await _fetchPostsFromInternet();
-      HiveRepository().addPosts(posts);
+
+      //delete and add posts in the background
+      HiveRepository().deleteAllPost().then((_) async {
+        await HiveRepository().addPosts(posts);
+      });
       return posts;
     } else {
-      return await HiveRepository().getPosts();
+      final posts = await HiveRepository().getPosts();
+      return posts;
     }
   }
 

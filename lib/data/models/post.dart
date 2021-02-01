@@ -39,8 +39,6 @@ class Post {
   Uint8List userImageBytes;
   @HiveField(12)
   Uint8List postImageBytes;
-  @HiveField(13)
-  List<Uint8List> otherUsersImageBytes;
 
   Post({
     this.postId,
@@ -54,6 +52,8 @@ class Post {
     this.commentCount,
     this.comments,
     this.location,
+    this.userImageBytes,
+    this.postImageBytes,
   });
 
   Post copyWith({
@@ -68,6 +68,8 @@ class Post {
     int commentCount,
     List<Comment> comments,
     Location location,
+    Uint8List userImageBytes,
+    Uint8List postImageBytes,
   }) {
     return Post(
       postId: postId ?? this.postId,
@@ -81,6 +83,8 @@ class Post {
       commentCount: commentCount ?? this.commentCount,
       comments: comments ?? this.comments,
       location: location ?? this.location,
+      userImageBytes: userImageBytes ?? this.userImageBytes,
+      postImageBytes: postImageBytes ?? this.postImageBytes,
     );
   }
 
@@ -97,6 +101,8 @@ class Post {
       'commentCount': commentCount,
       'comments': comments?.map((x) => x?.toMap())?.toList(),
       'location': location?.toMap(),
+      // 'userImageBytes': userImageBytes?.toMap(),
+      // 'postImageBytes': postImageBytes?.toMap(),
     };
   }
 
@@ -117,6 +123,8 @@ class Post {
       comments:
           List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
       location: Location.fromMap(map['location']),
+      // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
+      // postImageBytes: Uint8List.fromMap(map['postImageBytes']),
     );
   }
 
@@ -126,7 +134,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location)';
+    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location, userImageBytes: $userImageBytes, postImageBytes: $postImageBytes)';
   }
 
   @override
@@ -144,7 +152,9 @@ class Post {
         o.upvotes == upvotes &&
         o.commentCount == commentCount &&
         listEquals(o.comments, comments) &&
-        o.location == location;
+        o.location == location &&
+        o.userImageBytes == userImageBytes &&
+        o.postImageBytes == postImageBytes;
   }
 
   @override
@@ -159,6 +169,8 @@ class Post {
         upvotes.hashCode ^
         commentCount.hashCode ^
         comments.hashCode ^
-        location.hashCode;
+        location.hashCode ^
+        userImageBytes.hashCode ^
+        postImageBytes.hashCode;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 class Connectivity {
@@ -13,13 +14,18 @@ class Connectivity {
     // } catch (e) {
     //   return false;
     // }
-    print("No internet");
     return false;
   }
 
-  Future<String> networkImageToBase64(String imageUrl) async {
+  static Future<String> networkImageToBase64(String imageUrl) async {
     http.Response response = await http.get(imageUrl);
     final bytes = response?.bodyBytes;
     return (bytes != null ? base64Encode(bytes) : null);
+  }
+
+  static Future<Uint8List> networkImageToBytes(String imageUrl) async {
+    http.Response response = await http.get(imageUrl);
+    final bytes = response?.bodyBytes;
+    return bytes;
   }
 }

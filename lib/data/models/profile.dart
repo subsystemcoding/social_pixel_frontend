@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:hive/hive.dart';
 
@@ -26,6 +27,10 @@ class Profile {
   final String createDate;
   @HiveField(9)
   final bool isVerified;
+  @HiveField(10)
+  final Uint8List userImageBytes;
+  @HiveField(11)
+  final Uint8List userCoverImageBytes;
 
   Profile({
     this.userId,
@@ -38,6 +43,8 @@ class Profile {
     this.followers,
     this.createDate,
     this.isVerified,
+    this.userImageBytes,
+    this.userCoverImageBytes,
   });
 
   Profile copyWith({
@@ -51,6 +58,8 @@ class Profile {
     int followers,
     String createDate,
     bool isVerified,
+    Uint8List userImageBytes,
+    Uint8List userCoverImageBytes,
   }) {
     return Profile(
       userId: userId ?? this.userId,
@@ -63,6 +72,8 @@ class Profile {
       followers: followers ?? this.followers,
       createDate: createDate ?? this.createDate,
       isVerified: isVerified ?? this.isVerified,
+      userImageBytes: userImageBytes ?? this.userImageBytes,
+      userCoverImageBytes: userCoverImageBytes ?? this.userCoverImageBytes,
     );
   }
 
@@ -78,6 +89,8 @@ class Profile {
       'followers': followers,
       'createDate': createDate,
       'isVerified': isVerified,
+      //'userImageBytes': userImageBytes?.toMap(),
+      //'userCoverImageBytes': userCoverImageBytes?.toMap(),
     };
   }
 
@@ -95,6 +108,8 @@ class Profile {
       followers: map['followers'],
       createDate: map['createDate'],
       isVerified: map['isVerified'],
+      //userImageBytes: Uint8List.fromMap(map['userImageBytes']),
+      //userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
     );
   }
 
@@ -105,7 +120,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified)';
+    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes)';
   }
 
   @override
@@ -122,7 +137,9 @@ class Profile {
         o.points == points &&
         o.followers == followers &&
         o.createDate == createDate &&
-        o.isVerified == isVerified;
+        o.isVerified == isVerified &&
+        o.userImageBytes == userImageBytes &&
+        o.userCoverImageBytes == userCoverImageBytes;
   }
 
   @override
@@ -136,6 +153,8 @@ class Profile {
         points.hashCode ^
         followers.hashCode ^
         createDate.hashCode ^
-        isVerified.hashCode;
+        isVerified.hashCode ^
+        userImageBytes.hashCode ^
+        userCoverImageBytes.hashCode;
   }
 }

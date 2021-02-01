@@ -27,13 +27,15 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       followers: fields[7] as int,
       createDate: fields[8] as String,
       isVerified: fields[9] as bool,
+      userImageBytes: fields[10] as Uint8List,
+      userCoverImageBytes: fields[11] as Uint8List,
     );
   }
 
   @override
   void write(BinaryWriter writer, Profile obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -53,7 +55,11 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       ..writeByte(8)
       ..write(obj.createDate)
       ..writeByte(9)
-      ..write(obj.isVerified);
+      ..write(obj.isVerified)
+      ..writeByte(10)
+      ..write(obj.userImageBytes)
+      ..writeByte(11)
+      ..write(obj.userCoverImageBytes);
   }
 
   @override
