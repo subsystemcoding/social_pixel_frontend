@@ -3,8 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
+import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/models/profile.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 import 'package:tinycolor/tinycolor.dart';
@@ -16,9 +20,10 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
     BlocProvider.of<ChannelBloc>(context).add(GetChannelList());
-    BlocProvider.of<PostBloc>(context).add(GetPost());
+    BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
     return Scaffold(
       appBar: MenuBar().appbar,
+      drawer: CustomDrawer(),
       bottomNavigationBar: BottomNavBar(
         currentRoute: '/search',
       ),
@@ -54,90 +59,93 @@ class SearchScreen extends StatelessWidget {
   }
 
   Widget buildPeopleSection() {
+    List<Profile> profiles = [];
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (state is ProfileListLoaded) {
-          return ListView.builder(
-            itemCount: state.profiles.length * 2,
-            itemBuilder: (context, i) {
-              if (i % 2 == 0) {
-                int index = i == 0 ? i : (i ~/ 2);
-                return buildUser(
-                  context,
-                  userId: state.profiles[index].userId,
-                  username: state.profiles[index].username,
-                  description: state.profiles[index].description,
-                  image: NetworkImage(state.profiles[index].userAvatarImage),
-                );
-              }
-              return Divider();
-            },
-          );
+          profiles = state.profiles;
         } else if (state is ProfileLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        return Container();
+        return ListView.builder(
+          itemCount: profiles.length * 2,
+          itemBuilder: (context, i) {
+            if (i % 2 == 0) {
+              int index = i == 0 ? i : (i ~/ 2);
+              return buildUser(
+                context,
+                userId: profiles[index].userId,
+                username: profiles[index].username,
+                description: profiles[index].description,
+                image: NetworkImage(profiles[index].userAvatarImage),
+              );
+            }
+            return Divider();
+          },
+        );
       },
     );
   }
 
   Widget buildPostSection() {
+    List<Post> posts = [];
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         if (state is PostLoaded) {
-          return ListView.builder(
-            itemCount: state.posts.length * 2,
-            itemBuilder: (context, i) {
-              if (i % 2 == 0) {
-                int index = i == 0 ? i : (i ~/ 2);
-                return buildPost(
-                  context,
-                  username: state.posts[index].userName,
-                  description: state.posts[index].caption,
-                  image: NetworkImage(state.posts[index].postImageLink),
-                );
-              }
-              return Divider();
-            },
-          );
+          posts = state.posts;
         } else if (state is PostLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        return Container();
+        return ListView.builder(
+          itemCount: posts.length * 2,
+          itemBuilder: (context, i) {
+            if (i % 2 == 0) {
+              int index = i == 0 ? i : (i ~/ 2);
+              return buildPost(
+                context,
+                username: posts[index].userName,
+                description: posts[index].caption,
+                image: NetworkImage(posts[index].postImageLink),
+              );
+            }
+            return Divider();
+          },
+        );
       },
     );
   }
 
   Widget buildChannelSection() {
+    List<Channel> channels = [];
     return BlocBuilder<ChannelBloc, ChannelState>(
       builder: (context, state) {
         if (state is ChannelListLoaded) {
-          return ListView.builder(
-            itemCount: state.channels.length * 2,
-            itemBuilder: (context, i) {
-              if (i % 2 == 0) {
-                int index = i == 0 ? i : i ~/ 2;
-                return buildChannel(
-                  context,
-                  channelId: state.channels[index].id,
-                  channelName: state.channels[index].name,
-                  image: NetworkImage(state.channels[index].avatarImageLink),
-                  subscribers: state.channels[index].subscribers.toString(),
-                );
-              }
-              return Divider();
-            },
-          );
+          channels = state.channels;
         } else if (state is ChannelLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        return Container();
+        return ListView.builder(
+          itemCount: channels.length * 2,
+          itemBuilder: (context, i) {
+            if (i % 2 == 0) {
+              int index = i == 0 ? i : i ~/ 2;
+              return buildChannel(
+                context,
+                channelId: channels[index].id,
+                channelName: channels[index].name,
+                image: NetworkImage(channels[index].avatarImageLink),
+                subscribers: channels[index].subscribers.toString(),
+              );
+            }
+            return Divider();
+          },
+        );
       },
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 
 class MessageListScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class MessageListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MenuBar().appbar,
+      drawer: CustomDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/bloc/game_bloc/game_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/cover_image_header.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 import 'package:socialpixel/widgets/game_widget.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
@@ -22,36 +25,55 @@ class ChannelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Post> posts = [];
     List<Game> games = [];
+    //Getting the post and game blocs
     final postBloc = BlocProvider.of<PostBloc>(context);
+    final gameBloc = BlocProvider.of<GameBloc>(context);
+    //getting the channel information from the bloc
     BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
-    postBloc.add(GetPostAndGame());
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: BlocBuilder<ChannelBloc, ChannelState>(
         builder: (context, state) {
           if (state is ChannelLoaded) {
+            postBloc.add(FetchInitialPost(channelId: channelId));
+            gameBloc.add(FetchGames(channelId));
             return DefaultTabController(
               length: 2,
               child: NestedScrollView(
                 headerSliverBuilder: (context, value) {
                   return [
+                    //Appvar
                     SliverAppBar(
-                      expandedHeight: 300,
-                      collapsedHeight: 260,
-                      //floating: true,
-                      //pinned: true,
-                      flexibleSpace: buildImages(
-                        context,
-                        NetworkImage(state.channel.coverImageLink),
-                        NetworkImage(state.channel.avatarImageLink),
-                        state.channel.name,
-                        state.channel.description,
+                      collapsedHeight: 170,
+                      flexibleSpace: Column(
+                        children: [
+                          CoverImageHeader(
+                            coverImage:
+                                NetworkImage(state.channel.coverImageLink),
+                            avatarImage:
+                                NetworkImage(state.channel.avatarImageLink),
+                            coverImageHeight: 150,
+                            avatarImageRadius: 40,
+                          ),
+                        ],
                       ),
-                      bottom: CustomTabBar().tabBar(
-                        context,
-                        tabs: [
-                          Text("Posts"),
-                          Text("Rooms"),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          buildInfo(
+                            context,
+                            state.channel.name,
+                            state.channel.description,
+                            state.channel.subscribers,
+                          ),
+                          CustomTabBar().tabBar(
+                            context,
+                            tabs: [
+                              Text("Posts"),
+                              Text("Rooms"),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -90,16 +112,22 @@ class ChannelScreen extends StatelessWidget {
     List<Post> posts = [];
     return ListView(
       children: [
-        Container(
-          height: 250,
-          child: BlocBuilder<PostBloc, PostState>(
-            builder: (context, state) {
-              if (state is GamePostLoaded) {
-                games = state.games;
-              }
-              return buildGames(context, games);
-            },
-          ),
+        BlocBuilder<GameBloc, GameState>(
+          builder: (context, state) {
+            if (state is GameLoaded) {
+              return state.games.isEmpty
+                  ? Container()
+                  : buildGames(context, state.games);
+            } else if (state is GameLoading) {
+              return Container(
+                height: 250,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return Container();
+          },
         ),
         BlocListener<PostBloc, PostState>(
           listener: (context, state) {
@@ -110,9 +138,12 @@ class ChannelScreen extends StatelessWidget {
           },
           child: BlocBuilder<PostBloc, PostState>(
             builder: (context, state) {
-              print(state);
               if (state is PostLoaded) {
                 posts = state.posts;
+              } else if (state is PostLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               }
               return buildPosts(context, posts);
             },
@@ -123,15 +154,22 @@ class ChannelScreen extends StatelessWidget {
   }
 
   Widget buildGames(BuildContext context, List<Game> games) {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: games
-          .map((game) => GameWidget(
-                title: game.name,
-                description: game.description,
-                backgroundImage: NetworkImage(game.image),
-              ))
-          .toList(),
+    return Container(
+      height: 250,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        ///////////////////Debug///////////////////////////
+        ///Remove itemCount
+        itemCount: 2,
+        itemBuilder: (context, i) {
+          final game = games[i];
+          return GameWidget(
+            title: game.name,
+            description: game.description,
+            backgroundImage: NetworkImage(game.image),
+          );
+        },
+      ),
     );
   }
 
@@ -140,15 +178,14 @@ class ChannelScreen extends StatelessWidget {
       children: posts
           .map((post) => PostWidget(
                 userName: post.userName,
-                userAvatar: NetworkImage(post.userAvatarLink),
+                userAvatar: post.userAvatarLink,
                 datePosted: post.datePosted,
-                postImage: NetworkImage(post.postImageLink),
+                postImage: post.postImageLink,
                 otherUsers: post.otherUsers
-                    .map((imageLink) => NetworkImage(imageLink))
+                    .map((user) => user.userAvatarImage)
                     .toList(),
-                status: post.status,
                 caption: post.caption,
-                gpsTag: post.gpsTag,
+                location: post.location,
               ))
           .toList(),
     );
@@ -189,14 +226,15 @@ class ChannelScreen extends StatelessWidget {
           Positioned(
             top: coverImageHeight + radius,
             width: MediaQuery.of(context).size.width,
-            child: buildInfo(context, title, description),
+            child: buildInfo(context, title, description, 12),
           ),
         ],
       ),
     );
   }
 
-  Widget buildInfo(BuildContext context, String title, String description) {
+  Widget buildInfo(
+      BuildContext context, String title, String description, int subscribers) {
     return Column(
       children: [
         SizedBox(
@@ -206,7 +244,14 @@ class ChannelScreen extends StatelessWidget {
           title,
           style: Theme.of(context).primaryTextTheme.headline3,
         ),
-        Text(description, style: Theme.of(context).primaryTextTheme.subtitle1)
+        Text(description, style: Theme.of(context).primaryTextTheme.subtitle1),
+        Text('$subscribers subscribers',
+            style: Theme.of(context).primaryTextTheme.subtitle1),
+        CustomButtons.standardButton(
+          context,
+          text: "Subscribe",
+          onPressed: () {},
+        ),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/widgets/verified_widget.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class UserProfileScreen extends StatelessWidget {
@@ -116,29 +117,7 @@ class UserProfileScreen extends StatelessWidget {
             SizedBox(
               width: isVerified ? 16 : 0,
             ),
-            isVerified
-                ? Container(
-                    margin: EdgeInsets.only(bottom: 8.0),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      color: TinyColor(Theme.of(context).accentColor)
-                          .lighten(35)
-                          .color,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12.0),
-                      ),
-                    ),
-                    child: Text(
-                      "Verified",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: TinyColor(Theme.of(context).accentColor)
-                              .lighten(0)
-                              .color),
-                    ),
-                  )
-                : Container(),
+            isVerified ? VerifiedWidget() : Container(),
           ],
         ),
         SizedBox(
@@ -214,7 +193,7 @@ class UserProfileScreen extends StatelessWidget {
 
   Widget buildPosts(context) {
     List<Widget> posts = [];
-    BlocProvider.of<PostBloc>(context).add(GetPost());
+    BlocProvider.of<PostBloc>(context).add(FetchInitialPost());
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),

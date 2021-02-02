@@ -32,6 +32,14 @@ class MessageManagement {
           messageBody: "okay cya",
           userId: '002',
           recipientId: '001',
+        ),
+        Message(
+          createDate: "02:47",
+          messageType: "photo",
+          messageBody:
+              "https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg",
+          userId: '002',
+          recipientId: '001',
         )
       ];
     });

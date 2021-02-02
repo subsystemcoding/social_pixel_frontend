@@ -25,23 +25,42 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   ) async* {
     yield PostLoading();
     try {
-      if (event is GetPost) {
-        final posts = await postManagement.fetchPosts();
-        yield PostLoaded(posts);
-      } else if (event is GetPostAndGame) {
-        final posts = await postManagement.fetchPosts();
-        yield PostLoaded(posts);
-        final games = await postManagement.fetchGamePosts();
-        yield GamePostLoaded(games);
-      } else if (event is GetGame) {
-        final games = await postManagement.fetchGamePosts();
-        yield GamePostLoaded(games);
+      if (event is FetchInitialPost) {
+        if (event.channelId == 0) {
+          var cachedPosts = await postManagement.fetchCachedPosts();
+          if (cachedPosts.isNotEmpty) {
+            yield PostLoaded(cachedPosts);
+          }
+        }
+
+        ///if not available due to internet
+        ///show no internet connection snackbar
+        ///If both are not available then
+        ///connect to internet screen
+        yield PostLoaded(
+            await postManagement.fetchFirstPosts(channelId: event.channelId));
+      } else if (event is FetchMorePost) {
+        yield PostLoaded(
+            await postManagement.fetchMorePosts(channelId: event.channelId));
+      } else if (event is FetchNewPost) {
+        /// if no new post available then show snack bar
+        yield PostLoaded(
+            await postManagement.fetchNewPosts(channelId: event.channelId));
+      } else if (event is FetchSearchedPost) {
+        /// Return searched posts with hashtags
+        yield PostLoaded(
+            await postManagement.fetchSearchedPosts(hashtags: event.hashtags));
+      } else if (event is FetchProfilePost) {
+        /// Return posts that are under user profile
+        yield PostLoaded(
+            await postManagement.fetchProfilePosts(userId: event.userId));
       } else if (event is SendPost) {
         //await postManagement.sendPost(post, PostSending.Successful);
         // TODO
         yield PostSent(PostSending.Successful);
       }
     } catch (e) {
+      print(e);
       yield PostError("Could not find posts");
     }
     // TODO: implement mapEventToState

@@ -1,27 +1,59 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
+import 'package:socialpixel/data/models/comment.dart';
+import 'package:socialpixel/data/models/profile.dart';
+
+import 'location.dart';
+
+part 'post.g.dart';
+
+@HiveType(typeId: 0)
 class Post {
+  @HiveField(0)
   final int postId;
+  @HiveField(1)
   final String userName;
+  @HiveField(2)
   final String userAvatarLink;
+  @HiveField(3)
   final String datePosted;
+  @HiveField(4)
   final String postImageLink;
-  final String status;
+  @HiveField(5)
   final String caption;
-  final List<String> otherUsers;
-  final String gpsTag;
+  @HiveField(6)
+  final List<Profile> otherUsers;
+  @HiveField(7)
+  final int upvotes;
+  @HiveField(8)
+  final int commentCount;
+  @HiveField(9)
+  final List<Comment> comments;
+  @HiveField(10)
+  final Location location;
+  @HiveField(11)
+  Uint8List userImageBytes;
+  @HiveField(12)
+  Uint8List postImageBytes;
+
   Post({
     this.postId,
     this.userName,
     this.userAvatarLink,
     this.datePosted,
     this.postImageLink,
-    this.status,
     this.caption,
     this.otherUsers,
-    this.gpsTag,
+    this.upvotes,
+    this.commentCount,
+    this.comments,
+    this.location,
+    this.userImageBytes,
+    this.postImageBytes,
   });
 
   Post copyWith({
@@ -30,10 +62,14 @@ class Post {
     String userAvatarLink,
     String datePosted,
     String postImageLink,
-    String status,
     String caption,
-    List<String> otherUsers,
-    String gpsTag,
+    List<Profile> otherUsers,
+    int upvotes,
+    int commentCount,
+    List<Comment> comments,
+    Location location,
+    Uint8List userImageBytes,
+    Uint8List postImageBytes,
   }) {
     return Post(
       postId: postId ?? this.postId,
@@ -41,10 +77,14 @@ class Post {
       userAvatarLink: userAvatarLink ?? this.userAvatarLink,
       datePosted: datePosted ?? this.datePosted,
       postImageLink: postImageLink ?? this.postImageLink,
-      status: status ?? this.status,
       caption: caption ?? this.caption,
       otherUsers: otherUsers ?? this.otherUsers,
-      gpsTag: gpsTag ?? this.gpsTag,
+      upvotes: upvotes ?? this.upvotes,
+      commentCount: commentCount ?? this.commentCount,
+      comments: comments ?? this.comments,
+      location: location ?? this.location,
+      userImageBytes: userImageBytes ?? this.userImageBytes,
+      postImageBytes: postImageBytes ?? this.postImageBytes,
     );
   }
 
@@ -55,10 +95,14 @@ class Post {
       'userAvatarLink': userAvatarLink,
       'datePosted': datePosted,
       'postImageLink': postImageLink,
-      'status': status,
       'caption': caption,
-      'otherUsers': otherUsers,
-      'gpsTag': gpsTag,
+      'otherUsers': otherUsers?.map((x) => x?.toMap())?.toList(),
+      'upvotes': upvotes,
+      'commentCount': commentCount,
+      'comments': comments?.map((x) => x?.toMap())?.toList(),
+      'location': location?.toMap(),
+      // 'userImageBytes': userImageBytes?.toMap(),
+      // 'postImageBytes': postImageBytes?.toMap(),
     };
   }
 
@@ -71,10 +115,16 @@ class Post {
       userAvatarLink: map['userAvatarLink'],
       datePosted: map['datePosted'],
       postImageLink: map['postImageLink'],
-      status: map['status'],
       caption: map['caption'],
-      otherUsers: List<String>.from(map['otherUsers']),
-      gpsTag: map['gpsTag'],
+      otherUsers:
+          List<Profile>.from(map['otherUsers']?.map((x) => Profile.fromMap(x))),
+      upvotes: map['upvotes'],
+      commentCount: map['commentCount'],
+      comments:
+          List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
+      location: Location.fromMap(map['location']),
+      // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
+      // postImageBytes: Uint8List.fromMap(map['postImageBytes']),
     );
   }
 
@@ -84,7 +134,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, status: $status, caption: $caption, otherUsers: $otherUsers, gpsTag: $gpsTag)';
+    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location, userImageBytes: $userImageBytes, postImageBytes: $postImageBytes)';
   }
 
   @override
@@ -97,10 +147,14 @@ class Post {
         o.userAvatarLink == userAvatarLink &&
         o.datePosted == datePosted &&
         o.postImageLink == postImageLink &&
-        o.status == status &&
         o.caption == caption &&
         listEquals(o.otherUsers, otherUsers) &&
-        o.gpsTag == gpsTag;
+        o.upvotes == upvotes &&
+        o.commentCount == commentCount &&
+        listEquals(o.comments, comments) &&
+        o.location == location &&
+        o.userImageBytes == userImageBytes &&
+        o.postImageBytes == postImageBytes;
   }
 
   @override
@@ -110,9 +164,13 @@ class Post {
         userAvatarLink.hashCode ^
         datePosted.hashCode ^
         postImageLink.hashCode ^
-        status.hashCode ^
         caption.hashCode ^
         otherUsers.hashCode ^
-        gpsTag.hashCode;
+        upvotes.hashCode ^
+        commentCount.hashCode ^
+        comments.hashCode ^
+        location.hashCode ^
+        userImageBytes.hashCode ^
+        postImageBytes.hashCode;
   }
 }

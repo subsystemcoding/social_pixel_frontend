@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:hive/hive.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/data/repos/connectivity.dart';
+import 'package:socialpixel/data/repos/hive_repository.dart';
+import 'package:socialpixel/data/test_data/test_data.dart';
 
 enum PostSending {
   Successful,
@@ -11,6 +17,7 @@ enum PostSending {
 
 class PostManagement {
   Random random;
+  int currentPostId = 0;
   PostManagement() {
     random = Random();
   }
@@ -21,59 +28,119 @@ class PostManagement {
     });
   }
 
-  Future<List<Game>> fetchGamePosts() {
+  Future<List<Game>> fetchGamePosts({int channelId}) {
     return Future.delayed(Duration(seconds: 1), () {
-      return [
-        Game(
-            name: "First Game",
-            description: "This the channel's first game",
-            image:
-                "https://data4.origin.com/asset/content/dam/originx/web/app/programs/About/aboutorigin_3840x2160_battlefield1.jpg/27051ac9-d3c0-49e3-9979-3dc1058a69f5/original.jpg"),
-        Game(
-            name: "Second Game",
-            description:
-                "This the channel's second game which is amazing and beyond explosion, muhahaha",
-            image:
-                "https://i.guim.co.uk/img/media/c6f7b43fa821d06fe1ab4311e558686529931492/168_84_1060_636/master/1060.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=fd98bc73a66809dbb678b1a88aa6f96c")
-      ];
+      String jsonData = TestData.gamePostData();
+      List<dynamic> list = json.decode(jsonData);
+
+      List<Game> games = list.map((obj) {
+        return Game.fromMap(obj);
+      }).toList();
+
+      return games;
     });
   }
 
-  Future<List<Post>> fetchPosts() {
-    return Future.delayed(Duration(seconds: 1), () {
-      return [
-        Post(
-            postId: 1,
-            userName: "Anas Patel",
-            userAvatarLink:
-                "https://i.pinimg.com/originals/5b/b4/8b/5bb48b07fa6e3840bb3afa2bc821b882.jpg",
-            datePosted: "2 days ago",
-            postImageLink:
-                "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=1.00xw:0.669xh;0,0.190xh&resize=1200:*",
-            otherUsers: [
-              "https://pbs.twimg.com/profile_images/1342768807891378178/8le-DzgC.jpg",
-              "https://png.pngtree.com/thumb_back/fh260/background/20190827/pngtree-random-energy-wave-background-image_307670.jpg"
-            ],
-            status: "76 upvotes   2 comments",
-            caption: "Ugly dog i found on my strret.",
-            gpsTag: "Abu Dhabi"),
-        Post(
-            postId: 3,
-            userName: "Benjamin",
-            userAvatarLink:
-                "https://pbs.twimg.com/profile_images/1342768807891378178/8le-DzgC.jpg",
-            datePosted: "2 days ago",
-            postImageLink:
-                "https://post.greatist.com/wp-content/uploads/sites/3/2020/02/322868_1100-1100x628.jpg",
-            otherUsers: [
-              "https://pbs.twimg.com/profile_images/1342768807891378178/8le-DzgC.jpg",
-              "https://png.pngtree.com/thumb_back/fh260/background/20190827/pngtree-random-energy-wave-background-image_307670.jpg",
-              "https://www.computerhope.com/jargon/r/random-dice.jpg"
-            ],
-            status: "94562 upvotes   456 comments",
-            caption: "Believe or not, I ate this guy",
-            gpsTag: "Dubai"),
-      ];
+  Future<List<Post>> fetchFirstPosts({int channelId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _deleteAllPostInCache().then((_) async {
+      await _addPostsToCache(posts);
     });
+    return posts;
+  }
+
+  Future<List<Post>> fetchMorePosts({int channelId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> fetchNewPosts({int channelId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> fetchSearchedPosts({List<String> hashtags}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> fetchProfilePosts({int userId}) async {
+    final posts = await _fetchPostsFromInternet();
+
+    //delete and add posts in the background
+    _addPostsToCache(posts);
+    return posts;
+  }
+
+  Future<List<Post>> _fetchPostsFromInternet() {
+    return Future.delayed(
+      Duration(seconds: 1),
+      () {
+        String jsonData = TestData.postData();
+        List<dynamic> list = json.decode(jsonData);
+
+        List<Post> posts = list.map((obj) {
+          return Post.fromMap(obj);
+        }).toList();
+
+        return posts.sublist(5, 10);
+      },
+    );
+  }
+
+  Future<List<Post>> fetchCachedPosts() async {
+    final box = await Hive.openBox('posts');
+    List<Post> posts = [];
+    for (int i = 0; i < box.length; i++) {
+      posts.add(box.getAt(i));
+    }
+    return posts;
+  }
+
+  Future<void> _addPostsToCache(List<Post> posts) async {
+    final box = await Hive.openBox('posts');
+
+    for (int i = 0; i < posts.length; i++) {
+      //convert userAvatarLink to base64
+      final post = posts[i];
+      final userAvatar =
+          await Connectivity.networkImageToBytes(post.userAvatarLink);
+      //convert postImageLink to base64
+      final postImage =
+          await Connectivity.networkImageToBytes(post.postImageLink);
+      //convert otherUsers avatar to base64
+      List<Profile> otherUsers = [];
+      for (int j = 0; j < post.otherUsers.length; j++) {
+        final user = post.otherUsers[j];
+        final avatar =
+            await Connectivity.networkImageToBytes(user.userAvatarImage);
+        otherUsers.add(user.copyWith(userImageBytes: avatar));
+      }
+
+      // add the new post to the box
+      final newPost = post.copyWith(
+        userImageBytes: userAvatar,
+        postImageBytes: postImage,
+        otherUsers: otherUsers,
+      );
+
+      box.put(newPost.postId, newPost);
+    }
+  }
+
+  Future<void> _deleteAllPostInCache() async {
+    final box = await Hive.openBox('posts');
+    await box.clear();
   }
 }

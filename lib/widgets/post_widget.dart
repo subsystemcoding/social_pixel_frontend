@@ -1,14 +1,24 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:socialpixel/data/models/location.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 
 class PostWidget extends StatelessWidget {
   final String userName;
-  final ImageProvider<Object> userAvatar;
+  final String userAvatar;
   final String datePosted;
-  final ImageProvider<Object> postImage;
+  final String postImage;
   final String caption;
-  final List<ImageProvider<Object>> otherUsers;
-  final String status;
-  final String gpsTag;
+  final List<String> otherUsers;
+  final int upvotes;
+  final int comments;
+  final Location location;
+  final Uint8List userAvatarBytes;
+  final Uint8List postImageBytes;
+  final List<Uint8List> otherUsersBytes;
 
   const PostWidget({
     Key key,
@@ -16,10 +26,14 @@ class PostWidget extends StatelessWidget {
     this.datePosted,
     this.postImage,
     this.otherUsers,
-    this.status,
     this.caption,
     this.userName,
-    this.gpsTag,
+    this.upvotes,
+    this.comments,
+    this.location,
+    this.userAvatarBytes,
+    this.postImageBytes,
+    this.otherUsersBytes,
   }) : super(key: key);
 
   @override
@@ -48,7 +62,7 @@ class PostWidget extends StatelessWidget {
           SizedBox(
             height: 12.0,
           ),
-          getGpsTag(text: this.gpsTag),
+          getGpsTag(text: this.location.toString()),
           getCaption(context),
           SizedBox(
             height: 12.0,
@@ -69,7 +83,9 @@ class PostWidget extends StatelessWidget {
   Widget profile(BuildContext context) {
     return Row(children: [
       CircleAvatar(
-        backgroundImage: this.userAvatar,
+        backgroundImage: this.userAvatarBytes != null
+            ? MemoryImage(this.userAvatarBytes)
+            : NetworkImage(this.userAvatar),
         radius: 30,
       ),
       SizedBox(
@@ -101,7 +117,9 @@ class PostWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),
         child: Image(
-          image: this.postImage,
+          image: this.postImageBytes != null
+              ? MemoryImage(this.postImageBytes)
+              : NetworkImage(this.postImage),
           fit: BoxFit.scaleDown,
         ),
       ),
@@ -122,21 +140,23 @@ class PostWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        button(context,
-            text: "Upvote",
-            onPressed: () => {},
-            textStyle: Theme.of(context).textTheme.bodyText1,
-            backgroundColor: Theme.of(context).accentColor),
-        button(context,
-            text: "Comment",
-            onPressed: () => {},
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            backgroundColor: Theme.of(context).disabledColor),
-        button(context,
-            text: "Share",
-            onPressed: () => {},
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            backgroundColor: Theme.of(context).disabledColor),
+        CustomButtons.standardButton(
+          context,
+          text: "Upvote",
+          onPressed: () => {},
+        ),
+        CustomButtons.standardButton(
+          context,
+          text: "Comment",
+          onPressed: () => {},
+          type: ButtonStyleType.DisabledPurpleButton,
+        ),
+        CustomButtons.standardButton(
+          context,
+          text: "Share",
+          onPressed: () => {},
+          type: ButtonStyleType.DisabledPurpleButton,
+        ),
       ],
     );
   }
@@ -169,10 +189,19 @@ class PostWidget extends StatelessWidget {
         Container(
           width: 120,
           height: 45,
-          child: getavatars(context, images: this.otherUsers, radius: 20),
+          child: getavatars(context,
+              images: (this.otherUsersBytes == null ||
+                      this.otherUsersBytes.isEmpty ||
+                      this.otherUsersBytes[0] == null)
+                  ? this.otherUsers.map((link) => NetworkImage(link)).toList()
+                  : this
+                      .otherUsersBytes
+                      .map((bytes) => MemoryImage(bytes))
+                      .toList(),
+              radius: 20),
         ),
         Text(
-          this.status,
+          this.upvotes.toString() + " " + this.comments.toString() ?? '',
           style: Theme.of(context).primaryTextTheme.subtitle1,
         )
       ],
