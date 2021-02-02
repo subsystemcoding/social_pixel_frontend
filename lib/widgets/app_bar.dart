@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MenuBar {
+  final AppBar transparentAppBar = AppBar(
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+  );
+
   final AppBar appbar = AppBar(
     toolbarHeight: 75.0,
     backgroundColor: Colors.transparent,

@@ -7,6 +7,8 @@ import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/cover_image_header.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 import 'package:socialpixel/widgets/game_widget.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
@@ -23,8 +25,10 @@ class ChannelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Post> posts = [];
     List<Game> games = [];
+    //Getting the post and game blocs
     final postBloc = BlocProvider.of<PostBloc>(context);
     final gameBloc = BlocProvider.of<GameBloc>(context);
+    //getting the channel information from the bloc
     BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
@@ -38,23 +42,38 @@ class ChannelScreen extends StatelessWidget {
               child: NestedScrollView(
                 headerSliverBuilder: (context, value) {
                   return [
+                    //Appvar
                     SliverAppBar(
-                      expandedHeight: 300,
-                      collapsedHeight: 260,
-                      //floating: true,
-                      //pinned: true,
-                      flexibleSpace: buildImages(
-                        context,
-                        NetworkImage(state.channel.coverImageLink),
-                        NetworkImage(state.channel.avatarImageLink),
-                        state.channel.name,
-                        state.channel.description,
+                      collapsedHeight: 170,
+                      flexibleSpace: Column(
+                        children: [
+                          CoverImageHeader(
+                            coverImage:
+                                NetworkImage(state.channel.coverImageLink),
+                            avatarImage:
+                                NetworkImage(state.channel.avatarImageLink),
+                            coverImageHeight: 150,
+                            avatarImageRadius: 40,
+                          ),
+                        ],
                       ),
-                      bottom: CustomTabBar().tabBar(
-                        context,
-                        tabs: [
-                          Text("Posts"),
-                          Text("Rooms"),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          buildInfo(
+                            context,
+                            state.channel.name,
+                            state.channel.description,
+                            state.channel.subscribers,
+                          ),
+                          CustomTabBar().tabBar(
+                            context,
+                            tabs: [
+                              Text("Posts"),
+                              Text("Rooms"),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -122,10 +141,8 @@ class ChannelScreen extends StatelessWidget {
               if (state is PostLoaded) {
                 posts = state.posts;
               } else if (state is PostLoading) {
-                return Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
               }
               return buildPosts(context, posts);
@@ -209,14 +226,15 @@ class ChannelScreen extends StatelessWidget {
           Positioned(
             top: coverImageHeight + radius,
             width: MediaQuery.of(context).size.width,
-            child: buildInfo(context, title, description),
+            child: buildInfo(context, title, description, 12),
           ),
         ],
       ),
     );
   }
 
-  Widget buildInfo(BuildContext context, String title, String description) {
+  Widget buildInfo(
+      BuildContext context, String title, String description, int subscribers) {
     return Column(
       children: [
         SizedBox(
@@ -226,7 +244,14 @@ class ChannelScreen extends StatelessWidget {
           title,
           style: Theme.of(context).primaryTextTheme.headline3,
         ),
-        Text(description, style: Theme.of(context).primaryTextTheme.subtitle1)
+        Text(description, style: Theme.of(context).primaryTextTheme.subtitle1),
+        Text('$subscribers subscribers',
+            style: Theme.of(context).primaryTextTheme.subtitle1),
+        CustomButtons.standardButton(
+          context,
+          text: "Subscribe",
+          onPressed: () {},
+        ),
       ],
     );
   }
