@@ -37,10 +37,6 @@ class FetchProfilePost extends PostEvent {
   FetchProfilePost(this.userId);
 }
 
-class GetPostAndGame extends PostEvent {}
-
-class GetGame extends PostEvent {}
-
 class SendPost extends PostEvent {
   final imageLib.Image image;
   final Location location;

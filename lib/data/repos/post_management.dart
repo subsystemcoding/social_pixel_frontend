@@ -37,8 +37,6 @@ class PostManagement {
         return Game.fromMap(obj);
       }).toList();
 
-      //print(games);
-
       return games;
     });
   }
@@ -144,6 +142,5 @@ class PostManagement {
   Future<void> _deleteAllPostInCache() async {
     final box = await Hive.openBox('posts');
     await box.clear();
-    print('deleted');
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/bloc/game_bloc/game_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -23,13 +24,15 @@ class ChannelScreen extends StatelessWidget {
     List<Post> posts = [];
     List<Game> games = [];
     final postBloc = BlocProvider.of<PostBloc>(context);
+    final gameBloc = BlocProvider.of<GameBloc>(context);
     BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
-    postBloc.add(GetPostAndGame());
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: BlocBuilder<ChannelBloc, ChannelState>(
         builder: (context, state) {
           if (state is ChannelLoaded) {
+            postBloc.add(FetchInitialPost(channelId: channelId));
+            gameBloc.add(FetchGames(channelId));
             return DefaultTabController(
               length: 2,
               child: NestedScrollView(
@@ -90,12 +93,21 @@ class ChannelScreen extends StatelessWidget {
     List<Post> posts = [];
     return ListView(
       children: [
-        BlocBuilder<PostBloc, PostState>(
+        BlocBuilder<GameBloc, GameState>(
           builder: (context, state) {
-            if (state is GamePostLoaded) {
-              games = state.games;
+            if (state is GameLoaded) {
+              return state.games.isEmpty
+                  ? Container()
+                  : buildGames(context, state.games);
+            } else if (state is GameLoading) {
+              return Container(
+                height: 250,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
             }
-            return games.isEmpty ? Container() : buildGames(context, games);
+            return Container();
           },
         ),
         BlocListener<PostBloc, PostState>(
@@ -107,9 +119,14 @@ class ChannelScreen extends StatelessWidget {
           },
           child: BlocBuilder<PostBloc, PostState>(
             builder: (context, state) {
-              print(state);
               if (state is PostLoaded) {
                 posts = state.posts;
+              } else if (state is PostLoading) {
+                return Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }
               return buildPosts(context, posts);
             },

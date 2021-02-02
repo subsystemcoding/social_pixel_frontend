@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/bloc/game_bloc/game_bloc.dart';
 import 'package:socialpixel/bloc/leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
@@ -49,6 +50,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<LeaderboardBloc>(
           create: (context) => LeaderboardBloc(),
+        ),
+        BlocProvider<GameBloc>(
+          create: (context) => GameBloc(),
         ),
       ],
       child: GestureDetector(

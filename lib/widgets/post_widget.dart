@@ -80,7 +80,6 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget profile(BuildContext context) {
-    print(this.userAvatar);
     return Row(children: [
       CircleAvatar(
         backgroundImage: this.userAvatarBytes != null
@@ -112,7 +111,6 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget post() {
-    print(this.postImageBytes.toString());
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 300.0),
       child: ClipRRect(
@@ -183,15 +181,14 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget information(BuildContext context) {
-    print(this.otherUsersBytes);
     return Row(
       children: [
         Container(
           width: 120,
           height: 45,
           child: getavatars(context,
-              images: (this.otherUsersBytes.isEmpty ||
-                      this.otherUsersBytes == null ||
+              images: (this.otherUsersBytes == null ||
+                      this.otherUsersBytes.isEmpty ||
                       this.otherUsersBytes[0] == null)
                   ? this.otherUsers.map((link) => NetworkImage(link)).toList()
                   : this

@@ -54,14 +54,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         /// Return posts that are under user profile
         yield PostLoaded(
             await postManagement.fetchProfilePosts(userId: event.userId));
-      } else if (event is GetPostAndGame) {
-        final posts = await postManagement.fetchFirstPosts();
-        yield PostLoaded(posts);
-        final games = await postManagement.fetchGamePosts();
-        yield GamePostLoaded(games);
-      } else if (event is GetGame) {
-        final games = await postManagement.fetchGamePosts();
-        yield GamePostLoaded(games);
       } else if (event is SendPost) {
         //await postManagement.sendPost(post, PostSending.Successful);
         // TODO
