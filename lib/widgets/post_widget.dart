@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:socialpixel/data/models/location.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 
 class PostWidget extends StatelessWidget {
   final String userName;
@@ -139,21 +140,23 @@ class PostWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        button(context,
-            text: "Upvote",
-            onPressed: () => {},
-            textStyle: Theme.of(context).textTheme.bodyText1,
-            backgroundColor: Theme.of(context).accentColor),
-        button(context,
-            text: "Comment",
-            onPressed: () => {},
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            backgroundColor: Theme.of(context).disabledColor),
-        button(context,
-            text: "Share",
-            onPressed: () => {},
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            backgroundColor: Theme.of(context).disabledColor),
+        CustomButtons.standardButton(
+          context,
+          text: "Upvote",
+          onPressed: () => {},
+        ),
+        CustomButtons.standardButton(
+          context,
+          text: "Comment",
+          onPressed: () => {},
+          type: ButtonStyleType.DisabledPurpleButton,
+        ),
+        CustomButtons.standardButton(
+          context,
+          text: "Share",
+          onPressed: () => {},
+          type: ButtonStyleType.DisabledPurpleButton,
+        ),
       ],
     );
   }
