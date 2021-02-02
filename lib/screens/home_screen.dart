@@ -4,6 +4,7 @@ import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -22,6 +23,7 @@ class HomeScreen extends StatelessWidget {
         //specifying the currentroute
         currentRoute: '/home',
       ),
+      drawer: CustomDrawer(),
       body: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

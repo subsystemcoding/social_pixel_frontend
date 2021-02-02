@@ -12,10 +12,20 @@ class MenuBar {
     elevation: 0,
     leading: Padding(
       padding: const EdgeInsets.only(top: 24.0, left: 24.0),
-      child: Icon(
-        Icons.menu,
-        color: Colors.black,
-        size: 40.0,
+      child: GestureDetector(
+        onTap: () {
+          final scaffoldState = ScaffoldState();
+          if (scaffoldState.isDrawerOpen) {
+            Navigator.pop(scaffoldState.context);
+          } else {
+            scaffoldState.openDrawer();
+          }
+        },
+        child: Icon(
+          Icons.menu,
+          color: Colors.black,
+          size: 40.0,
+        ),
       ),
     ),
   );
