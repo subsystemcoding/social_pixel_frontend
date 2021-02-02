@@ -13,7 +13,7 @@ class GraphqlClient {
 
   factory GraphqlClient() => _singleton;
 
-  void query(String query) async {
+  Future<String> query(String query) async {
     try {
       var response = await this.client.post(
             url,
@@ -25,8 +25,9 @@ class GraphqlClient {
           );
 
       print(response.body.toString());
+      return response.body;
     } catch (e) {
-      print(e);
+      return 'down';
     }
   }
 }

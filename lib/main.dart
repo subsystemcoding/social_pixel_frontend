@@ -99,9 +99,10 @@ class _MyAppState extends State<MyApp> {
                   fontWeight: FontWeight.w600,
                   color: Colors.white),
               bodyText2: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xff7041ee)),
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff7041ee),
+              ),
             ),
             primaryTextTheme: TextTheme(
               headline1: TextStyle(
@@ -152,7 +153,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/home',
+          initialRoute: '/',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(
