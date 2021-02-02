@@ -6,11 +6,8 @@ import 'package:socialpixel/bloc/leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
-<<<<<<< HEAD
 import 'package:socialpixel/data/graphql_client.dart';
-=======
 import 'package:socialpixel/data/repos/hive_repository.dart';
->>>>>>> main
 import 'package:socialpixel/route_generator.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +25,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-<<<<<<< HEAD
   void initState() {
     super.initState();
     GraphqlClient();
@@ -47,10 +43,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     GraphqlClient().client.close();
-=======
-  void dispose() {
     HiveRepository().dispose();
->>>>>>> main
     super.dispose();
   }
 
@@ -159,11 +152,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-<<<<<<< HEAD
-          initialRoute: '/',
-=======
           initialRoute: '/home',
->>>>>>> main
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(
