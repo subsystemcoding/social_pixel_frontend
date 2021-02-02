@@ -9,6 +9,7 @@ import 'package:socialpixel/widgets/post_widget.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List<Post> posts = [];
     final postBloc = BlocProvider.of<PostBloc>(context);
     postBloc.add(FetchInitialPost());
     return Scaffold(
@@ -38,11 +39,9 @@ class HomeScreen extends StatelessWidget {
                   child: BlocBuilder<PostBloc, PostState>(
                     builder: (context, state) {
                       if (state is PostLoaded) {
-                        return buildPosts(context, state.posts);
+                        posts = state.posts;
                       }
-                      return Container(
-                        height: 300,
-                      );
+                      return buildPosts(context, posts);
                     },
                   ),
                 ),
