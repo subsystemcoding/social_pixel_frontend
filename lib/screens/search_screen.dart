@@ -8,6 +8,7 @@ import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 import 'package:tinycolor/tinycolor.dart';
@@ -22,6 +23,7 @@ class SearchScreen extends StatelessWidget {
     BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
     return Scaffold(
       appBar: MenuBar().appbar,
+      drawer: CustomDrawer(),
       bottomNavigationBar: BottomNavBar(
         currentRoute: '/search',
       ),
