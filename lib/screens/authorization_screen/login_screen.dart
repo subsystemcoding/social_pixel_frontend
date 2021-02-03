@@ -8,6 +8,11 @@ class LoginScreen extends StatelessWidget {
     'username': '',
     'password': '',
   };
+  final Map<String, dynamic> errors = {
+    'nonFieldErrors': {},
+    'username': {},
+    'password': {},
+  };
   LoginScreen({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -29,6 +34,18 @@ class LoginScreen extends StatelessWidget {
               return Center(
                 child: CircularProgressIndicator(),
               );
+            } else if (state is LoginUnsuccessful) {
+              errors['nonFieldErrors'] =
+                  state.errors.containsKey('nonFieldErrors')
+                      ? state.errors['nonFieldErrors'][0]
+                      : {};
+              errors['username'] = state.errors.containsKey('username')
+                  ? state.errors['username'][0]
+                  : {};
+              errors['password'] = state.errors.containsKey('password')
+                  ? state.errors['password'][0]
+                  : {};
+              print(state.errors);
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,6 +59,8 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   height: 40.0,
                 ),
+                _buildErrorMessage(context, errors['nonFieldErrors']),
+                _buildErrorMessage(context, errors['username']),
                 RaisedContainer(
                   color: Colors.white,
                   margin: EdgeInsets.symmetric(horizontal: 28.0),
@@ -61,6 +80,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   height: 12.0,
                 ),
+                _buildErrorMessage(context, errors['password']),
                 RaisedContainer(
                   margin: EdgeInsets.symmetric(horizontal: 28.0),
                   color: Colors.white,
@@ -139,5 +159,17 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildErrorMessage(BuildContext context, Map<dynamic, dynamic> error) {
+    String message = error.isNotEmpty ? error['message'] : null;
+    return error.isEmpty
+        ? Container()
+        : Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 40.0),
+            child: Text(
+              '• $message',
+              style: Theme.of(context).primaryTextTheme.overline,
+            ));
   }
 }

@@ -10,6 +10,13 @@ class RegisterScreen extends StatelessWidget {
     'password1': '',
     'password2': '',
   };
+  final Map<String, dynamic> errors = {
+    'nonFieldErrors': {},
+    'username': {},
+    'email': {},
+    'password1': {},
+    'password2': {},
+  };
   RegisterScreen({Key key}) : super(key: key);
 
   @override
@@ -32,6 +39,23 @@ class RegisterScreen extends StatelessWidget {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
+              } else if (state is RegistrationUnsuccessful) {
+                errors['nonFieldErrors'] =
+                    state.errors.containsKey('nonFieldErrors')
+                        ? state.errors['nonFieldErrors'][0]
+                        : {};
+                errors['username'] = state.errors.containsKey('username')
+                    ? state.errors['username'][0]
+                    : {};
+                errors['email'] = state.errors.containsKey('email')
+                    ? state.errors['email'][0]
+                    : {};
+                errors['password1'] = state.errors.containsKey('password1')
+                    ? state.errors['password1'][0]
+                    : {};
+                errors['password2'] = state.errors.containsKey('password2')
+                    ? state.errors['password2'][0]
+                    : {};
               }
               return _buildBody(context);
             },
@@ -54,21 +78,25 @@ class RegisterScreen extends StatelessWidget {
             SizedBox(
               height: 40.0,
             ),
+            _buildErrorMessage(context, errors['username']),
             buildTextField(context,
                 hintText: "Enter username", valueToChange: 'username'),
             SizedBox(
               height: 12.0,
             ),
+            _buildErrorMessage(context, errors['email']),
             buildTextField(context,
                 hintText: "Enter email", valueToChange: 'email'),
             SizedBox(
               height: 12.0,
             ),
+            _buildErrorMessage(context, errors['password1']),
             buildTextField(context,
                 hintText: "Enter Password", valueToChange: 'password1'),
             SizedBox(
               height: 12.0,
             ),
+            _buildErrorMessage(context, errors['password2']),
             buildTextField(context,
                 hintText: "Confirm Password", valueToChange: 'password2'),
             SizedBox(
@@ -159,5 +187,17 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildErrorMessage(BuildContext context, Map<dynamic, dynamic> error) {
+    String message = error.isNotEmpty ? error['message'] : null;
+    return error.isEmpty
+        ? Container()
+        : Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 40.0),
+            child: Text(
+              '• $message',
+              style: Theme.of(context).primaryTextTheme.overline,
+            ));
   }
 }

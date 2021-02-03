@@ -23,8 +23,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       if (response['success']) {
+        print('LoginSuccessful at authbloc:26');
         yield LoginSuccessful();
       } else {
+        print('LoginUnsuccessful at authbloc:29');
         yield LoginUnsuccessful(response['errors']);
       }
     } else if (event is Register) {
