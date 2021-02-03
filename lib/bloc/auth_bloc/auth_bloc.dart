@@ -18,16 +18,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async* {
     yield AuthWait();
     if (event is Login) {
-      var response = await _authRepository.authorizeLogin();
+      var response = await _authRepository.authorizeLogin(
+        username: event.username,
+        password: event.password,
+      );
       if (response['success']) {
         yield LoginSuccessful();
       } else {
-        yield LoginUnsuccessful();
+        yield LoginUnsuccessful(response['errors']);
       }
     } else if (event is Register) {
       var response = await _authRepository.authorizeRegister(
         username: event.username,
-        email: event.username,
+        email: event.email,
         password1: event.password1,
         password2: event.password2,
       );
@@ -35,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (response['success']) {
         yield RegistrationSuccessful();
       } else {
-        yield RegistrationUnsuccessful();
+        yield RegistrationUnsuccessful(response['errors']);
       }
     }
     // TODO: implement mapEventToState

@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:html';
 
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 
 class AuthRepository {
@@ -18,7 +18,7 @@ class AuthRepository {
   Future<dynamic> authorizeLogin({String username, String password}) async {
     var response = await client.query('''
     mutation {
-      tokenAuth(username: $username, password: $password ) {
+      tokenAuth(username: "$username", password: "$password" ) {
         success,
         errors,
         token,
@@ -26,6 +26,8 @@ class AuthRepository {
       }
     }
     ''');
+    print("Printing response from login");
+    print(response);
 
     var jsonResponse = jsonDecode(response)['data']['tokenAuth'];
     if (jsonResponse['success']) {
@@ -46,7 +48,7 @@ class AuthRepository {
     var response = await client.query('''
     mutation {
       refreshToken(
-        refreshToken: $refreshToken
+        refreshToken: "$refreshToken"
       ) {
         success,
         errors,
@@ -79,10 +81,10 @@ class AuthRepository {
     var response = await client.query(''' 
     mutation {
       register(
-        email: $email,
-        username: $email,
-        password1: $password1,
-        password2: $password2,
+        email: "$email",
+        username: "$username",
+        password1: "$password1",
+        password2: "$password2",
       ) {
         success,
         errors,

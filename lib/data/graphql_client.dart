@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 //This is a singleton class
 class GraphqlClient {
   final client = http.Client();
-  final url = 'http://localhost:8000/api/graphql';
+  final url = 'http://localhost:8000/graphql';
 
   GraphqlClient._internal();
 
@@ -21,13 +21,15 @@ class GraphqlClient {
               'Content-Type': 'application/json',
               "Accept": "application/json",
             },
-            body: jsonEncode({"query": query}),
+            body: jsonEncode({'query': query}),
           );
 
       print(response.body.toString());
       return response.body;
     } catch (e) {
-      return 'down';
+      print("Priniting Error");
+      print(e);
+      return null;
     }
   }
 }
