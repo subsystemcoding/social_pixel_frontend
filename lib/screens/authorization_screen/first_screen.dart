@@ -16,8 +16,9 @@ class FirstScreen extends StatelessWidget {
             width: 208,
             height: 208,
             child: Image(
-              image: NetworkImage(
-                  "https://cdn.logo.com/hotlink-ok/logo-social.png"),
+              image: AssetImage('assets/images/logo.jpg'),
+              // image: NetworkImage(
+              //     "https://cdn.logo.com/hotlink-ok/logo-social.png"),
             ),
           ),
           Text(

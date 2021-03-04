@@ -49,6 +49,7 @@ class BottomNavBar extends StatelessWidget {
               size: 28,
             ),
             onTap: () {
+              Navigator.of(context).pushNamed('/camera');
               // if (currentRoute != '/post') {
               //   Navigator.of(context).pushNamed('/post');
               // }

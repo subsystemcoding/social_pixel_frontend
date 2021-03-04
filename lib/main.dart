@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/auth_bloc/auth_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/game_bloc/game_bloc.dart';
 import 'package:socialpixel/bloc/leaderboard_bloc/leaderboard_bloc.dart';
@@ -28,16 +29,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     GraphqlClient();
-    GraphqlClient().query("""
-    query{
-      posts{
-        postId
-        image
-        author{
-          username
-        }
-      }
-    }""");
   }
 
   @override
@@ -71,6 +62,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<GameBloc>(
           create: (context) => GameBloc(),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(),
         ),
       ],
       child: GestureDetector(
@@ -139,6 +133,11 @@ class _MyAppState extends State<MyApp> {
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Colors.black),
+              overline: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Colors.red,
+              ),
             ),
             tabBarTheme: TabBarTheme(
                 labelStyle: TextStyle(
