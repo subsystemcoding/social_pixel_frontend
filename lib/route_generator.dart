@@ -14,6 +14,8 @@ import 'package:socialpixel/screens/post_screen/post_details_screen.dart';
 import 'package:socialpixel/screens/search_screen.dart';
 import 'package:socialpixel/screens/user_profile_screen.dart';
 
+import 'screens/settings_screen.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
@@ -31,6 +33,8 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
         );
+      case '/settings':
+        return MaterialPageRoute(builder: (_) => SettingsScreen());
       case '/search':
         return MaterialPageRoute(builder: (_) => SearchScreen());
       case '/message_list':

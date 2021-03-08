@@ -152,7 +152,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/',
+          initialRoute: '/settings',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(
