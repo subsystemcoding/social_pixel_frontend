@@ -12,7 +12,9 @@ import 'package:socialpixel/screens/post_screen/camera_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_preview_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_details_screen.dart';
 import 'package:socialpixel/screens/search_screen.dart';
+import 'package:socialpixel/screens/settings_screen.dart';
 import 'package:socialpixel/screens/user_profile_screen.dart';
+import 'package:socialpixel/screens/notif_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -33,10 +35,14 @@ class RouteGenerator {
         );
       case '/search':
         return MaterialPageRoute(builder: (_) => SearchScreen());
+      case '/settings':
+        return MaterialPageRoute(builder: (_) => SettingsScreen());
       case '/message_list':
         return MaterialPageRoute(builder: (_) => MessageListScreen());
       case '/message':
         return MaterialPageRoute(builder: (_) => MessageScreen());
+      case '/notif':
+        return MaterialPageRoute(builder: (_) => NotifScreen());
       case '/channel':
         return MaterialPageRoute(
           builder: (_) => ChannelScreen(

@@ -9,14 +9,14 @@ class MessageListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MenuBar().appbar,
+      appBar: MenuBar().appbar(context, title: "Messages"),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          MenuBar().titleBar(context, title: "Messages"),
+          //MenuBar().titleBar(context, title: "Messages"),
           SizedBox(height: 16.0),
           SearchBar(),
-          SizedBox(height: 24.0),
+          SizedBox(height: 16.0),
           Expanded(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 12.0),

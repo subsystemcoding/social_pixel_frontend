@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     final postBloc = BlocProvider.of<PostBloc>(context);
     postBloc.add(GetPost());
     return Scaffold(
-      appBar: MenuBar().appbar,
+      appBar: MenuBar().appbar(context, title: "Home"),
       bottomNavigationBar: BottomNavBar(
         currentRoute: '/home',
       ),
@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            MenuBar().titleBar(context, title: "Home"),
+            //MenuBar().titleBar(context, title: "Home"),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () {

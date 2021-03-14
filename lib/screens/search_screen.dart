@@ -18,7 +18,7 @@ class SearchScreen extends StatelessWidget {
     BlocProvider.of<ChannelBloc>(context).add(GetChannelList());
     BlocProvider.of<PostBloc>(context).add(GetPost());
     return Scaffold(
-      appBar: MenuBar().appbar,
+      appBar: MenuBar().appbar(context, title: "Search"),
       bottomNavigationBar: BottomNavBar(
         currentRoute: '/search',
       ),
@@ -26,13 +26,15 @@ class SearchScreen extends StatelessWidget {
         length: 3,
         child: Column(
           children: [
+            //MenuBar().titleBar(context, title: "Search"),
+            SizedBox(height: 8.0),
             SearchBar(),
             CustomTabBar().tabBar(
               context,
               tabs: [
-                Text("People"),
-                Text("Posts"),
-                Text("Channel"),
+                Text("PEOPLE"),
+                Text("POSTS"),
+                Text("CHANNELS"),
               ],
             ),
             SizedBox(

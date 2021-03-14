@@ -85,9 +85,9 @@ class BottomNavBar extends StatelessWidget {
               size: 28,
             ),
             onTap: () {
-              // if (currentRoute != '/notification') {
-              //   Navigator.of(context).pushNamed('/notification');
-              // }
+              if (currentRoute != '/notif') {
+                Navigator.of(context).pushNamed('/notif');
+              }
             },
           ),
         ],

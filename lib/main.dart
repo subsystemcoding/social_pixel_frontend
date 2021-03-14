@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/camera',
+          initialRoute: '/settings',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(
