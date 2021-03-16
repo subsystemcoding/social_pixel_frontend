@@ -6,12 +6,10 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appBar2 = AppBar(title: const Text('Settings'), actions: <Widget>[
-      IconButton(
-        icon: const Icon(Icons.navigate_next),
-        onPressed: () {},
-      ),
-    ]);
+    var appBar2 = AppBar(
+      title:
+          const Text('Settings', style: TextStyle(fontSize: 20.0, height: 2.5)),
+    );
     return Scaffold(
         appBar: appBar2,
         body: Container(
@@ -21,9 +19,6 @@ class SettingsScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(
-                    height: 48.0,
-                  ),
                   SizedBox(
                     height: 24.0,
                   ),
@@ -41,21 +36,11 @@ class SettingsScreen extends StatelessWidget {
                   SizedBox(
                     height: 24.0,
                   ),
-                  _buildHeading(context, "PRIVACY"),
-                  SizedBox(
-                    height: 12.0,
-                  ),
-                  _buildRow(context, "Blocked Accounts"),
-                  _buildRow(context, "Muted Accounts"),
-                  SizedBox(
-                    height: 24.0,
-                  ),
                   _buildHeading(context, "SECURITY"),
                   SizedBox(
                     height: 12.0,
                   ),
                   _buildRow(context, "Change Password"),
-                  _buildRow(context, "Login Activity"),
                   SizedBox(
                     height: 24.0,
                   ),
@@ -65,7 +50,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   _buildRow(context, "Personal Information"),
                   _buildRow(context, "Language"),
-                  _buildToggleRow(context, "Mobile Data Sver"),
                   _buildToggleRow(context, "Save To CameraRoll"),
                   _buildRow(context, "Request Verification"),
                   _buildRow(context, "Share to Other Applications"),
