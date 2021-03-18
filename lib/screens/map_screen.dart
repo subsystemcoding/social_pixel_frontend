@@ -27,7 +27,7 @@ class _MapScreenState extends State<MapScreen> {
   //mapcontroller for GoogleMaps
   Completer<GoogleMapController> _controller = Completer();
   //a dummy current position
-  Position currentPosition = new Position(longitude: 29, latitude: 54);
+  LatLng currentPosition = LatLng(29, 54);
   //profile of the user
   Profile profile;
   //markers for the map
@@ -63,10 +63,10 @@ class _MapScreenState extends State<MapScreen> {
       body: BlocListener<GeoBloc, GeoState>(
         listener: (context, state) {
           if (state is GeoPositionLoaded) {
-            currentPosition = state.position;
+            currentPosition =
+                LatLng(state.position.latitude, state.position.longitude);
             _controller.future.then((controller) {
-              controller.moveCamera(CameraUpdate.newLatLng(
-                  LatLng(currentPosition.latitude, currentPosition.longitude)));
+              controller.moveCamera(CameraUpdate.newLatLng(currentPosition));
             });
           } else if (state is GeoPositionError) {
             return Scaffold.of(context).showSnackBar(
@@ -113,11 +113,11 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  Widget _buildLocationWidget(BuildContext context, Position position) {
+  Widget _buildLocationWidget(BuildContext context, LatLng position) {
     bool includeMarker = true;
     if (position == null) {
       includeMarker = false;
-      position = new Position(latitude: 24.483483, longitude: 54.374130);
+      position = LatLng(24.483483, 54.374130);
     }
     return BlocBuilder<MapBloc, MapState>(
       builder: (context, state) {
