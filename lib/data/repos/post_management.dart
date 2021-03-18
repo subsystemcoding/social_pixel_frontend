@@ -16,11 +16,15 @@ enum PostSending {
 }
 
 class PostManagement {
-  Random random;
+  Random random = Random();
   int currentPostId = 0;
-  PostManagement() {
-    random = Random();
+  static final PostManagement _singleton = PostManagement._internal();
+
+  factory PostManagement() {
+    return _singleton;
   }
+
+  PostManagement._internal();
 
   Future<PostSending> sendPost(Post post, PostSending value) {
     return Future.delayed(Duration(milliseconds: 500), () {

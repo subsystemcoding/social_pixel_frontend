@@ -170,10 +170,11 @@ class _CameraWidgetState extends State<CameraWidget> {
   void takePictureHandler(BuildContext context) async {
     try {
       await _initializeControllerFuture;
+      Directory path = await getTemporaryDirectory();
       //take the picture
-      XFile xfile = await _controller.takePicture();
+      await _controller.takePicture(path.path);
       //Fix the image rotation
-      File file = await FlutterExifRotation.rotateImage(path: xfile.path);
+      File file = await FlutterExifRotation.rotateImage(path: path.path);
 
       //arg[0] = imagePath
       //arg[1] = isCamera (picture taken from camera?)

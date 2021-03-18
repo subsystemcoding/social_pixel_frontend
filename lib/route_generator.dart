@@ -6,6 +6,7 @@ import 'package:socialpixel/screens/authorization_screen/forget_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/register_screen.dart';
 import 'package:socialpixel/screens/channel_screen/channel_screen.dart';
 import 'package:socialpixel/screens/channel_screen/leaderboard_screen.dart';
+import 'package:socialpixel/screens/map_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_list_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_screen.dart';
 import 'package:socialpixel/screens/post_screen/camera_screen.dart';
@@ -41,6 +42,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MessageListScreen());
       case '/message':
         return MaterialPageRoute(builder: (_) => MessageScreen());
+      case '/map':
+        return MaterialPageRoute(builder: (_) => MapScreen());
       case '/channel':
         return MaterialPageRoute(
           builder: (_) => ChannelScreen(

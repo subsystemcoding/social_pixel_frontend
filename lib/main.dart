@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/auth_bloc/auth_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/game_bloc/game_bloc.dart';
+import 'package:socialpixel/bloc/geo_bloc/geo_bloc.dart';
 import 'package:socialpixel/bloc/leaderboard_bloc/leaderboard_bloc.dart';
+import 'package:socialpixel/bloc/map_bloc/map_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
@@ -28,12 +30,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    GraphqlClient();
+    //GraphqlClient();
   }
 
   @override
   void dispose() {
-    GraphqlClient().client.close();
+    //GraphqlClient().client.close();
     HiveRepository().dispose();
     super.dispose();
   }
@@ -47,6 +49,12 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider<PostBloc>(
           create: (context) => PostBloc(),
+        ),
+        BlocProvider<MapBloc>(
+          create: (context) => MapBloc(),
+        ),
+        BlocProvider<GeoBloc>(
+          create: (context) => GeoBloc(),
         ),
         BlocProvider<ProfileBloc>(
           create: (context) => ProfileBloc(),
@@ -152,7 +160,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/settings',
+          initialRoute: '/map',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(

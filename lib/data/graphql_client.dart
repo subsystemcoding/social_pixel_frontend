@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 class GraphqlClient {
   final client = http.Client();
   final url = 'http://localhost:8000/graphql';
+  Uri uri = Uri.http('localhost:8000', '/graphql');
 
   GraphqlClient._internal();
 
@@ -16,7 +17,7 @@ class GraphqlClient {
   Future<String> query(String query) async {
     try {
       var response = await this.client.post(
-            url,
+            uri,
             headers: {
               'Content-Type': 'application/json',
               "Accept": "application/json",

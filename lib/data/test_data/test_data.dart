@@ -3,746 +3,726 @@ class TestData {
     return '''
       [{
   "postId": 1,
-  "userName": "vkoeppke0",
-  "userAvatarLink": "http://dummyimage.com/75x75.jpg/cc0000/ffffff",
-  "datePosted": "11/20/2020",
+  "username": "jspera0",
+  "userAvatarLink": "http://dummyimage.com/75x75.jpg/dddddd/000000",
+  "datePosted": "4/30/2020",
   "postImageLink": "http://dummyimage.com/400x400.jpg/dddddd/000000",
-  "caption": "Laceration w fb of right eyelid and periocular area, subs",
-  "upvotes": 475,
-  "commentCount": 7,
+  "caption": "Oth fx head/neck of r femr, 7thQ",
+  "upvotes": 3639,
+  "commentCount": 8,
   "otherUsers": [
+    {
+      "userId": 18,
+      "userAvatarImage": "http://dummyimage.com/142x172.png/ff4444/ffffff"
+    },
+    {
+      "userId": 23,
+      "userAvatarImage": "http://dummyimage.com/158x240.jpg/dddddd/000000"
+    },
     {
       "userId": 32,
-      "userAvatarImage": "http://dummyimage.com/195x148.bmp/ff4444/ffffff"
+      "userAvatarImage": "http://dummyimage.com/136x241.png/5fa2dd/ffffff"
     },
     {
-      "userId": 11,
-      "userAvatarImage": "http://dummyimage.com/160x241.jpg/dddddd/000000"
-    },
-    {
-      "userId": 20,
-      "userAvatarImage": "http://dummyimage.com/237x223.png/5fa2dd/ffffff"
-    },
-    {
-      "userId": 2,
-      "userAvatarImage": "http://dummyimage.com/146x222.bmp/ff4444/ffffff"
-    },
-    {
-      "userId": 10,
-      "userAvatarImage": "http://dummyimage.com/147x171.png/cc0000/ffffff"
-    },
-    {
-      "userId": 30,
-      "userAvatarImage": "http://dummyimage.com/180x139.png/cc0000/ffffff"
-    },
-    {
-      "userId": 46,
-      "userAvatarImage": "http://dummyimage.com/108x204.png/5fa2dd/ffffff"
-    },
-    {
-      "userId": 10,
-      "userAvatarImage": "http://dummyimage.com/184x184.bmp/ff4444/ffffff"
-    },
-    {
-      "userId": 17,
-      "userAvatarImage": "http://dummyimage.com/187x160.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 16,
-      "userAvatarImage": "http://dummyimage.com/134x111.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 46,
-      "userAvatarImage": "http://dummyimage.com/202x207.png/dddddd/000000"
+      "userId": 6,
+      "userAvatarImage": "http://dummyimage.com/138x162.jpg/dddddd/000000"
     }
   ],
   "comments": [
     {
-      "commentId": 8972,
-      "commentContent": "Inj unsp musc/fasc/tend at wrs/hnd lv, right hand, sequela",
-      "repliedCommentId": 1964,
-      "dateCreated": "4/19/2020"
+      "commentId": 3553,
+      "commentContent": "Unsp injury of musc/fasc/tend prt biceps, unsp arm, init",
+      "repliedCommentId": 278,
+      "dateCreated": "9/22/2020"
     },
     {
-      "commentId": 9222,
-      "commentContent": "Fall into well, subsequent encounter",
-      "repliedCommentId": 7683,
-      "dateCreated": "4/9/2020"
-    },
-    {
-      "commentId": 7120,
-      "commentContent": "Displ bimalleol fx l low leg, 7thM",
-      "repliedCommentId": 6253,
-      "dateCreated": "4/27/2020"
-    },
-    {
-      "commentId": 4762,
-      "commentContent": "Toxic effect of unsp inorganic substance, assault, init",
-      "repliedCommentId": 1539,
-      "dateCreated": "11/1/2020"
-    }
-  ],
-  "userId": 22
-}, {
-  "postId": 2,
-  "userName": "sloidl1",
-  "userAvatarLink": "http://dummyimage.com/75x75.jpg/ff4444/ffffff",
-  "datePosted": "10/11/2020",
-  "postImageLink": "http://dummyimage.com/400x400.jpg/5fa2dd/ffffff",
-  "caption": "Foreign body in cornea, right eye, sequela",
-  "upvotes": 960,
-  "commentCount": 1,
-  "otherUsers": [
-    {
-      "userId": 31,
-      "userAvatarImage": "http://dummyimage.com/240x169.bmp/dddddd/000000"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 9856,
-      "commentContent": "Laceration of adductor musc/fasc/tend unsp thigh",
-      "repliedCommentId": 940,
-      "dateCreated": "3/6/2020"
-    },
-    {
-      "commentId": 9375,
-      "commentContent": "Nondisp fx of base of nk of l femr, 7thE",
-      "repliedCommentId": 1222,
-      "dateCreated": "8/25/2020"
-    },
-    {
-      "commentId": 4143,
-      "commentContent": "Laceration w/o foreign body of l idx fngr w/o damage to nail",
-      "repliedCommentId": 232,
-      "dateCreated": "7/25/2020"
-    },
-    {
-      "commentId": 2543,
-      "commentContent": "Heat cramp, initial encounter",
-      "repliedCommentId": 4086,
-      "dateCreated": "1/3/2021"
-    },
-    {
-      "commentId": 1819,
-      "commentContent": "Nondisp fx of trapezium, left wrist, init for opn fx",
-      "repliedCommentId": 7905,
-      "dateCreated": "5/8/2020"
-    },
-    {
-      "commentId": 9386,
-      "commentContent": "Inhalant dependence with inhalant-induced anxiety disorder",
-      "repliedCommentId": 7016,
-      "dateCreated": "1/5/2021"
-    },
-    {
-      "commentId": 1242,
-      "commentContent": "Unspecified mononeuropathy of right upper limb",
-      "repliedCommentId": 9327,
-      "dateCreated": "5/10/2020"
-    },
-    {
-      "commentId": 6791,
-      "commentContent": "Mesothelioma",
-      "repliedCommentId": 7403,
-      "dateCreated": "5/20/2020"
-    },
-    {
-      "commentId": 9403,
-      "commentContent": "Open bite of left eyelid and periocular area, sequela",
-      "repliedCommentId": 6256,
-      "dateCreated": "5/6/2020"
-    },
-    {
-      "commentId": 1849,
-      "commentContent": "Obesity complicating pregnancy, unspecified trimester",
-      "repliedCommentId": 3179,
-      "dateCreated": "8/3/2020"
-    }
-  ],
-  "userId": 5
-}, {
-  "postId": 3,
-  "userName": "achalmers2",
-  "userAvatarLink": "http://dummyimage.com/75x75.png/cc0000/ffffff",
-  "datePosted": "4/18/2020",
-  "postImageLink": "http://dummyimage.com/400x400.bmp/dddddd/000000",
-  "caption": "Disorders of muscle tone of newborn",
-  "upvotes": 319,
-  "commentCount": 5,
-  "otherUsers": [
-    {
-      "userId": 27,
-      "userAvatarImage": "http://dummyimage.com/107x116.bmp/dddddd/000000"
-    },
-    {
-      "userId": 1,
-      "userAvatarImage": "http://dummyimage.com/234x151.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 11,
-      "userAvatarImage": "http://dummyimage.com/173x157.bmp/dddddd/000000"
-    },
-    {
-      "userId": 39,
-      "userAvatarImage": "http://dummyimage.com/165x155.png/ff4444/ffffff"
-    },
-    {
-      "userId": 15,
-      "userAvatarImage": "http://dummyimage.com/187x242.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 40,
-      "userAvatarImage": "http://dummyimage.com/183x138.jpg/5fa2dd/ffffff"
-    },
-    {
-      "userId": 30,
-      "userAvatarImage": "http://dummyimage.com/122x183.png/dddddd/000000"
-    },
-    {
-      "userId": 15,
-      "userAvatarImage": "http://dummyimage.com/129x157.bmp/ff4444/ffffff"
-    },
-    {
-      "userId": 28,
-      "userAvatarImage": "http://dummyimage.com/221x203.jpg/dddddd/000000"
-    },
-    {
-      "userId": 35,
-      "userAvatarImage": "http://dummyimage.com/166x177.jpg/5fa2dd/ffffff"
-    },
-    {
-      "userId": 7,
-      "userAvatarImage": "http://dummyimage.com/180x117.jpg/ff4444/ffffff"
-    },
-    {
-      "userId": 49,
-      "userAvatarImage": "http://dummyimage.com/212x230.png/dddddd/000000"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 6776,
-      "commentContent": "Puncture wound without foreign body of oral cavity, sequela",
-      "repliedCommentId": 5046,
-      "dateCreated": "10/26/2020"
-    },
-    {
-      "commentId": 9039,
-      "commentContent": "Nexdtve age-related mclr degn, right eye, intermed dry stage",
-      "repliedCommentId": 657,
-      "dateCreated": "1/1/2021"
-    },
-    {
-      "commentId": 4911,
-      "commentContent": "Burn of first degree of unspecified hand, unspecified site",
-      "repliedCommentId": 4306,
-      "dateCreated": "9/14/2020"
-    },
-    {
-      "commentId": 5776,
-      "commentContent": "Laceration of thoracic trachea, initial encounter",
-      "repliedCommentId": 3832,
-      "dateCreated": "12/24/2020"
-    },
-    {
-      "commentId": 4712,
-      "commentContent": "War operations involving friendly fire, sequela",
-      "repliedCommentId": 7615,
-      "dateCreated": "1/26/2021"
-    },
-    {
-      "commentId": 2981,
-      "commentContent": "Other specified injuries of ankle",
-      "repliedCommentId": 5892,
-      "dateCreated": "2/10/2020"
-    },
-    {
-      "commentId": 7679,
-      "commentContent": "Accidental rifle, shotgun and larger firearm discharge",
-      "repliedCommentId": 9468,
-      "dateCreated": "11/12/2020"
-    },
-    {
-      "commentId": 1144,
-      "commentContent": "Unspecified fracture of acetabulum",
-      "repliedCommentId": 1355,
-      "dateCreated": "5/27/2020"
-    },
-    {
-      "commentId": 8692,
-      "commentContent": "Nondisp fx of medial wall of right acetabulum, init",
-      "repliedCommentId": 583,
-      "dateCreated": "5/5/2020"
-    }
-  ],
-  "userId": 12
-}, {
-  "postId": 4,
-  "userName": "estrewther3",
-  "userAvatarLink": "http://dummyimage.com/75x75.bmp/5fa2dd/ffffff",
-  "datePosted": "10/21/2020",
-  "postImageLink": "http://dummyimage.com/400x400.png/ff4444/ffffff",
-  "caption": "Allergy status to anesthetic agent status",
-  "upvotes": 2750,
-  "commentCount": 1,
-  "otherUsers": [
-    {
-      "userId": 32,
-      "userAvatarImage": "http://dummyimage.com/148x219.bmp/dddddd/000000"
-    },
-    {
-      "userId": 42,
-      "userAvatarImage": "http://dummyimage.com/171x205.jpg/cc0000/ffffff"
-    },
-    {
-      "userId": 4,
-      "userAvatarImage": "http://dummyimage.com/197x130.bmp/5fa2dd/ffffff"
-    },
-    {
-      "userId": 21,
-      "userAvatarImage": "http://dummyimage.com/242x247.jpg/ff4444/ffffff"
-    },
-    {
-      "userId": 41,
-      "userAvatarImage": "http://dummyimage.com/158x238.png/ff4444/ffffff"
-    },
-    {
-      "userId": 40,
-      "userAvatarImage": "http://dummyimage.com/152x182.jpg/ff4444/ffffff"
-    },
-    {
-      "userId": 31,
-      "userAvatarImage": "http://dummyimage.com/228x107.png/cc0000/ffffff"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 3202,
-      "commentContent": "Cystic meniscus, post horn of medial meniscus, unsp knee",
-      "repliedCommentId": 7938,
-      "dateCreated": "11/1/2020"
-    },
-    {
-      "commentId": 2842,
-      "commentContent": "Nondisp oblique fx shaft of l fibula, 7thD",
-      "repliedCommentId": 3339,
+      "commentId": 7416,
+      "commentContent": "Malignant neoplasm of thymus",
+      "repliedCommentId": 192,
       "dateCreated": "3/4/2020"
     },
     {
-      "commentId": 4564,
-      "commentContent": "Unsp fx the low end r rad, 7thQ",
-      "repliedCommentId": 3856,
-      "dateCreated": "7/9/2020"
+      "commentId": 4673,
+      "commentContent": "Nondisp fx of hook pro of hamate bone, l wrs, 7thG",
+      "repliedCommentId": 3135,
+      "dateCreated": "6/20/2020"
     }
   ],
-  "userId": 22
+  "userId": 37,
+  "location": {
+    "latitude": 24.483752,
+    "longitude": 54.374517
+  }
 }, {
-  "postId": 5,
-  "userName": "mcristea4",
-  "userAvatarLink": "http://dummyimage.com/75x75.bmp/ff4444/ffffff",
-  "datePosted": "2/3/2020",
-  "postImageLink": "http://dummyimage.com/400x400.bmp/5fa2dd/ffffff",
-  "caption": "Displ commnt fx shaft of l fibula, 7thF",
-  "upvotes": 3613,
-  "commentCount": 1,
-  "otherUsers": [
-    {
-      "userId": 42,
-      "userAvatarImage": "http://dummyimage.com/116x245.jpg/dddddd/000000"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 3387,
-      "commentContent": "Unspecified injury of right foot",
-      "repliedCommentId": 4513,
-      "dateCreated": "9/3/2020"
-    },
-    {
-      "commentId": 345,
-      "commentContent": "Driver of 3-whl mv inj in clsn w 2/3-whl mv nontraf, subs",
-      "repliedCommentId": 6515,
-      "dateCreated": "3/15/2020"
-    },
-    {
-      "commentId": 9930,
-      "commentContent": "Lacerat flexor musc/fasc/tend r rng fngr at wrs/hnd lv, sqla",
-      "repliedCommentId": 9274,
-      "dateCreated": "1/29/2021"
-    },
-    {
-      "commentId": 2489,
-      "commentContent": "Mech compl of surgically created arteriovenous fistula, subs",
-      "repliedCommentId": 9752,
-      "dateCreated": "4/10/2020"
-    },
-    {
-      "commentId": 8205,
-      "commentContent": "Nondisp transverse fx shaft of unsp femr, 7thN",
-      "repliedCommentId": 4501,
-      "dateCreated": "8/3/2020"
-    },
-    {
-      "commentId": 1389,
-      "commentContent": "Open bite of unspecified part of head, subsequent encounter",
-      "repliedCommentId": 3878,
-      "dateCreated": "10/19/2020"
-    },
-    {
-      "commentId": 7441,
-      "commentContent": "Oth injury of other blood vessels at forearm level",
-      "repliedCommentId": 9991,
-      "dateCreated": "3/11/2020"
-    },
-    {
-      "commentId": 5695,
-      "commentContent": "Contusion of unspecified lower leg, initial encounter",
-      "repliedCommentId": 1951,
-      "dateCreated": "8/23/2020"
-    }
-  ],
-  "userId": 22
-}, {
-  "postId": 6,
-  "userName": "hwysome5",
+  "postId": 2,
+  "username": "thanhard1",
   "userAvatarLink": "http://dummyimage.com/75x75.png/ff4444/ffffff",
-  "datePosted": "7/17/2020",
-  "postImageLink": "http://dummyimage.com/400x400.png/ff4444/ffffff",
-  "caption": "Chronic mucoid otitis media",
-  "upvotes": 2602,
-  "commentCount": 2,
+  "datePosted": "8/3/2020",
+  "postImageLink": "http://dummyimage.com/400x400.bmp/cc0000/ffffff",
+  "caption": "Contact with other specified machinery",
+  "upvotes": 1147,
+  "commentCount": 4,
   "otherUsers": [
     {
-      "userId": 12,
-      "userAvatarImage": "http://dummyimage.com/107x183.bmp/5fa2dd/ffffff"
+      "userId": 8,
+      "userAvatarImage": "http://dummyimage.com/157x135.bmp/5fa2dd/ffffff"
     },
     {
-      "userId": 30,
-      "userAvatarImage": "http://dummyimage.com/184x167.jpg/ff4444/ffffff"
-    },
-    {
-      "userId": 18,
-      "userAvatarImage": "http://dummyimage.com/236x214.bmp/ff4444/ffffff"
-    },
-    {
-      "userId": 48,
-      "userAvatarImage": "http://dummyimage.com/183x101.jpg/ff4444/ffffff"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 4684,
-      "commentContent": "Fall on same level due to ice and snow, sequela",
-      "repliedCommentId": 7954,
-      "dateCreated": "10/12/2020"
-    },
-    {
-      "commentId": 44,
-      "commentContent": "Nondisp longitud fx unsp patella, 7thQ",
-      "repliedCommentId": 5088,
-      "dateCreated": "11/6/2020"
-    },
-    {
-      "commentId": 1117,
-      "commentContent": "Maternal care for oth fetal problems, unsp trimester, unsp",
-      "repliedCommentId": 507,
-      "dateCreated": "10/7/2020"
-    },
-    {
-      "commentId": 5494,
-      "commentContent": "Toxic effect of taipan venom, intentional self-harm, init",
-      "repliedCommentId": 4657,
-      "dateCreated": "9/23/2020"
-    },
-    {
-      "commentId": 4247,
-      "commentContent": "Toxic effect of venom of hornets, undetermined, init encntr",
-      "repliedCommentId": 4648,
-      "dateCreated": "6/10/2020"
-    },
-    {
-      "commentId": 6807,
-      "commentContent": "Injury of other cranial nerves, right side, sequela",
-      "repliedCommentId": 7036,
-      "dateCreated": "2/7/2020"
-    }
-  ],
-  "userId": 8
-}, {
-  "postId": 7,
-  "userName": "kimpleton6",
-  "userAvatarLink": "http://dummyimage.com/75x75.jpg/cc0000/ffffff",
-  "datePosted": "9/10/2020",
-  "postImageLink": "http://dummyimage.com/400x400.bmp/ff4444/ffffff",
-  "caption": "Pnctr w/o foreign body of left cheek and TMJ area, sequela",
-  "upvotes": 642,
-  "commentCount": 7,
-  "otherUsers": [
-    {
-      "userId": 7,
-      "userAvatarImage": "http://dummyimage.com/140x109.jpg/5fa2dd/ffffff"
-    },
-    {
-      "userId": 50,
-      "userAvatarImage": "http://dummyimage.com/150x240.png/ff4444/ffffff"
+      "userId": 45,
+      "userAvatarImage": "http://dummyimage.com/114x122.jpg/dddddd/000000"
     },
     {
       "userId": 9,
-      "userAvatarImage": "http://dummyimage.com/118x160.png/ff4444/ffffff"
+      "userAvatarImage": "http://dummyimage.com/191x190.jpg/ff4444/ffffff"
+    },
+    {
+      "userId": 32,
+      "userAvatarImage": "http://dummyimage.com/151x113.bmp/ff4444/ffffff"
+    },
+    {
+      "userId": 31,
+      "userAvatarImage": "http://dummyimage.com/162x207.jpg/ff4444/ffffff"
+    },
+    {
+      "userId": 40,
+      "userAvatarImage": "http://dummyimage.com/190x225.png/ff4444/ffffff"
+    },
+    {
+      "userId": 32,
+      "userAvatarImage": "http://dummyimage.com/107x104.bmp/ff4444/ffffff"
+    },
+    {
+      "userId": 30,
+      "userAvatarImage": "http://dummyimage.com/194x191.jpg/dddddd/000000"
+    },
+    {
+      "userId": 25,
+      "userAvatarImage": "http://dummyimage.com/129x175.jpg/5fa2dd/ffffff"
     },
     {
       "userId": 49,
-      "userAvatarImage": "http://dummyimage.com/156x123.bmp/5fa2dd/ffffff"
-    },
-    {
-      "userId": 26,
-      "userAvatarImage": "http://dummyimage.com/194x103.png/cc0000/ffffff"
-    },
-    {
-      "userId": 11,
-      "userAvatarImage": "http://dummyimage.com/189x185.jpg/dddddd/000000"
-    },
-    {
-      "userId": 20,
-      "userAvatarImage": "http://dummyimage.com/238x116.png/5fa2dd/ffffff"
-    },
-    {
-      "userId": 3,
-      "userAvatarImage": "http://dummyimage.com/196x233.jpg/dddddd/000000"
+      "userAvatarImage": "http://dummyimage.com/198x176.jpg/cc0000/ffffff"
     }
   ],
   "comments": [
     {
-      "commentId": 8175,
-      "commentContent": "Chronic perichondritis of left external ear",
-      "repliedCommentId": 198,
-      "dateCreated": "11/4/2020"
+      "commentId": 5378,
+      "commentContent": "Laceration with foreign body of elbow",
+      "repliedCommentId": 2129,
+      "dateCreated": "10/3/2020"
     },
     {
-      "commentId": 8926,
-      "commentContent": "Secondary noninfectious iridocyclitis, left eye",
-      "repliedCommentId": 8316,
-      "dateCreated": "1/8/2021"
+      "commentId": 8553,
+      "commentContent": "Oth fx left femur, subs for opn fx type 3A/B/C w routn heal",
+      "repliedCommentId": 7675,
+      "dateCreated": "9/20/2020"
     }
   ],
-  "userId": 31
+  "userId": 35,
+  "location": {
+    "latitude": 14.10578,
+    "longitude": 13.911621
+  }
 }, {
-  "postId": 8,
-  "userName": "icaldecot7",
-  "userAvatarLink": "http://dummyimage.com/75x75.bmp/ff4444/ffffff",
-  "datePosted": "2/20/2020",
-  "postImageLink": "http://dummyimage.com/400x400.bmp/5fa2dd/ffffff",
-  "caption": "Breakdown (mechanical) of prosthetic orbit of left eye",
-  "upvotes": 1669,
-  "commentCount": 7,
+  "postId": 3,
+  "username": "esearchfield2",
+  "userAvatarLink": "http://dummyimage.com/75x75.bmp/dddddd/000000",
+  "datePosted": "8/19/2020",
+  "postImageLink": "http://dummyimage.com/400x400.jpg/5fa2dd/ffffff",
+  "caption": "Unstable burst fracture of second lumbar vertebra, sequela",
+  "upvotes": 3999,
+  "commentCount": 3,
   "otherUsers": [
     {
-      "userId": 43,
-      "userAvatarImage": "http://dummyimage.com/115x205.jpg/dddddd/000000"
+      "userId": 49,
+      "userAvatarImage": "http://dummyimage.com/157x175.bmp/5fa2dd/ffffff"
     },
     {
-      "userId": 20,
-      "userAvatarImage": "http://dummyimage.com/151x241.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 35,
-      "userAvatarImage": "http://dummyimage.com/242x165.jpg/5fa2dd/ffffff"
+      "userId": 46,
+      "userAvatarImage": "http://dummyimage.com/235x138.png/dddddd/000000"
     },
     {
       "userId": 30,
-      "userAvatarImage": "http://dummyimage.com/135x106.bmp/5fa2dd/ffffff"
-    },
-    {
-      "userId": 20,
-      "userAvatarImage": "http://dummyimage.com/227x201.jpg/dddddd/000000"
-    },
-    {
-      "userId": 47,
-      "userAvatarImage": "http://dummyimage.com/229x162.png/dddddd/000000"
-    },
-    {
-      "userId": 36,
-      "userAvatarImage": "http://dummyimage.com/242x150.jpg/dddddd/000000"
-    },
-    {
-      "userId": 28,
-      "userAvatarImage": "http://dummyimage.com/240x137.jpg/5fa2dd/ffffff"
-    },
-    {
-      "userId": 29,
-      "userAvatarImage": "http://dummyimage.com/105x183.jpg/dddddd/000000"
-    },
-    {
-      "userId": 11,
-      "userAvatarImage": "http://dummyimage.com/123x215.png/ff4444/ffffff"
-    },
-    {
-      "userId": 30,
-      "userAvatarImage": "http://dummyimage.com/149x171.bmp/dddddd/000000"
-    },
-    {
-      "userId": 23,
-      "userAvatarImage": "http://dummyimage.com/158x110.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 27,
-      "userAvatarImage": "http://dummyimage.com/142x248.jpg/cc0000/ffffff"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 4129,
-      "commentContent": "Unsp inj extn musc/fasc/tend l thm at wrs/hnd lv, sequela",
-      "repliedCommentId": 9208,
-      "dateCreated": "4/29/2020"
-    },
-    {
-      "commentId": 5730,
-      "commentContent": "Legal intervnt involving manhandling, suspect injured, subs",
-      "repliedCommentId": 8841,
-      "dateCreated": "12/20/2020"
-    }
-  ],
-  "userId": 49
-}, {
-  "postId": 9,
-  "userName": "dnehlsen8",
-  "userAvatarLink": "http://dummyimage.com/75x75.bmp/ff4444/ffffff",
-  "datePosted": "7/28/2020",
-  "postImageLink": "http://dummyimage.com/400x400.jpg/ff4444/ffffff",
-  "caption": "Struck by orca",
-  "upvotes": 3123,
-  "commentCount": 5,
-  "otherUsers": [
-    {
-      "userId": 28,
-      "userAvatarImage": "http://dummyimage.com/138x162.jpg/dddddd/000000"
-    },
-    {
-      "userId": 4,
-      "userAvatarImage": "http://dummyimage.com/145x211.png/5fa2dd/ffffff"
-    },
-    {
-      "userId": 23,
-      "userAvatarImage": "http://dummyimage.com/164x128.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 24,
-      "userAvatarImage": "http://dummyimage.com/199x106.png/5fa2dd/ffffff"
-    },
-    {
-      "userId": 43,
-      "userAvatarImage": "http://dummyimage.com/155x186.jpg/dddddd/000000"
-    },
-    {
-      "userId": 11,
-      "userAvatarImage": "http://dummyimage.com/233x182.png/cc0000/ffffff"
-    },
-    {
-      "userId": 48,
-      "userAvatarImage": "http://dummyimage.com/167x159.jpg/cc0000/ffffff"
-    },
-    {
-      "userId": 35,
-      "userAvatarImage": "http://dummyimage.com/200x128.jpg/cc0000/ffffff"
-    }
-  ],
-  "comments": [
-    {
-      "commentId": 916,
-      "commentContent": "3-part fx surg neck of unsp humer, subs for fx w routn heal",
-      "repliedCommentId": 3212,
-      "dateCreated": "1/15/2021"
-    },
-    {
-      "commentId": 8227,
-      "commentContent": "Lacerat musc/tend anterior grp at lower leg level, unsp leg",
-      "repliedCommentId": 351,
-      "dateCreated": "3/10/2020"
-    },
-    {
-      "commentId": 6283,
-      "commentContent": "Nondisp fx of body of scapula, r shldr, 7thD",
-      "repliedCommentId": 9068,
-      "dateCreated": "6/26/2020"
-    },
-    {
-      "commentId": 2427,
-      "commentContent": "Sltr-haris Type I physl fx upr end l femr, 7thD",
-      "repliedCommentId": 5716,
-      "dateCreated": "4/26/2020"
-    },
-    {
-      "commentId": 1453,
-      "commentContent": "Other synovitis and tenosynovitis, left thigh",
-      "repliedCommentId": 6150,
-      "dateCreated": "10/15/2020"
-    },
-    {
-      "commentId": 7294,
-      "commentContent": "War op w chem weapons and oth unconvtl warfare, civ, sequela",
-      "repliedCommentId": 3257,
-      "dateCreated": "6/20/2020"
-    },
-    {
-      "commentId": 4343,
-      "commentContent": "Disp fx of med phalanx of r mid fngr, subs for fx w malunion",
-      "repliedCommentId": 1007,
-      "dateCreated": "8/30/2020"
-    },
-    {
-      "commentId": 7355,
-      "commentContent": "Other specified rheumatoid arthritis, multiple sites",
-      "repliedCommentId": 3717,
-      "dateCreated": "4/11/2020"
-    },
-    {
-      "commentId": 8188,
-      "commentContent": "Rheumatoid lung disease w rheumatoid arthritis of left wrist",
-      "repliedCommentId": 158,
-      "dateCreated": "11/8/2020"
-    },
-    {
-      "commentId": 5725,
-      "commentContent": "Other superficial bite of left thumb",
-      "repliedCommentId": 2159,
-      "dateCreated": "7/9/2020"
-    }
-  ],
-  "userId": 9
-}, {
-  "postId": 10,
-  "userName": "mpikett9",
-  "userAvatarLink": "http://dummyimage.com/75x75.jpg/5fa2dd/ffffff",
-  "datePosted": "1/25/2021",
-  "postImageLink": "http://dummyimage.com/400x400.png/dddddd/000000",
-  "caption": "Pnctr w/o fb of r frnt wl of thorax w penet thor cav, subs",
-  "upvotes": 2173,
-  "commentCount": 9,
-  "otherUsers": [
-    {
-      "userId": 47,
-      "userAvatarImage": "http://dummyimage.com/101x107.bmp/cc0000/ffffff"
-    },
-    {
-      "userId": 9,
-      "userAvatarImage": "http://dummyimage.com/133x151.jpg/ff4444/ffffff"
+      "userAvatarImage": "http://dummyimage.com/156x227.png/5fa2dd/ffffff"
     },
     {
       "userId": 37,
-      "userAvatarImage": "http://dummyimage.com/135x177.bmp/dddddd/000000"
+      "userAvatarImage": "http://dummyimage.com/161x179.jpg/dddddd/000000"
+    },
+    {
+      "userId": 35,
+      "userAvatarImage": "http://dummyimage.com/249x195.bmp/dddddd/000000"
+    },
+    {
+      "userId": 8,
+      "userAvatarImage": "http://dummyimage.com/130x169.png/cc0000/ffffff"
+    },
+    {
+      "userId": 28,
+      "userAvatarImage": "http://dummyimage.com/234x237.jpg/dddddd/000000"
+    },
+    {
+      "userId": 11,
+      "userAvatarImage": "http://dummyimage.com/130x109.jpg/5fa2dd/ffffff"
+    },
+    {
+      "userId": 39,
+      "userAvatarImage": "http://dummyimage.com/199x170.bmp/dddddd/000000"
+    },
+    {
+      "userId": 46,
+      "userAvatarImage": "http://dummyimage.com/184x210.jpg/ff4444/ffffff"
+    },
+    {
+      "userId": 4,
+      "userAvatarImage": "http://dummyimage.com/162x232.png/dddddd/000000"
     }
   ],
   "comments": [
     {
-      "commentId": 9961,
-      "commentContent": "Nondisp commnt fx shaft of l femr, 7thP",
-      "repliedCommentId": 8724,
-      "dateCreated": "8/10/2020"
+      "commentId": 5374,
+      "commentContent": "Unsp inj intrns musc/fasc/tend r lit fngr at wrs/hnd lv,subs",
+      "repliedCommentId": 4644,
+      "dateCreated": "5/4/2020"
+    },
+    {
+      "commentId": 4302,
+      "commentContent": "Central demyelination of corpus callosum",
+      "repliedCommentId": 4148,
+      "dateCreated": "3/1/2020"
+    },
+    {
+      "commentId": 4001,
+      "commentContent": "Oth physeal fx upper end of humerus, right arm, sequela",
+      "repliedCommentId": 2729,
+      "dateCreated": "7/12/2020"
+    },
+    {
+      "commentId": 3222,
+      "commentContent": "Occ of specl veh mainly used in agriculture inj in trnsp acc",
+      "repliedCommentId": 4779,
+      "dateCreated": "7/7/2020"
+    },
+    {
+      "commentId": 8878,
+      "commentContent": "Other mature T/NK-cell lymphomas, unspecified site",
+      "repliedCommentId": 4865,
+      "dateCreated": "8/19/2020"
+    },
+    {
+      "commentId": 90,
+      "commentContent": "Unsp superficial injury of right middle finger, sequela",
+      "repliedCommentId": 9539,
+      "dateCreated": "7/16/2020"
     }
   ],
-  "userId": 33
+  "userId": 44,
+  "location": {
+    "latitude": 30.397233,
+    "longitude": 18.828152
+  }
+}, {
+  "postId": 4,
+  "username": "slaughtisse3",
+  "userAvatarLink": "http://dummyimage.com/75x75.jpg/cc0000/ffffff",
+  "datePosted": "10/21/2020",
+  "postImageLink": "http://dummyimage.com/400x400.bmp/dddddd/000000",
+  "caption": "Complete loss of teeth due to oth cause, class IV",
+  "upvotes": 3974,
+  "commentCount": 7,
+  "otherUsers": [
+    {
+      "userId": 44,
+      "userAvatarImage": "http://dummyimage.com/230x182.bmp/5fa2dd/ffffff"
+    },
+    {
+      "userId": 37,
+      "userAvatarImage": "http://dummyimage.com/218x190.bmp/5fa2dd/ffffff"
+    },
+    {
+      "userId": 3,
+      "userAvatarImage": "http://dummyimage.com/153x132.jpg/cc0000/ffffff"
+    },
+    {
+      "userId": 15,
+      "userAvatarImage": "http://dummyimage.com/213x243.bmp/ff4444/ffffff"
+    },
+    {
+      "userId": 4,
+      "userAvatarImage": "http://dummyimage.com/194x104.bmp/dddddd/000000"
+    },
+    {
+      "userId": 28,
+      "userAvatarImage": "http://dummyimage.com/155x197.jpg/ff4444/ffffff"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 8721,
+      "commentContent": "Nondisp fx of shaft of fourth MC bone, right hand, sequela",
+      "repliedCommentId": 4089,
+      "dateCreated": "11/10/2020"
+    },
+    {
+      "commentId": 9283,
+      "commentContent": "Unspecified injury of unspecified blood vessel of thorax",
+      "repliedCommentId": 2177,
+      "dateCreated": "3/19/2020"
+    },
+    {
+      "commentId": 3170,
+      "commentContent": "Noninflammatory disorders of testis",
+      "repliedCommentId": 9452,
+      "dateCreated": "1/23/2021"
+    },
+    {
+      "commentId": 9604,
+      "commentContent": "Collapsed vertebra, NEC, occipito-atlanto-axial region",
+      "repliedCommentId": 3341,
+      "dateCreated": "1/9/2021"
+    },
+    {
+      "commentId": 5305,
+      "commentContent": "Atheroembolism of kidney",
+      "repliedCommentId": 3536,
+      "dateCreated": "6/7/2020"
+    },
+    {
+      "commentId": 7715,
+      "commentContent": "Priapism, drug-induced",
+      "repliedCommentId": 5753,
+      "dateCreated": "1/24/2021"
+    },
+    {
+      "commentId": 6422,
+      "commentContent": "Mucocele of salivary gland",
+      "repliedCommentId": 9516,
+      "dateCreated": "12/31/2020"
+    }
+  ],
+  "userId": 23,
+  "location": {
+    "latitude": 3.053605,
+    "longitude": 8.686273
+  }
+}, {
+  "postId": 5,
+  "username": "mspurret4",
+  "userAvatarLink": "http://dummyimage.com/75x75.png/ff4444/ffffff",
+  "datePosted": "5/25/2020",
+  "postImageLink": "http://dummyimage.com/400x400.jpg/dddddd/000000",
+  "caption": "Contusion of lip and oral cavity",
+  "upvotes": 806,
+  "commentCount": 8,
+  "otherUsers": [
+    {
+      "userId": 43,
+      "userAvatarImage": "http://dummyimage.com/133x155.png/dddddd/000000"
+    },
+    {
+      "userId": 26,
+      "userAvatarImage": "http://dummyimage.com/135x199.png/dddddd/000000"
+    },
+    {
+      "userId": 19,
+      "userAvatarImage": "http://dummyimage.com/147x102.png/ff4444/ffffff"
+    },
+    {
+      "userId": 4,
+      "userAvatarImage": "http://dummyimage.com/103x226.jpg/ff4444/ffffff"
+    },
+    {
+      "userId": 4,
+      "userAvatarImage": "http://dummyimage.com/165x224.png/ff4444/ffffff"
+    },
+    {
+      "userId": 37,
+      "userAvatarImage": "http://dummyimage.com/191x195.png/5fa2dd/ffffff"
+    },
+    {
+      "userId": 14,
+      "userAvatarImage": "http://dummyimage.com/192x143.jpg/cc0000/ffffff"
+    },
+    {
+      "userId": 33,
+      "userAvatarImage": "http://dummyimage.com/215x231.bmp/dddddd/000000"
+    },
+    {
+      "userId": 19,
+      "userAvatarImage": "http://dummyimage.com/128x250.jpg/5fa2dd/ffffff"
+    },
+    {
+      "userId": 45,
+      "userAvatarImage": "http://dummyimage.com/120x157.png/cc0000/ffffff"
+    },
+    {
+      "userId": 1,
+      "userAvatarImage": "http://dummyimage.com/213x215.bmp/cc0000/ffffff"
+    },
+    {
+      "userId": 30,
+      "userAvatarImage": "http://dummyimage.com/116x147.bmp/dddddd/000000"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 216,
+      "commentContent": "Abrasion of penis, initial encounter",
+      "repliedCommentId": 285,
+      "dateCreated": "5/26/2020"
+    },
+    {
+      "commentId": 5534,
+      "commentContent": "Open bite of unsp bk wl of thorax w penet thor cavity, subs",
+      "repliedCommentId": 3948,
+      "dateCreated": "10/9/2020"
+    },
+    {
+      "commentId": 7928,
+      "commentContent": "Nondisp transverse fx shaft of unsp ulna, 7thE",
+      "repliedCommentId": 779,
+      "dateCreated": "3/28/2020"
+    },
+    {
+      "commentId": 9824,
+      "commentContent": "Insect bite (nonvenomous) of right little finger, subs",
+      "repliedCommentId": 610,
+      "dateCreated": "12/9/2020"
+    },
+    {
+      "commentId": 6400,
+      "commentContent": "Malignant neoplasm of unsp kidney, except renal pelvis",
+      "repliedCommentId": 7305,
+      "dateCreated": "5/13/2020"
+    },
+    {
+      "commentId": 9275,
+      "commentContent": "Exposure of implanted urethral mesh into urethra, sequela",
+      "repliedCommentId": 4138,
+      "dateCreated": "12/26/2020"
+    }
+  ],
+  "userId": 6,
+  "location": {
+    "latitude": 16.346435,
+    "longitude": 24.37192
+  }
+}, {
+  "postId": 6,
+  "username": "dcusted5",
+  "userAvatarLink": "http://dummyimage.com/75x75.png/5fa2dd/ffffff",
+  "datePosted": "3/25/2020",
+  "postImageLink": "http://dummyimage.com/400x400.jpg/dddddd/000000",
+  "caption": "Displ transverse fx shaft of unsp tibia, 7thC",
+  "upvotes": 1559,
+  "commentCount": 7,
+  "otherUsers": [
+    {
+      "userId": 9,
+      "userAvatarImage": "http://dummyimage.com/192x243.bmp/5fa2dd/ffffff"
+    },
+    {
+      "userId": 44,
+      "userAvatarImage": "http://dummyimage.com/167x201.png/cc0000/ffffff"
+    },
+    {
+      "userId": 47,
+      "userAvatarImage": "http://dummyimage.com/177x161.jpg/dddddd/000000"
+    },
+    {
+      "userId": 4,
+      "userAvatarImage": "http://dummyimage.com/143x235.png/5fa2dd/ffffff"
+    },
+    {
+      "userId": 20,
+      "userAvatarImage": "http://dummyimage.com/153x223.jpg/ff4444/ffffff"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 4454,
+      "commentContent": "Injury of nerve root of thoracic spine, sequela",
+      "repliedCommentId": 3634,
+      "dateCreated": "2/6/2020"
+    },
+    {
+      "commentId": 3323,
+      "commentContent": "Nondisp fx of proximal phalanx of left middle finger",
+      "repliedCommentId": 671,
+      "dateCreated": "9/28/2020"
+    }
+  ],
+  "userId": 37,
+  "location": {
+    "latitude": 5.761372,
+    "longitude": 52.39331
+  }
+}, {
+  "postId": 7,
+  "username": "jlothean6",
+  "userAvatarLink": "http://dummyimage.com/75x75.bmp/cc0000/ffffff",
+  "datePosted": "4/14/2020",
+  "postImageLink": "http://dummyimage.com/400x400.png/5fa2dd/ffffff",
+  "caption": "Displ artic fx head of l femur, subs for clos fx w malunion",
+  "upvotes": 2313,
+  "commentCount": 7,
+  "otherUsers": [
+    {
+      "userId": 49,
+      "userAvatarImage": "http://dummyimage.com/164x180.bmp/ff4444/ffffff"
+    },
+    {
+      "userId": 39,
+      "userAvatarImage": "http://dummyimage.com/166x232.png/dddddd/000000"
+    },
+    {
+      "userId": 10,
+      "userAvatarImage": "http://dummyimage.com/220x232.jpg/dddddd/000000"
+    },
+    {
+      "userId": 18,
+      "userAvatarImage": "http://dummyimage.com/177x203.bmp/ff4444/ffffff"
+    },
+    {
+      "userId": 20,
+      "userAvatarImage": "http://dummyimage.com/248x224.png/cc0000/ffffff"
+    },
+    {
+      "userId": 11,
+      "userAvatarImage": "http://dummyimage.com/135x121.jpg/dddddd/000000"
+    },
+    {
+      "userId": 26,
+      "userAvatarImage": "http://dummyimage.com/129x203.bmp/ff4444/ffffff"
+    },
+    {
+      "userId": 40,
+      "userAvatarImage": "http://dummyimage.com/124x155.png/cc0000/ffffff"
+    },
+    {
+      "userId": 27,
+      "userAvatarImage": "http://dummyimage.com/178x140.bmp/cc0000/ffffff"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 423,
+      "commentContent": "Primary blast injury of left ear, subsequent encounter",
+      "repliedCommentId": 3088,
+      "dateCreated": "9/4/2020"
+    },
+    {
+      "commentId": 6169,
+      "commentContent": "Burn of third degree of right toe(s) (nail), init encntr",
+      "repliedCommentId": 2725,
+      "dateCreated": "2/8/2020"
+    },
+    {
+      "commentId": 988,
+      "commentContent": "Suprvsn of preg w history of infertility, unsp trimester",
+      "repliedCommentId": 8294,
+      "dateCreated": "1/13/2021"
+    },
+    {
+      "commentId": 4747,
+      "commentContent": "Newborn affected by ectopic pregnancy",
+      "repliedCommentId": 7617,
+      "dateCreated": "3/3/2020"
+    },
+    {
+      "commentId": 2648,
+      "commentContent": "Residual stage of angle-closure glaucoma, unspecified eye",
+      "repliedCommentId": 5040,
+      "dateCreated": "10/2/2020"
+    }
+  ],
+  "userId": 42,
+  "location": {
+    "latitude": 44.534846,
+    "longitude": 4.400879
+  }
+}, {
+  "postId": 8,
+  "username": "lpascow7",
+  "userAvatarLink": "http://dummyimage.com/75x75.jpg/cc0000/ffffff",
+  "datePosted": "12/30/2020",
+  "postImageLink": "http://dummyimage.com/400x400.bmp/ff4444/ffffff",
+  "caption": "Strain musc and tendons at ank/ft level, unsp foot, sequela",
+  "upvotes": 3337,
+  "commentCount": 4,
+  "otherUsers": [
+    {
+      "userId": 13,
+      "userAvatarImage": "http://dummyimage.com/107x114.jpg/dddddd/000000"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 8837,
+      "commentContent": "Unsp sexual dysfnct not due to a sub or known physiol cond",
+      "repliedCommentId": 5712,
+      "dateCreated": "10/10/2020"
+    },
+    {
+      "commentId": 8846,
+      "commentContent": "Underdosing of unsp drugs acting on muscles, subs encntr",
+      "repliedCommentId": 1979,
+      "dateCreated": "1/20/2021"
+    }
+  ],
+  "userId": 20,
+  "location": {
+    "latitude": 6.590299,
+    "longitude": 0.363587
+  }
+}, {
+  "postId": 9,
+  "username": "trosi8",
+  "userAvatarLink": "http://dummyimage.com/75x75.png/dddddd/000000",
+  "datePosted": "6/10/2020",
+  "postImageLink": "http://dummyimage.com/400x400.jpg/5fa2dd/ffffff",
+  "caption": "Burn of unsp degree of multiple sites of left wrist and hand",
+  "upvotes": 4939,
+  "commentCount": 3,
+  "otherUsers": [
+    {
+      "userId": 48,
+      "userAvatarImage": "http://dummyimage.com/159x205.png/dddddd/000000"
+    },
+    {
+      "userId": 9,
+      "userAvatarImage": "http://dummyimage.com/128x215.jpg/5fa2dd/ffffff"
+    },
+    {
+      "userId": 28,
+      "userAvatarImage": "http://dummyimage.com/119x181.png/ff4444/ffffff"
+    },
+    {
+      "userId": 4,
+      "userAvatarImage": "http://dummyimage.com/179x238.jpg/ff4444/ffffff"
+    },
+    {
+      "userId": 35,
+      "userAvatarImage": "http://dummyimage.com/194x180.jpg/cc0000/ffffff"
+    },
+    {
+      "userId": 16,
+      "userAvatarImage": "http://dummyimage.com/172x240.png/dddddd/000000"
+    },
+    {
+      "userId": 38,
+      "userAvatarImage": "http://dummyimage.com/116x232.jpg/dddddd/000000"
+    },
+    {
+      "userId": 30,
+      "userAvatarImage": "http://dummyimage.com/188x159.jpg/5fa2dd/ffffff"
+    },
+    {
+      "userId": 21,
+      "userAvatarImage": "http://dummyimage.com/205x215.bmp/dddddd/000000"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 5613,
+      "commentContent": "Disp fx of shaft of 3rd MC bone, r hand, 7thP",
+      "repliedCommentId": 9260,
+      "dateCreated": "8/26/2020"
+    },
+    {
+      "commentId": 4789,
+      "commentContent": "Other glycogen storage disease",
+      "repliedCommentId": 326,
+      "dateCreated": "6/4/2020"
+    },
+    {
+      "commentId": 9120,
+      "commentContent": "Other specified injury of dorsal vein of right foot",
+      "repliedCommentId": 6990,
+      "dateCreated": "12/30/2020"
+    },
+    {
+      "commentId": 8463,
+      "commentContent": "Cerebral infrc due to unsp occls or stenosis of precerb art",
+      "repliedCommentId": 5907,
+      "dateCreated": "6/21/2020"
+    },
+    {
+      "commentId": 9155,
+      "commentContent": "Unsp pedl cyclst injured in clsn w oth mv in traf, sequela",
+      "repliedCommentId": 8073,
+      "dateCreated": "9/30/2020"
+    }
+  ],
+  "userId": 17,
+  "location": {
+    "latitude": 28.871648,
+    "longitude": 6.980746
+  }
+}, {
+  "postId": 10,
+  "username": "gruddom9",
+  "userAvatarLink": "http://dummyimage.com/75x75.png/cc0000/ffffff",
+  "datePosted": "5/8/2020",
+  "postImageLink": "http://dummyimage.com/400x400.bmp/cc0000/ffffff",
+  "caption": "Kaschin-Beck disease, right hand",
+  "upvotes": 2425,
+  "commentCount": 6,
+  "otherUsers": [
+    {
+      "userId": 43,
+      "userAvatarImage": "http://dummyimage.com/249x116.bmp/cc0000/ffffff"
+    }
+  ],
+  "comments": [
+    {
+      "commentId": 5989,
+      "commentContent": "Failed trial of labor, unspecified",
+      "repliedCommentId": 809,
+      "dateCreated": "4/5/2020"
+    },
+    {
+      "commentId": 48,
+      "commentContent": "Lead-induced chronic gout, ankle and foot",
+      "repliedCommentId": 3280,
+      "dateCreated": "3/8/2020"
+    },
+    {
+      "commentId": 5819,
+      "commentContent": "Physeal fracture of lower end of humerus",
+      "repliedCommentId": 5818,
+      "dateCreated": "10/30/2020"
+    },
+    {
+      "commentId": 4156,
+      "commentContent": "Oth fracture of left patella, init for opn fx type I/2",
+      "repliedCommentId": 7327,
+      "dateCreated": "4/22/2020"
+    },
+    {
+      "commentId": 386,
+      "commentContent": "Puncture wound w/o foreign body, unsp lower leg, init encntr",
+      "repliedCommentId": 9308,
+      "dateCreated": "10/5/2020"
+    },
+    {
+      "commentId": 6812,
+      "commentContent": "Shock due to anesthesia, initial encounter",
+      "repliedCommentId": 1185,
+      "dateCreated": "12/31/2020"
+    },
+    {
+      "commentId": 8821,
+      "commentContent": "Congenital lens malformation, unspecified",
+      "repliedCommentId": 3849,
+      "dateCreated": "5/3/2020"
+    }
+  ],
+  "userId": 35,
+  "location": {
+    "latitude": 36.060886,
+    "longitude": 5.079375
+  }
 }]
     ''';
   }
