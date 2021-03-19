@@ -151,10 +151,18 @@ class MapRepository {
     await box.clear();
   }
 
-  Future<Uint8List> _imageToImagePin(Uint8List image) async {
+  Future<Uint8List> _imageToImagePin(Uint8List image,
+      {Color color = const Color(0xff7041ee)}) async {
     imageLib.Image image1 = imageLib.decodeImage(image);
     final image2Byte = await rootBundle.load('assets/images/pin.png');
-    final image2 = imageLib.decodeImage(image2Byte.buffer.asUint8List());
+    imageLib.Image image2 =
+        imageLib.decodeImage(image2Byte.buffer.asUint8List());
+    image2 = imageLib.colorOffset(
+      image2,
+      red: color.red,
+      blue: color.blue,
+      green: color.green,
+    );
     imageLib.Image mergedImage = imageLib.Image(75, 75);
     mergedImage = imageLib.copyInto(mergedImage, image2);
     image1 = imageLib.copyResize(image1, width: 69, height: 47);
