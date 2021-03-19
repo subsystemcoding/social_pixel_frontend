@@ -1,12 +1,29 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+
+import 'package:socialpixel/data/models/game.dart';
+
+part 'channel.g.dart';
+
+@HiveType(typeId: 5)
 class Channel {
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String description;
+  @HiveField(3)
   final int subscribers;
+  @HiveField(4)
   final String coverImageLink;
+  @HiveField(5)
   final String avatarImageLink;
+  @HiveField(6)
+  final List<Game> games;
+
   Channel({
     this.id,
     this.name,
@@ -14,6 +31,7 @@ class Channel {
     this.subscribers,
     this.coverImageLink,
     this.avatarImageLink,
+    this.games,
   });
 
   Channel copyWith({
@@ -23,6 +41,7 @@ class Channel {
     int subscribers,
     String coverImageLink,
     String avatarImageLink,
+    List<Game> games,
   }) {
     return Channel(
       id: id ?? this.id,
@@ -31,6 +50,7 @@ class Channel {
       subscribers: subscribers ?? this.subscribers,
       coverImageLink: coverImageLink ?? this.coverImageLink,
       avatarImageLink: avatarImageLink ?? this.avatarImageLink,
+      games: games ?? this.games,
     );
   }
 
@@ -42,12 +62,11 @@ class Channel {
       'subscribers': subscribers,
       'coverImageLink': coverImageLink,
       'avatarImageLink': avatarImageLink,
+      'games': games?.map((x) => x.toMap())?.toList(),
     };
   }
 
   factory Channel.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Channel(
       id: map['id'],
       name: map['name'],
@@ -55,6 +74,7 @@ class Channel {
       subscribers: map['subscribers'],
       coverImageLink: map['coverImageLink'],
       avatarImageLink: map['avatarImageLink'],
+      games: List<Game>.from(map['games']?.map((x) => Game.fromMap(x))),
     );
   }
 
@@ -65,20 +85,21 @@ class Channel {
 
   @override
   String toString() {
-    return 'Channel(id: $id, name: $name, description: $description, subscribers: $subscribers, coverImageLink: $coverImageLink, avatarImageLink: $avatarImageLink)';
+    return 'Channel(id: $id, name: $name, description: $description, subscribers: $subscribers, coverImageLink: $coverImageLink, avatarImageLink: $avatarImageLink, games: $games)';
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is Channel &&
-        o.id == id &&
-        o.name == name &&
-        o.description == description &&
-        o.subscribers == subscribers &&
-        o.coverImageLink == coverImageLink &&
-        o.avatarImageLink == avatarImageLink;
+    return other is Channel &&
+        other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        other.subscribers == subscribers &&
+        other.coverImageLink == coverImageLink &&
+        other.avatarImageLink == avatarImageLink &&
+        listEquals(other.games, games);
   }
 
   @override
@@ -88,6 +109,7 @@ class Channel {
         description.hashCode ^
         subscribers.hashCode ^
         coverImageLink.hashCode ^
-        avatarImageLink.hashCode;
+        avatarImageLink.hashCode ^
+        games.hashCode;
   }
 }

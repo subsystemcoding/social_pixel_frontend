@@ -1,11 +1,31 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+
+import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/models/mapPost.dart';
+
+part 'game.g.dart';
+
+@HiveType(typeId: 6)
 class Game {
+  @HiveField(0)
   int gameId;
+  @HiveField(1)
   String image;
+  @HiveField(2)
   String name;
+  @HiveField(3)
   String description;
+  @HiveField(4)
   int leaderboardId;
+  @HiveField(5)
+  List<MapPost> mapPosts;
+  @HiveField(6)
+  String pinColorHex;
+  @HiveField(7)
+  Channel channel;
 
   Game({
     this.gameId,
@@ -13,6 +33,9 @@ class Game {
     this.name,
     this.description,
     this.leaderboardId,
+    this.mapPosts,
+    this.pinColorHex,
+    this.channel,
   });
 
   Game copyWith({
@@ -21,6 +44,9 @@ class Game {
     String name,
     String description,
     int leaderboardId,
+    List<MapPost> mapPosts,
+    String pinColorHex,
+    Channel channel,
   }) {
     return Game(
       gameId: gameId ?? this.gameId,
@@ -28,6 +54,9 @@ class Game {
       name: name ?? this.name,
       description: description ?? this.description,
       leaderboardId: leaderboardId ?? this.leaderboardId,
+      mapPosts: mapPosts ?? this.mapPosts,
+      pinColorHex: pinColorHex ?? this.pinColorHex,
+      channel: channel ?? this.channel,
     );
   }
 
@@ -38,18 +67,23 @@ class Game {
       'name': name,
       'description': description,
       'leaderboardId': leaderboardId,
+      'mapPosts': mapPosts?.map((x) => x.toMap())?.toList(),
+      'pinColorHex': pinColorHex,
+      'channel': channel.toMap(),
     };
   }
 
   factory Game.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Game(
       gameId: map['gameId'],
       image: map['image'],
       name: map['name'],
       description: map['description'],
       leaderboardId: map['leaderboardId'],
+      mapPosts:
+          List<MapPost>.from(map['mapPosts']?.map((x) => MapPost.fromMap(x))),
+      pinColorHex: map['pinColorHex'],
+      channel: Channel.fromMap(map['channel']),
     );
   }
 
@@ -59,19 +93,22 @@ class Game {
 
   @override
   String toString() {
-    return 'Game(gameId: $gameId, image: $image, name: $name, description: $description, leaderboardId: $leaderboardId)';
+    return 'Game(gameId: $gameId, image: $image, name: $name, description: $description, leaderboardId: $leaderboardId, mapPosts: $mapPosts, pinColorHex: $pinColorHex, channel: $channel)';
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is Game &&
-        o.gameId == gameId &&
-        o.image == image &&
-        o.name == name &&
-        o.description == description &&
-        o.leaderboardId == leaderboardId;
+    return other is Game &&
+        other.gameId == gameId &&
+        other.image == image &&
+        other.name == name &&
+        other.description == description &&
+        other.leaderboardId == leaderboardId &&
+        listEquals(other.mapPosts, mapPosts) &&
+        other.pinColorHex == pinColorHex &&
+        other.channel == channel;
   }
 
   @override
@@ -80,6 +117,9 @@ class Game {
         image.hashCode ^
         name.hashCode ^
         description.hashCode ^
-        leaderboardId.hashCode;
+        leaderboardId.hashCode ^
+        mapPosts.hashCode ^
+        pinColorHex.hashCode ^
+        channel.hashCode;
   }
 }
