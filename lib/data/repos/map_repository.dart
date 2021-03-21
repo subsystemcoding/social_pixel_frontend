@@ -14,6 +14,7 @@ import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
 import 'package:socialpixel/data/repos/connectivity.dart';
 import 'package:socialpixel/data/repos/hive_repository.dart';
+import 'package:socialpixel/data/repos/profile_repository.dart';
 import 'package:socialpixel/data/test_data/test_data.dart';
 
 class MapRepository {
@@ -84,6 +85,10 @@ class MapRepository {
       mapPosts.add(box.getAt(i));
     }
     return mapPosts;
+  }
+
+  Future<List<Game>> fetchSubscribedGames() async {
+    return ProfileRepository().updateSubscribedGames();
   }
 
   Future<bool> hasPostinChecklist(MapPost mapPost) async {

@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+
+import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/models/game.dart';
 
 part 'profile.g.dart';
 
@@ -31,6 +35,10 @@ class Profile {
   final Uint8List userImageBytes;
   @HiveField(11)
   final Uint8List userCoverImageBytes;
+  @HiveField(12)
+  final List<Game> subscribedGames;
+  @HiveField(13)
+  final List<Channel> subscribedChannels;
 
   Profile({
     this.userId,
@@ -45,6 +53,8 @@ class Profile {
     this.isVerified,
     this.userImageBytes,
     this.userCoverImageBytes,
+    this.subscribedGames,
+    this.subscribedChannels,
   });
 
   Profile copyWith({
@@ -60,6 +70,8 @@ class Profile {
     bool isVerified,
     Uint8List userImageBytes,
     Uint8List userCoverImageBytes,
+    List<Game> subscribedGames,
+    List<Channel> subscribedChannels,
   }) {
     return Profile(
       userId: userId ?? this.userId,
@@ -74,6 +86,8 @@ class Profile {
       isVerified: isVerified ?? this.isVerified,
       userImageBytes: userImageBytes ?? this.userImageBytes,
       userCoverImageBytes: userCoverImageBytes ?? this.userCoverImageBytes,
+      subscribedGames: subscribedGames ?? this.subscribedGames,
+      subscribedChannels: subscribedChannels ?? this.subscribedChannels,
     );
   }
 
@@ -89,14 +103,14 @@ class Profile {
       'followers': followers,
       'createDate': createDate,
       'isVerified': isVerified,
-      //'userImageBytes': userImageBytes?.toMap(),
-      //'userCoverImageBytes': userCoverImageBytes?.toMap(),
+      // 'userImageBytes': userImageBytes.toMap(),
+      // 'userCoverImageBytes': userCoverImageBytes.toMap(),
+      'subscribedGames': subscribedGames?.map((x) => x.toMap())?.toList(),
+      'subscribedChannels': subscribedChannels?.map((x) => x.toMap())?.toList(),
     };
   }
 
   factory Profile.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Profile(
       userId: map['userId'],
       username: map['username'],
@@ -108,8 +122,12 @@ class Profile {
       followers: map['followers'],
       createDate: map['createDate'],
       isVerified: map['isVerified'],
-      //userImageBytes: Uint8List.fromMap(map['userImageBytes']),
-      //userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
+      // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
+      // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
+      subscribedGames:
+          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
+      subscribedChannels: List<Channel>.from(
+          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
     );
   }
 
@@ -120,26 +138,28 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes)';
+    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels)';
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is Profile &&
-        o.userId == userId &&
-        o.username == username &&
-        o.userAvatarImage == userAvatarImage &&
-        o.userCoverImage == userCoverImage &&
-        o.email == email &&
-        o.description == description &&
-        o.points == points &&
-        o.followers == followers &&
-        o.createDate == createDate &&
-        o.isVerified == isVerified &&
-        o.userImageBytes == userImageBytes &&
-        o.userCoverImageBytes == userCoverImageBytes;
+    return other is Profile &&
+        other.userId == userId &&
+        other.username == username &&
+        other.userAvatarImage == userAvatarImage &&
+        other.userCoverImage == userCoverImage &&
+        other.email == email &&
+        other.description == description &&
+        other.points == points &&
+        other.followers == followers &&
+        other.createDate == createDate &&
+        other.isVerified == isVerified &&
+        other.userImageBytes == userImageBytes &&
+        other.userCoverImageBytes == userCoverImageBytes &&
+        listEquals(other.subscribedGames, subscribedGames) &&
+        listEquals(other.subscribedChannels, subscribedChannels);
   }
 
   @override
@@ -155,6 +175,8 @@ class Profile {
         createDate.hashCode ^
         isVerified.hashCode ^
         userImageBytes.hashCode ^
-        userCoverImageBytes.hashCode;
+        userCoverImageBytes.hashCode ^
+        subscribedGames.hashCode ^
+        subscribedChannels.hashCode;
   }
 }

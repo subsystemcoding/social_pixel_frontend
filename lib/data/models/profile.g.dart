@@ -29,13 +29,15 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       isVerified: fields[9] as bool,
       userImageBytes: fields[10] as Uint8List,
       userCoverImageBytes: fields[11] as Uint8List,
+      subscribedGames: (fields[12] as List)?.cast<Game>(),
+      subscribedChannels: (fields[13] as List)?.cast<Channel>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Profile obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -59,7 +61,11 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       ..writeByte(10)
       ..write(obj.userImageBytes)
       ..writeByte(11)
-      ..write(obj.userCoverImageBytes);
+      ..write(obj.userCoverImageBytes)
+      ..writeByte(12)
+      ..write(obj.subscribedGames)
+      ..writeByte(13)
+      ..write(obj.subscribedChannels);
   }
 
   @override

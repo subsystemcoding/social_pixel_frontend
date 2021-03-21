@@ -1242,4 +1242,195 @@ class TestData {
 }]
     ''';
   }
+
+  static String getSubscribedGamesForMap() {
+    return '''
+    [{
+      "subscribedGames": [
+        {
+          "gameId": "0307",
+          "name": "White-fronted capuchin",
+          "leaderboardId": "9208",
+          "pinColorHex": "#0f7472",
+          "mapPosts": [
+            {
+              "postId": "351",
+              "location": {
+                "latitude": -8.0412,
+                "longitude": 111.6694
+              },
+              "postImageLink": "http://dummyimage.com/400x400.bmp/5fa2dd/ffffff"
+            }
+          ],
+          "channelId": "Macaw, red and blue"
+        },
+        {
+          "gameId": "37328",
+          "name": "Gray duiker",
+          "leaderboardId": "531",
+          "pinColorHex": "#5e404a",
+          "mapPosts": [
+            {
+              "postId": "25",
+              "location": {
+                "latitude": 10.4309602,
+                "longitude": -85.0966591
+              },
+              "postImageLink": "http://dummyimage.com/400x400.bmp/5fa2dd/ffffff"
+            },
+            {
+              "postId": "713",
+              "location": {
+                "latitude": 21.9440983,
+                "longitude": -78.4325615
+              },
+              "postImageLink": "http://dummyimage.com/400x400.jpg/cc0000/ffffff"
+            }
+          ],
+          "channelId": "Huron"
+        },
+        {
+          "gameId": "8",
+          "name": "Lion, mountain",
+          "leaderboardId": "63",
+          "pinColorHex": "#6c3629",
+          "mapPosts": [
+            {
+              "postId": "30",
+              "location": {
+                "latitude": 9.791337,
+                "longitude": -74.7975249
+              },
+              "postImageLink": "http://dummyimage.com/400x400.png/cc0000/ffffff"
+            }
+          ],
+          "channelId": "Sifaka, verreaux's"
+        },
+        {
+          "gameId": "18",
+          "name": "Wolf, common",
+          "leaderboardId": "873",
+          "pinColorHex": "#81a8ec",
+          "mapPosts": [
+            {
+              "postId": "6",
+              "location": {
+                "latitude": 14.290674,
+                "longitude": -91.912218
+              },
+              "postImageLink": "http://dummyimage.com/400x400.bmp/5fa2dd/ffffff"
+            }
+          ],
+          "channelId": "Eagle, tawny"
+        },
+        {
+          "gameId": "219",
+          "name": "Giant girdled lizard",
+          "leaderboardId": "53",
+          "pinColorHex": "#3fff30",
+          "mapPosts": [
+            {
+              "postId": "0",
+              "location": {
+                "latitude": 37.520481,
+                "longitude": 115.251124
+              },
+              "postImageLink": "http://dummyimage.com/400x400.png/dddddd/000000"
+            },
+            {
+              "postId": "331",
+              "location": {
+                "latitude": 54.51667,
+                "longitude": 24.83333
+              },
+              "postImageLink": "http://dummyimage.com/400x400.bmp/5fa2dd/ffffff"
+            },
+            {
+              "postId": "60",
+              "location": {
+                "latitude": -12.1450486,
+                "longitude": 96.8217017
+              },
+              "postImageLink": "http://dummyimage.com/400x400.jpg/5fa2dd/ffffff"
+            },
+            {
+              "postId": "91061",
+              "location": {
+                "latitude": 8.9085671,
+                "longitude": 125.4008484
+              },
+              "postImageLink": "http://dummyimage.com/400x400.png/ff4444/ffffff"
+            },
+            {
+              "postId": "67",
+              "location": {
+                "latitude": 29.33903,
+                "longitude": 104.778442
+              },
+              "postImageLink": "http://dummyimage.com/400x400.jpg/5fa2dd/ffffff"
+            },
+            {
+              "postId": "061",
+              "location": {
+                "latitude": 27.7244646,
+                "longitude": 100.7887231
+              },
+              "postImageLink": "http://dummyimage.com/400x400.png/cc0000/ffffff"
+            }
+          ],
+          "channelId": "Meerkat"
+        },
+        {
+          "gameId": "0",
+          "name": "Macaque, bonnet",
+          "leaderboardId": "29115",
+          "pinColorHex": "#723e04",
+          "mapPosts": [
+            {
+              "postId": "043",
+              "location": {
+                "latitude": -20.210385,
+                "longitude": 57.6240731
+              },
+              "postImageLink": "http://dummyimage.com/400x400.png/cc0000/ffffff"
+            },
+            {
+              "postId": "962",
+              "location": {
+                "latitude": 24.4752847,
+                "longitude": 101.3431058
+              },
+              "postImageLink": "http://dummyimage.com/400x400.bmp/dddddd/000000"
+            },
+            {
+              "postId": "0",
+              "location": {
+                "latitude": 12.1299094,
+                "longitude": 7.6724456
+              },
+              "postImageLink": "http://dummyimage.com/400x400.png/ff4444/ffffff"
+            },
+            {
+              "postId": "691",
+              "location": {
+                "latitude": 10.8847156,
+                "longitude": 121.9757838
+              },
+              "postImageLink": "http://dummyimage.com/400x400.bmp/ff4444/ffffff"
+            },
+            {
+              "postId": "5924",
+              "location": {
+                "latitude": -6.7332152,
+                "longitude": 111.1950767
+              },
+              "postImageLink": "http://dummyimage.com/400x400.jpg/5fa2dd/ffffff"
+            }
+          ],
+          "channelId": "Sambar"
+        }
+      ]
+    }]
+    ''';
+  }
 }

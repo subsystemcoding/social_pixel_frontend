@@ -69,7 +69,7 @@ class _MapScreenState extends State<MapScreen> {
               controller.moveCamera(CameraUpdate.newLatLng(currentPosition));
             });
           } else if (state is GeoPositionError) {
-            return Scaffold.of(context).showSnackBar(
+            return ScaffoldMessengerState().showSnackBar(
               SnackBar(
                 content:
                     Text("Location Error, please allow the location access."),
