@@ -24,3 +24,5 @@ class CheckPostInChecklist extends MapEvent {
 }
 
 class GetPostsFromChecklist extends MapEvent {}
+
+class GetSubscribedGames extends MapEvent {}

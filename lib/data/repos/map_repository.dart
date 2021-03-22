@@ -88,7 +88,7 @@ class MapRepository {
   }
 
   Future<List<Game>> fetchSubscribedGames() async {
-    return ProfileRepository().updateSubscribedGames();
+    return await ProfileRepository().updateSubscribedGames();
   }
 
   Future<bool> hasPostinChecklist(MapPost mapPost) async {

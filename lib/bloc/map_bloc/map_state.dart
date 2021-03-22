@@ -25,4 +25,10 @@ class MapPostInChecklist extends MapState {
   MapPostInChecklist(this.hasPost);
 }
 
+class SubscribedGamesLoaded extends MapState {
+  final List<Game> games;
+
+  SubscribedGamesLoaded(this.games);
+}
+
 class MapPostError extends MapState {}

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
@@ -103,14 +104,17 @@ class Profile {
       'followers': followers,
       'createDate': createDate,
       'isVerified': isVerified,
-      // 'userImageBytes': userImageBytes.toMap(),
-      // 'userCoverImageBytes': userCoverImageBytes.toMap(),
-      'subscribedGames': subscribedGames?.map((x) => x.toMap())?.toList(),
-      'subscribedChannels': subscribedChannels?.map((x) => x.toMap())?.toList(),
+      // 'userImageBytes': userImageBytes?.toMap(),
+      // 'userCoverImageBytes': userCoverImageBytes?.toMap(),
+      'subscribedGames': subscribedGames?.map((x) => x?.toMap())?.toList(),
+      'subscribedChannels':
+          subscribedChannels?.map((x) => x?.toMap())?.toList(),
     };
   }
 
   factory Profile.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+
     return Profile(
       userId: map['userId'],
       username: map['username'],
@@ -124,10 +128,12 @@ class Profile {
       isVerified: map['isVerified'],
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
-      subscribedGames:
-          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
+      subscribedGames: List<Game>.from(
+              map['subscribedGames']?.map((x) => Game.fromMap(x))) ??
+          null,
       subscribedChannels: List<Channel>.from(
-          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
+              map['subscribedChannels']?.map((x) => Channel.fromMap(x))) ??
+          null,
     );
   }
 
@@ -142,24 +148,25 @@ class Profile {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
-    return other is Profile &&
-        other.userId == userId &&
-        other.username == username &&
-        other.userAvatarImage == userAvatarImage &&
-        other.userCoverImage == userCoverImage &&
-        other.email == email &&
-        other.description == description &&
-        other.points == points &&
-        other.followers == followers &&
-        other.createDate == createDate &&
-        other.isVerified == isVerified &&
-        other.userImageBytes == userImageBytes &&
-        other.userCoverImageBytes == userCoverImageBytes &&
-        listEquals(other.subscribedGames, subscribedGames) &&
-        listEquals(other.subscribedChannels, subscribedChannels);
+    return o is Profile &&
+        o.userId == userId &&
+        o.username == username &&
+        o.userAvatarImage == userAvatarImage &&
+        o.userCoverImage == userCoverImage &&
+        o.email == email &&
+        o.description == description &&
+        o.points == points &&
+        o.followers == followers &&
+        o.createDate == createDate &&
+        o.isVerified == isVerified &&
+        o.userImageBytes == userImageBytes &&
+        o.userCoverImageBytes == userCoverImageBytes &&
+        listEquals(o.subscribedGames, subscribedGames) &&
+        listEquals(o.subscribedChannels, subscribedChannels);
   }
 
   @override

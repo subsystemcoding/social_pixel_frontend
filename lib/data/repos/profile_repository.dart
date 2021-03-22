@@ -39,20 +39,20 @@ class ProfileRepository {
       },
     );
   }
-}
 
-Future<List<Profile>> fetchProfileList() {
-  return Future.delayed(
-    Duration(seconds: 1),
-    () {
-      String jsonData = TestData.profileListData();
-      List<dynamic> list = json.decode(jsonData);
+  Future<List<Profile>> fetchProfileList() {
+    return Future.delayed(
+      Duration(seconds: 1),
+      () {
+        String jsonData = TestData.profileListData();
+        List<dynamic> list = json.decode(jsonData);
 
-      List<Profile> profiles = list.map((obj) {
-        return Profile.fromMap(obj);
-      }).toList();
+        List<Profile> profiles = list.map((obj) {
+          return Profile.fromMap(obj);
+        }).toList();
 
-      return profiles;
-    },
-  );
+        return profiles;
+      },
+    );
+  }
 }

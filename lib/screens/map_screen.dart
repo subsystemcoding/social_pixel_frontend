@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:socialpixel/bloc/geo_bloc/geo_bloc.dart';
 import 'package:socialpixel/bloc/map_bloc/map_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
+import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/mapPost.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
@@ -31,13 +33,15 @@ class _MapScreenState extends State<MapScreen> {
   //profile of the user
   Profile profile;
   //markers for the map
-  Set<Marker> markers = Set<Marker>();
+  Map<int, Marker> markers = Map();
   //streams the current position
   Stream<Position> positionStream = Geolocator.getPositionStream(
       desiredAccuracy: LocationAccuracy.bestForNavigation,
       intervalDuration: Duration(seconds: 1));
   //List of checklist widgets
   List<Widget> checklist = [];
+  //List of gamesList widgets
+  List<Widget> gamesList = [];
   final bottomWidgetConstant = Container();
   Widget bottomWidget = Container();
   //Text for checklist
@@ -48,6 +52,7 @@ class _MapScreenState extends State<MapScreen> {
     super.initState();
     BlocProvider.of<GeoBloc>(context).add(GetPosition());
     BlocProvider.of<MapBloc>(context).add(GetPosts());
+    BlocProvider.of<MapBloc>(context).add(GetSubscribedGames());
     BlocProvider.of<ProfileBloc>(context).add(GetProfile(1));
   }
 
@@ -123,22 +128,9 @@ class _MapScreenState extends State<MapScreen> {
       builder: (context, state) {
         if (state is MapPostLoaded) {
           for (var mapPost in state.mapPosts) {
-            final bitmap = BitmapDescriptor.fromBytes(mapPost.imagePin);
-
-            markers.add(
-              Marker(
-                  markerId: MarkerId('Marker-${mapPost.post.postId}'),
-                  position: LatLng(
-                    mapPost.post.location.latitude,
-                    mapPost.post.location.longitude,
-                  ),
-                  icon: bitmap,
-                  onTap: () {
-                    setState(() {
-                      bottomWidget = _buildBottomWidget(mapPost);
-                    });
-                  }),
-            );
+            final marker = _createMarker(mapPost);
+            markers.update(mapPost.post.postId, (value) => marker,
+                ifAbsent: () => marker);
           }
         }
 
@@ -160,7 +152,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
               zoom: 17,
             ),
-            markers: markers,
+            markers: markers.values.toSet(),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
@@ -299,7 +291,6 @@ class _MapScreenState extends State<MapScreen> {
         BlocBuilder<MapBloc, MapState>(
           builder: (context, state) {
             if (state is MapPostInChecklistLoaded) {
-              print("MapPostInChecklistLoaded");
               checklist = state.mapPosts.map((mapPost) {
                 return _buildChecklistItem(mapPost);
               }).toList();
@@ -313,6 +304,23 @@ class _MapScreenState extends State<MapScreen> {
             );
           },
         ),
+        BlocBuilder<MapBloc, MapState>(
+          builder: (context, state) {
+            if (state is SubscribedGamesLoaded) {
+              gamesList = state.games.map((game) {
+                return _buildGamesListItem(game);
+              }).toList();
+            }
+            return ExpansionTile(
+              title: Text(
+                "Subscribed Games",
+                style: Theme.of(context).primaryTextTheme.bodyText2,
+              ),
+              children: gamesList,
+            );
+            ;
+          },
+        )
       ],
     );
     // return Drawer(
@@ -431,6 +439,131 @@ class _MapScreenState extends State<MapScreen> {
           bottomWidget = _buildBottomWidget(mapPost);
         });
       },
+    );
+  }
+
+  Widget _buildGamesListItem(Game game) {
+    double radius = 25;
+    return CheckboxListTile(
+      value: true,
+      checkColor: Theme.of(context).accentColor,
+      activeColor: Theme.of(context).primaryColor,
+      onChanged: (bool isChecked) {
+        if (isChecked) {
+          setState(() {
+            for (var i = 0; i < game.mapPosts.length; i++) {
+              markers.update(
+                game.mapPosts[i].post.postId,
+                (value) => _createMarker(game.mapPosts[i]),
+                ifAbsent: () => _createMarker(game.mapPosts[i]),
+              );
+            }
+          });
+        } else {
+          for (var mapPost in game.mapPosts) {
+            markers.remove(mapPost.post.postId);
+          }
+        }
+      },
+      title: Text(
+        game.name,
+        style: Theme.of(context).primaryTextTheme.bodyText2,
+      ),
+      secondary: TextButton(
+        child: CircleAvatar(
+          radius: radius,
+          backgroundColor: Theme.of(context).accentColor,
+          child: CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColor,
+            radius: radius - 1,
+            child: Icon(Icons.location_pin),
+          ),
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+
+  Marker _createMarker(MapPost mapPost) {
+    final bitmap = BitmapDescriptor.fromBytes(mapPost.imagePin);
+    return Marker(
+        markerId: MarkerId('Marker-${mapPost.post.postId}'),
+        position: LatLng(
+          mapPost.post.location.latitude,
+          mapPost.post.location.longitude,
+        ),
+        icon: bitmap,
+        onTap: () {
+          setState(() {
+            bottomWidget = _buildBottomWidget(mapPost);
+          });
+        });
+  }
+
+  Widget _buildBottomWidgetForGame(String imageLink, Game game) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25.0),
+            topRight: Radius.circular(25.0),
+          )),
+      child: Column(
+        children: [
+          Container(
+            height: 150,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                //image
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(25)),
+                    child: Image.network(imageLink),
+                  ),
+                ),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      //TODO
+                    },
+                    style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).accentColor),
+                    child: Text(
+                      "View Post",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 250,
+            child: ListView.builder(
+              itemCount: game.mapPosts.length,
+              itemBuilder: (context, i) {
+                return ListTile(
+                  title: Text("Post-${game.mapPosts[i].post.postId}"),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          Center(
+            child: _buildButton(
+                color: Theme.of(context).accentColor,
+                text: "View leaderboard",
+                onPressed: () {
+                  //TODO
+                  Navigator.pushNamed(context, "/leaderboard");
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

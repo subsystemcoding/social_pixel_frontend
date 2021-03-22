@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/mapPost.dart';
 import 'package:socialpixel/data/repos/map_repository.dart';
 
@@ -45,6 +46,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } else if (event is GetPostsFromChecklist) {
       List<MapPost> mapPosts = await _mapRepository.getAllPostInChecklist();
       yield MapPostInChecklistLoaded(mapPosts);
+    } else if (event is GetSubscribedGames) {
+      List<Game> games = await _mapRepository.fetchSubscribedGames();
+      yield SubscribedGamesLoaded(games);
     }
   }
 }
