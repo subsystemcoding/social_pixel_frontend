@@ -6,11 +6,13 @@ import 'package:socialpixel/widgets/verified_widget.dart';
 
 class MapDrawer extends StatelessWidget {
   final List<Widget> children;
-  MapDrawer({Key key, this.children}) : super(key: key);
+  final Function initial;
+  MapDrawer({Key key, this.children, this.initial}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Profile profile;
+    initial();
     return Drawer(
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {

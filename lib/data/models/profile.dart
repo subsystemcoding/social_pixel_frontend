@@ -40,7 +40,6 @@ class Profile {
   final List<Game> subscribedGames;
   @HiveField(13)
   final List<Channel> subscribedChannels;
-
   Profile({
     this.userId,
     this.username,
@@ -128,12 +127,10 @@ class Profile {
       isVerified: map['isVerified'],
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
-      subscribedGames: List<Game>.from(
-              map['subscribedGames']?.map((x) => Game.fromMap(x))) ??
-          null,
+      subscribedGames:
+          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
       subscribedChannels: List<Channel>.from(
-              map['subscribedChannels']?.map((x) => Channel.fromMap(x))) ??
-          null,
+          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
     );
   }
 
@@ -150,7 +147,6 @@ class Profile {
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return o is Profile &&
         o.userId == userId &&

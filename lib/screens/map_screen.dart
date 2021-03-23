@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:socialpixel/bloc/geo_bloc/geo_bloc.dart';
 import 'package:socialpixel/bloc/map_bloc/map_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
@@ -62,9 +61,6 @@ class _MapScreenState extends State<MapScreen> {
       extendBodyBehindAppBar: true,
       appBar: MenuBar().appbar,
       drawer: _buildDrawer(),
-      onDrawerChanged: (isOpen) {
-        BlocProvider.of<MapBloc>(context).add(GetPostsFromChecklist());
-      },
       body: BlocListener<GeoBloc, GeoState>(
         listener: (context, state) {
           if (state is GeoPositionLoaded) {
@@ -74,7 +70,7 @@ class _MapScreenState extends State<MapScreen> {
               controller.moveCamera(CameraUpdate.newLatLng(currentPosition));
             });
           } else if (state is GeoPositionError) {
-            return ScaffoldMessengerState().showSnackBar(
+            return Scaffold.of(context).showSnackBar(
               SnackBar(
                 content:
                     Text("Location Error, please allow the location access."),
@@ -281,6 +277,9 @@ class _MapScreenState extends State<MapScreen> {
 
   Widget _buildDrawer() {
     return MapDrawer(
+      initial: () {
+        BlocProvider.of<MapBloc>(context).add(GetPostsFromChecklist());
+      },
       children: [
         ListTile(
           title: Text(
