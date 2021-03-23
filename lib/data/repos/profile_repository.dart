@@ -17,7 +17,7 @@ class ProfileRepository {
 
   Future<Profile> fetchProfile(int userId) {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         String jsonData = TestData.profileData();
 
@@ -30,7 +30,7 @@ class ProfileRepository {
 
   Future<List<Game>> updateSubscribedGames() {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         String jsonData = TestData.getSubscribedGamesForMap();
         Profile profile = Profile.fromJson(jsonData);
@@ -42,7 +42,7 @@ class ProfileRepository {
 
   Future<List<Profile>> fetchProfileList() {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         String jsonData = TestData.profileListData();
         List<dynamic> list = json.decode(jsonData);

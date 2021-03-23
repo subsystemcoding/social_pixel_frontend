@@ -74,7 +74,9 @@ class Channel {
       subscribers: map['subscribers'],
       coverImageLink: map['coverImageLink'],
       avatarImageLink: map['avatarImageLink'],
-      games: List<Game>.from(map['games']?.map((x) => Game.fromMap(x))),
+      games: map.containsKey("games")
+          ? List<Game>.from(map['games']?.map((x) => Game.fromMap(x)))
+          : null,
     );
   }
 

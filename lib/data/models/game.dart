@@ -80,10 +80,12 @@ class Game {
       name: map['name'],
       description: map['description'],
       leaderboardId: map['leaderboardId'],
-      mapPosts:
-          List<MapPost>.from(map['mapPosts']?.map((x) => MapPost.fromMap(x))),
+      mapPosts: map.containsKey("mapPosts")
+          ? List<MapPost>.from(map['mapPosts']?.map((x) => MapPost.fromMap(x)))
+          : null,
       pinColorHex: map['pinColorHex'],
-      channel: Channel.fromMap(map['channel']),
+      channel:
+          map.containsKey('channel') ? Channel.fromMap(map['channel']) : null,
     );
   }
 

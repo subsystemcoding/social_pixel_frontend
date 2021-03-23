@@ -4,13 +4,13 @@ class MessageManagement {
   MessageManagement();
 
   Future<List<Message>> fetchUserList() {
-    return Future.delayed(Duration(seconds: 1), () {
+    return Future.delayed(Duration(milliseconds: 100), () {
       return [];
     });
   }
 
   Future<List<Message>> fetchMessages() {
-    return Future.delayed(Duration(seconds: 1), () {
+    return Future.delayed(Duration(milliseconds: 100), () {
       return [
         Message(
           createDate: "02:46",

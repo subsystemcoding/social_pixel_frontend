@@ -116,12 +116,15 @@ class Post {
       datePosted: map['datePosted'],
       postImageLink: map['postImageLink'],
       caption: map['caption'],
-      otherUsers:
-          List<Profile>.from(map['otherUsers']?.map((x) => Profile.fromMap(x))),
+      otherUsers: map.containsKey('ohterUsers')
+          ? List<Profile>.from(
+              map['otherUsers']?.map((x) => Profile.fromMap(x)))
+          : null,
       upvotes: map['upvotes'],
       commentCount: map['commentCount'],
-      comments:
-          List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
+      comments: map.containsKey("comments")
+          ? List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x)))
+          : null,
       location: Location.fromMap(map['location']),
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // postImageBytes: Uint8List.fromMap(map['postImageBytes']),

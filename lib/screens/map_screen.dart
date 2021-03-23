@@ -10,6 +10,7 @@ import 'package:socialpixel/bloc/geo_bloc/geo_bloc.dart';
 import 'package:socialpixel/bloc/map_bloc/map_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/mapPost.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
@@ -41,6 +42,10 @@ class _MapScreenState extends State<MapScreen> {
   List<Widget> checklist = [];
   //List of gamesList widgets
   List<Widget> gamesList = [];
+  //Selected Tile for the gamePost lists
+  int selectedTile = 0;
+  //selected Map Post for bottom widget
+  MapPost selectedMapPost;
   final bottomWidgetConstant = Container();
   Widget bottomWidget = Container();
   //Text for checklist
@@ -127,6 +132,14 @@ class _MapScreenState extends State<MapScreen> {
             final marker = _createMarker(mapPost);
             markers.update(mapPost.post.postId, (value) => marker,
                 ifAbsent: () => marker);
+          }
+        } else if (state is SubscribedGamesLoaded) {
+          for (var game in state.games) {
+            for (var mapPost in game.mapPosts) {
+              final marker = _createMarker(mapPost);
+              markers.update(mapPost.post.postId, (value) => marker,
+                  ifAbsent: () => marker);
+            }
           }
         }
 
@@ -443,42 +456,60 @@ class _MapScreenState extends State<MapScreen> {
 
   Widget _buildGamesListItem(Game game) {
     double radius = 25;
-    return CheckboxListTile(
-      value: true,
-      checkColor: Theme.of(context).accentColor,
-      activeColor: Theme.of(context).primaryColor,
-      onChanged: (bool isChecked) {
-        if (isChecked) {
-          setState(() {
-            for (var i = 0; i < game.mapPosts.length; i++) {
-              markers.update(
-                game.mapPosts[i].post.postId,
-                (value) => _createMarker(game.mapPosts[i]),
-                ifAbsent: () => _createMarker(game.mapPosts[i]),
-              );
+    bool val = true;
+    return ListTile(
+      leading: Checkbox(
+        value: val,
+        checkColor: Theme.of(context).primaryColor,
+        activeColor: Theme.of(context).accentColor,
+        onChanged: (bool isChecked) {
+          if (isChecked) {
+            setState(() {
+              for (var i = 0; i < game.mapPosts.length; i++) {
+                markers.update(
+                  game.mapPosts[i].post.postId,
+                  (value) => _createMarker(game.mapPosts[i]),
+                  ifAbsent: () => _createMarker(game.mapPosts[i]),
+                );
+              }
+            });
+          } else {
+            for (var mapPost in game.mapPosts) {
+              markers.remove(mapPost.post.postId);
             }
-          });
-        } else {
-          for (var mapPost in game.mapPosts) {
-            markers.remove(mapPost.post.postId);
           }
-        }
-      },
+        },
+      ),
       title: Text(
         game.name,
         style: Theme.of(context).primaryTextTheme.bodyText2,
       ),
-      secondary: TextButton(
-        child: CircleAvatar(
-          radius: radius,
-          backgroundColor: Theme.of(context).accentColor,
-          child: CircleAvatar(
-            backgroundColor: Theme.of(context).primaryColor,
-            radius: radius - 1,
-            child: Icon(Icons.location_pin),
-          ),
-        ),
-        onPressed: () {},
+      trailing: TextButton(
+        child: Icon(Icons.location_pin),
+        // child: CircleAvatar(
+        //   radius: radius,
+        //   backgroundColor: Theme.of(context).accentColor,
+        //   child: CircleAvatar(
+        //     backgroundColor: Theme.of(context).primaryColor,
+        //     radius: radius - 2,
+        //     child: Icon(Icons.location_pin),
+        //   ),
+        // ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          setState(() {
+            _controller.future.then((controller) {
+              Location location = game.mapPosts[0].post.location;
+              controller.moveCamera(
+                CameraUpdate.newLatLngZoom(
+                    LatLng(location.latitude, location.longitude), 17),
+              );
+            });
+            selectedTile = 0;
+            selectedMapPost = game.mapPosts[0];
+            bottomWidget = _buildBottomWidgetForGame(game);
+          });
+        },
       ),
     );
   }
@@ -499,7 +530,7 @@ class _MapScreenState extends State<MapScreen> {
         });
   }
 
-  Widget _buildBottomWidgetForGame(String imageLink, Game game) {
+  Widget _buildBottomWidgetForGame(Game game) {
     return Container(
       decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
@@ -510,17 +541,20 @@ class _MapScreenState extends State<MapScreen> {
       child: Column(
         children: [
           Container(
-            height: 150,
+            height: 100,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 //image
                 Expanded(
+                  flex: 3,
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(25)),
-                    child: Image.network(imageLink),
-                  ),
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(25)),
+                      child: Image.memory(
+                        selectedMapPost.post.postImageBytes,
+                        fit: BoxFit.cover,
+                      )),
                 ),
                 Expanded(
                   child: TextButton(
@@ -528,6 +562,9 @@ class _MapScreenState extends State<MapScreen> {
                       //TODO
                     },
                     style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(25.0))),
                         backgroundColor: Theme.of(context).accentColor),
                     child: Text(
                       "View Post",
@@ -539,12 +576,38 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           Container(
-            height: 250,
+            height: 100,
             child: ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(0.0),
               itemCount: game.mapPosts.length,
               itemBuilder: (context, i) {
                 return ListTile(
-                  title: Text("Post-${game.mapPosts[i].post.postId}"),
+                  tileColor: i == selectedTile
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).primaryColor,
+                  title: Text(
+                    "Post-${game.mapPosts[i].post.postId}",
+                    style: i == selectedTile
+                        ? Theme.of(context).textTheme.bodyText1
+                        : Theme.of(context).textTheme.headline6,
+                  ),
+                  onTap: () {
+                    _controller.future.then((controller) {
+                      Location location = game.mapPosts[i].post.location;
+                      controller.moveCamera(
+                        CameraUpdate.newLatLngZoom(
+                          LatLng(location.latitude, location.longitude),
+                          17,
+                        ),
+                      );
+                      setState(() {
+                        selectedTile = i;
+                        selectedMapPost = game.mapPosts[i];
+                        bottomWidget = _buildBottomWidgetForGame(game);
+                      });
+                    });
+                  },
                 );
               },
             ),

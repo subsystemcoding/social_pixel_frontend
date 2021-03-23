@@ -6,7 +6,7 @@ import 'package:socialpixel/data/test_data/test_data.dart';
 class ChannelRepository {
   Future<Channel> fetchChannel(int channelId) {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         String jsonData = TestData.channelData();
 
@@ -19,7 +19,7 @@ class ChannelRepository {
 
   Future<List<Channel>> fetchChannelList() {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         String jsonData = TestData.channelListData();
         List<dynamic> list = json.decode(jsonData);

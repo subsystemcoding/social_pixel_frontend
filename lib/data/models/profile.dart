@@ -127,10 +127,13 @@ class Profile {
       isVerified: map['isVerified'],
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
-      subscribedGames:
-          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
-      subscribedChannels: List<Channel>.from(
-          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
+      subscribedGames: map.containsKey('subscribedGames')
+          ? List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x)))
+          : null,
+      subscribedChannels: map.containsKey('subscribedChannels')
+          ? List<Channel>.from(
+              map['subscribedChannels']?.map((x) => Channel.fromMap(x)))
+          : null,
     );
   }
 

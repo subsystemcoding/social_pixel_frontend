@@ -58,7 +58,7 @@ class MapRepository {
 
   Future<List<MapPost>> _fetchPostsFromInternet() {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () async {
         String jsonData = TestData.postData();
         List<dynamic> list = json.decode(jsonData);
@@ -88,7 +88,22 @@ class MapRepository {
   }
 
   Future<List<Game>> fetchSubscribedGames() async {
-    return await ProfileRepository().updateSubscribedGames();
+    final games = await ProfileRepository().updateSubscribedGames();
+    for (var game in games) {
+      for (var mapPost in game.mapPosts) {
+        Uint8List postImage =
+            await Connectivity.networkImageToBytes(mapPost.post.postImageLink);
+        mapPost.post.postImageBytes = postImage;
+        Uint8List imagePin = await _imageToImagePin(
+          postImage,
+          color: Color(
+            int.parse(game.pinColorHex, radix: 16),
+          ),
+        );
+        mapPost.imagePin = imagePin;
+      }
+    }
+    return games;
   }
 
   Future<bool> hasPostinChecklist(MapPost mapPost) async {

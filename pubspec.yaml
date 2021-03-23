@@ -36,29 +36,28 @@ dependencies:
   # imagelibrary providing more control of images
   image: ^2.1.19
   # Fixes Rotation
-  flutter_exif_rotation: ^0.4.1
+  flutter_exif_rotation: ^0.3.2
   # Allows reading the metadata of the picture
   exif: ^1.0.3
   photofilters: ^2.0.1
   # Geolocation detection
-  geolocator: ^7.0.1
+  geolocator: ^6.1.14
   # Date and time format and usage
-  intl: ^0.17.0
+  intl: ^0.16.1
   # image picker for flutter
-  image_picker: ^0.7.3
+  image_picker: ^0.6.7+21
   # map for flutter
-  flutter_map: ^0.12.0
+  flutter_map: ^0.10.1+1
   # google maps for flutter
-  google_maps_flutter: ^2.0.1
+  google_maps_flutter: ^1.1.1
   # http
-  http: ^0.13.0
+  http: ^0.12.2
   # hive database for caching
   hive:
   hive_flutter:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  sliding_up_panel: ^1.0.2
 
 dev_dependencies:
   english_words: ^3.1.5

@@ -10,9 +10,9 @@ part 'mapPost.g.dart';
 @HiveType(typeId: 4)
 class MapPost {
   @HiveField(0)
-  final Post post;
+  Post post;
   @HiveField(1)
-  final Uint8List imagePin;
+  Uint8List imagePin;
   MapPost({
     this.post,
     this.imagePin,

@@ -33,7 +33,7 @@ class PostManagement {
   }
 
   Future<List<Game>> fetchGamePosts({int channelId}) {
-    return Future.delayed(Duration(seconds: 1), () {
+    return Future.delayed(Duration(milliseconds: 100), () {
       String jsonData = TestData.gamePostData();
       List<dynamic> list = json.decode(jsonData);
 
@@ -89,7 +89,7 @@ class PostManagement {
 
   Future<List<Post>> _fetchPostsFromInternet() {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         String jsonData = TestData.postData();
         List<dynamic> list = json.decode(jsonData);

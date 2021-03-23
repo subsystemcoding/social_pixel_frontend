@@ -10,10 +10,10 @@ class LeaderboardRepository {
 
   Future<Leaderboard> fetchLeaderboard(int leaderboardId) {
     return Future.delayed(
-      Duration(seconds: 1),
+      Duration(milliseconds: 100),
       () {
         return Future.delayed(
-          Duration(seconds: 1),
+          Duration(milliseconds: 100),
           () {
             String jsonData = TestData.leaderboardData();
 

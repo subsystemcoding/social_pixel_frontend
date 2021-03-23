@@ -105,6 +105,11 @@ class _MyAppState extends State<MyApp> {
                 fontWeight: FontWeight.w600,
                 color: Color(0xff7041ee),
               ),
+              headline6: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
             ),
             primaryTextTheme: TextTheme(
               headline1: TextStyle(
