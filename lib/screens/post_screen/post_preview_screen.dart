@@ -278,39 +278,42 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
 
   Widget _buildDialog(imageLib.Image image, BuildContext context) {
     Uint8List imageBytes = imageLib.encodeJpg(image);
-    return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
-      title: Text("Found Person"),
-      content: Container(
-        height: 310,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Image.memory(
-              imageBytes,
-              height: 220,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-                "It is not allowed to post a picture of any person in this app. Please take another picture.")
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          child: Text(
-            "Ok",
-            style: Theme.of(context).textTheme.bodyText2,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AlertDialog(
+        contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+        title: Text("Found Person"),
+        content: Container(
+          height: 310,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.memory(
+                imageBytes,
+                height: 220,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                  "It is not allowed to post a picture of any person in this app. Please take another picture.")
+            ],
           ),
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          },
         ),
-      ],
+        actions: [
+          TextButton(
+            child: Text(
+              "Ok",
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
