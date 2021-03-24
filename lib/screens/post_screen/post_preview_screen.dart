@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/location.dart';
+import 'package:socialpixel/data/repos/tflite_repository.dart';
 import 'package:socialpixel/widgets/raised_container.dart';
 
 class PostPreviewScreen extends StatefulWidget {
@@ -27,17 +28,25 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
   imageLib.Image image;
   DateTime date;
   Location location;
+  TfLiteRepository tflite = TfLiteRepository();
 
   @override
   void initState() {
     super.initState();
     this.imageFile = File(this.widget.path);
-    this.imageFile.readAsBytes().then((bytes) {
+    tflite.checkHumanInPhoto(imageFile);
+    this.imageFile.readAsBytes().then((bytes) async {
       image = imageLib.decodeImage(bytes);
       getInfo();
     });
     gotInfo = false;
     imageFile = File(widget.path);
+  }
+
+  @override
+  void dispose() {
+    tflite.dispose();
+    super.dispose();
   }
 
   @override

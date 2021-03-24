@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/map',
+          initialRoute: '/camera',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(
