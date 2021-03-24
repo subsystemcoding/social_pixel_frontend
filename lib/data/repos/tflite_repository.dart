@@ -53,20 +53,35 @@ class TfLiteRepository {
     return convertedBytes.buffer.asUint8List();
   }
 
-  Future<bool> checkHumanInPhoto(File file) async {
+  Future<imageLib.Image> checkHumanInPhoto(File file) async {
     final object = await _recognizeObject(file);
     for (var item in object) {
       if (item['detectedClass'] == "person" &&
           item['confidenceInClass'] > 0.5) {
-        return true;
+        return getBoxesInImage(object, file);
       }
     }
-    return false;
+    return null;
+  }
+
+  imageLib.Image getBoxesInImage(dynamic object, File file) {
+    imageLib.Image image = imageLib.decodeJpg(file.readAsBytesSync());
+    for (var item in object) {
+      if (item['detectedClass'] == "person" &&
+          item['confidenceInClass'] > 0.5) {
+        final rect = item['rect'];
+        int x1 = (rect['x'] * image.width).round();
+        int y1 = (rect['y'] * image.height).round();
+        int x2 = (rect['w'] * image.width + x1).round();
+        int y2 = (rect['h'] * image.height + y1).round();
+
+        image = imageLib.drawRect(image, x1, y1, x2, y2, 0xffff0000);
+      }
+    }
+    return image;
   }
 
   Future<List<dynamic>> _recognizeObject(File file) async {
-    await init();
-
     final res = await Tflite.detectObjectOnImage(
       path: file.path, // required
       model: _model,

@@ -9,8 +9,10 @@ import 'package:socialpixel/bloc/map_bloc/map_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
+import 'package:socialpixel/bloc/tflite_bloc/tflite_bloc.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/repos/hive_repository.dart';
+import 'package:socialpixel/data/repos/tflite_repository.dart';
 import 'package:socialpixel/route_generator.dart';
 import 'package:flutter/services.dart';
 
@@ -30,12 +32,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    TfLiteRepository().init();
     //GraphqlClient();
   }
 
   @override
   void dispose() {
     //GraphqlClient().client.close();
+    TfLiteRepository().dispose();
     HiveRepository().dispose();
     super.dispose();
   }
@@ -49,6 +53,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider<PostBloc>(
           create: (context) => PostBloc(),
+        ),
+        BlocProvider<TfliteBloc>(
+          create: (context) => TfliteBloc(),
         ),
         BlocProvider<MapBloc>(
           create: (context) => MapBloc(),

@@ -82,7 +82,6 @@ flutter:
   assets:
     - assets/images/logo.jpg
     - assets/images/pin.png
-    - assets/images/test.jpg
     - assets/tflite/ssd_mobilenet.tflite
     - assets/tflite/labels.txt
   #   - images/a_dot_ham.jpeg

@@ -1,12 +1,15 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:photofilters/photofilters.dart';
 import 'package:path/path.dart';
 import 'package:image/image.dart' as imageLib;
+import 'package:socialpixel/bloc/tflite_bloc/tflite_bloc.dart';
 import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/repos/tflite_repository.dart';
@@ -28,16 +31,16 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
   imageLib.Image image;
   DateTime date;
   Location location;
-  TfLiteRepository tflite = TfLiteRepository();
 
   @override
   void initState() {
     super.initState();
     this.imageFile = File(this.widget.path);
-    tflite.checkHumanInPhoto(imageFile);
     this.imageFile.readAsBytes().then((bytes) async {
       image = imageLib.decodeImage(bytes);
       getInfo();
+      BlocProvider.of<TfliteBloc>(this.context)
+          .add(CheckImageForPerson(this.imageFile));
     });
     gotInfo = false;
     imageFile = File(widget.path);
@@ -45,95 +48,109 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
 
   @override
   void dispose() {
-    tflite.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Upload Post')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: !gotInfo
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.width,
-                  child: Image.file(
-                    imageFile,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 150,
-                        child: ListView(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            buildIcon(
-                              context,
-                              text: 'Crop',
-                              iconData: Icons.crop,
-                              onTap: () {
-                                _cropImage(context);
-                              },
-                            ),
-                            buildIcon(
-                              context,
-                              text: 'Filter',
-                              iconData: Icons.filter,
-                              onTap: () {
-                                _filterImage(context);
-                              },
-                            ),
-                          ],
-                        ),
+        appBar: AppBar(title: Text('Upload Post')),
+        // The image is stored as a file on the device. Use the `Image.file`
+        // constructor with the given path to display the image.
+        body: !gotInfo
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : BlocListener<TfliteBloc, TfliteState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                  if (state is ImageChecked) {
+                    if (state.image != null) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return _buildDialog(state.image, this.context);
+                        },
+                      );
+                    }
+                  }
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.width,
+                      child: Image.file(
+                        imageFile,
+                        fit: BoxFit.cover,
                       ),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      Container(
-                        width: 150,
-                        child: ElevatedButton(
-                          onPressed: () => onPressedNext(context),
-                          style: ElevatedButton.styleFrom(
-                            primary: gotInfo
-                                ? Theme.of(context).accentColor
-                                : Theme.of(context)
-                                    .accentColor
-                                    .withOpacity(0.3),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 150,
+                            child: ListView(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                buildIcon(
+                                  context,
+                                  text: 'Crop',
+                                  iconData: Icons.crop,
+                                  onTap: () {
+                                    _cropImage(context);
+                                  },
+                                ),
+                                buildIcon(
+                                  context,
+                                  text: 'Filter',
+                                  iconData: Icons.filter,
+                                  onTap: () {
+                                    _filterImage(context);
+                                  },
+                                ),
+                              ],
                             ),
                           ),
-                          child: Center(
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600),
+                          SizedBox(
+                            height: 4.0,
+                          ),
+                          Container(
+                            width: 150,
+                            child: ElevatedButton(
+                              onPressed: () => onPressedNext(context),
+                              style: ElevatedButton.styleFrom(
+                                primary: gotInfo
+                                    ? Theme.of(context).accentColor
+                                    : Theme.of(context)
+                                        .accentColor
+                                        .withOpacity(0.3),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Next",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-    );
+              ));
   }
 
   void getInfo() async {
@@ -257,5 +274,43 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
         imageFile = filteredImagefile['image_filtered'];
       });
     }
+  }
+
+  Widget _buildDialog(imageLib.Image image, BuildContext context) {
+    Uint8List imageBytes = imageLib.encodeJpg(image);
+    return AlertDialog(
+      contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+      title: Text("Found Person"),
+      content: Container(
+        height: 310,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image.memory(
+              imageBytes,
+              height: 220,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+                "It is not allowed to post a picture of any person in this app. Please take another picture.")
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          child: Text(
+            "Ok",
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
   }
 }
