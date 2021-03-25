@@ -1262,4 +1262,510 @@ class TestData {
 }]
     ''';
   }
+
+  static String notifData() {
+    return '''
+    [{
+  "notif": "Alphonso Gorczany tagged you in their post",
+  "time": "30 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/adeoslabore.png?size=75x75&set=set1"
+}, {
+  "notif": "Lawanna Considine commented on your post",
+  "time": "30 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/autasperioresexpedita.png?size=75x75&set=set1"
+}, {
+  "notif": "Fidel Kub tagged you in their post",
+  "time": "29 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/cupiditatequisunt.png?size=75x75&set=set1"
+}, {
+  "notif": "Edgardo Roberts and 9 others tagged you in their post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/ipsanemocupiditate.png?size=75x75&set=set1"
+}, {
+  "notif": "Everett Langosh tagged you in their post",
+  "time": "31 Oct",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/quiimpeditdolores.png?size=75x75&set=set1"
+}, {
+  "notif": "Earle Bernhard liked your post",
+  "time": "30 Oct",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/sedquiquos.png?size=75x75&set=set1"
+}, {
+  "notif": "Brenna Brakus and 7 others liked your post",
+  "time": "31 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/abomniset.png?size=75x75&set=set1"
+}, {
+  "notif": "Cheryl Legros and 785 others commented on your post",
+  "time": "08 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/repellatminimahic.png?size=75x75&set=set1"
+}, {
+  "notif": "Concetta Willms liked your post",
+  "time": "09 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/nonomnisquia.png?size=75x75&set=set1"
+}, {
+  "notif": "Diana Maggio and 89 others tagged you in their post",
+  "time": "30 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/teneturnumquamaliquid.png?size=75x75&set=set1"
+}, {
+  "notif": "Mimi Grant shared your post",
+  "time": "31 Sep",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/possimusfugiatnobis.png?size=75x75&set=set1"
+}, {
+  "notif": "Waltraud Wilderman shared your post",
+  "time": "4 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/ducimussedquasi.png?size=75x75&set=set1"
+}, {
+  "notif": "Darrin Langosh and 9 others tagged you in their post",
+  "time": "30 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/itaquepraesentiumquia.png?size=75x75&set=set1"
+}, {
+  "notif": "Jennie Douglas shared your post",
+  "time": "30 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/molestiasenimex.png?size=75x75&set=set1"
+}, {
+  "notif": "Nila Huel and 989 others commented on your post",
+  "time": "21 Jul",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/iustoanimised.png?size=75x75&set=set1"
+}, {
+  "notif": "Echo Moore tagged you in their post",
+  "time": "5 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/numquamvitaerepellendus.png?size=75x75&set=set1"
+}, {
+  "notif": "Ellis Monahan shared your post",
+  "time": "30 Oct",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/etminimareprehenderit.png?size=75x75&set=set1"
+}, {
+  "notif": "Wm Baumbach tagged you in their comment",
+  "time": "31 Nov",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/verocumquesaepe.png?size=75x75&set=set1"
+}, {
+  "notif": "Tiny Stark shared your post",
+  "time": "30 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/natusestarchitecto.png?size=75x75&set=set1"
+}, {
+  "notif": "Coralee Carroll shared your post",
+  "time": "09 Jul",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/perspiciatissolutaqui.png?size=75x75&set=set1"
+}, {
+  "notif": "Saul Beahan tagged you in their post",
+  "time": "30 Oct",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/inanimisimilique.png?size=75x75&set=set1"
+}, {
+  "notif": "Antione Weissnat and 89 others tagged you in their comment",
+  "time": "7 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/nisirerumvoluptatem.png?size=75x75&set=set1"
+}, {
+  "notif": "Felton Mayert shared your post",
+  "time": "30 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/ullamadipiscinostrum.png?size=75x75&set=set1"
+}, {
+  "notif": "Nilsa Baumbach and 9 others shared your post",
+  "time": "31 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/sintnobisomnis.png?size=75x75&set=set1"
+}, {
+  "notif": "Jay West and 379 others commented on your post",
+  "time": "9 Sep",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/quiaomniset.png?size=75x75&set=set1"
+}, {
+  "notif": "Viviana Fay and 87 others shared your post",
+  "time": "31 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/delectusquidemdeserunt.png?size=75x75&set=set1"
+}, {
+  "notif": "Florance Kirlin and 49 others tagged you in their comment",
+  "time": "30 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/repudiandaesitperspiciatis.png?size=75x75&set=set1"
+}, {
+  "notif": "Carolin Stoltenberg tagged you in their post",
+  "time": "7 Oct",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/etquosid.png?size=75x75&set=set1"
+}, {
+  "notif": "Chuck Bernier and 9 others shared your post",
+  "time": "31 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/eteaqueexplicabo.png?size=75x75&set=set1"
+}, {
+  "notif": "Moses Jacobi and 799 others liked your post",
+  "time": "29 Dec",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/accusamusetsit.png?size=75x75&set=set1"
+}, {
+  "notif": "Riley Fisher shared your post",
+  "time": "31 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/providentinventoreexplicabo.png?size=75x75&set=set1"
+}, {
+  "notif": "Jacquelynn Roberts commented on your post",
+  "time": "30 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/laudantiumofficiisofficia.png?size=75x75&set=set1"
+}, {
+  "notif": "Maura Hickle tagged you in their post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/absimiliquequo.png?size=75x75&set=set1"
+}, {
+  "notif": "Olene Ward commented on your post",
+  "time": "8 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/assumendatenetureligendi.png?size=75x75&set=set1"
+}, {
+  "notif": "Bennie Yost tagged you in their post",
+  "time": "30 Dec",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/officiisvelitet.png?size=75x75&set=set1"
+}, {
+  "notif": "Anja Davis and 9 others tagged you in their post",
+  "time": "17 Nov",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/velitnecessitatibuslaboriosam.png?size=75x75&set=set1"
+}, {
+  "notif": "Huong Boehm commented on your post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/nonnatushic.png?size=75x75&set=set1"
+}, {
+  "notif": "Marquis Vandervort shared your post",
+  "time": "08 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/ideteos.png?size=75x75&set=set1"
+}, {
+  "notif": "Alva Ward and 9 others tagged you in their post",
+  "time": "30 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/molestiaevoluptateea.png?size=75x75&set=set1"
+}, {
+  "notif": "Ruthie Douglas and 75 others tagged you in their post",
+  "time": "31 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/necessitatibusdoloroptio.png?size=75x75&set=set1"
+}, {
+  "notif": "Santiago Morar and 97 others tagged you in their post",
+  "time": "19 Jan",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/distinctiobeataequia.png?size=75x75&set=set1"
+}, {
+  "notif": "Celia Jewess tagged you in their post",
+  "time": "09 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/praesentiumillumexplicabo.png?size=75x75&set=set1"
+}, {
+  "notif": "Rickie Turner liked your post",
+  "time": "8 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/similiquehicvelit.png?size=75x75&set=set1"
+}, {
+  "notif": "Cara Grady tagged you in their post",
+  "time": "30 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/vitaeconsequaturaut.png?size=75x75&set=set1"
+}, {
+  "notif": "Zora Braun and 97 others commented on your post",
+  "time": "09 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/aliasutpossimus.png?size=75x75&set=set1"
+}, {
+  "notif": "Efren Gleason tagged you in their comment",
+  "time": "27 Dec",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/accusantiumrepellendusreprehenderit.png?size=75x75&set=set1"
+}, {
+  "notif": "Danyel Anderson tagged you in their comment",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/quiadebitisvero.png?size=75x75&set=set1"
+}, {
+  "notif": "Paola Jacobi and 9 others tagged you in their comment",
+  "time": "9 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/architectorerumillum.png?size=75x75&set=set1"
+}, {
+  "notif": "Georgene Bartell and 66 others tagged you in their post",
+  "time": "8 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/pariaturafugit.png?size=75x75&set=set1"
+}, {
+  "notif": "Deshawn Von and 799 others tagged you in their comment",
+  "time": "9 Dec",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/nonblanditiisa.png?size=75x75&set=set1"
+}, {
+  "notif": "Curtis Schimmel shared your post",
+  "time": "30 Oct",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/estnobisrem.png?size=75x75&set=set1"
+}, {
+  "notif": "Williams Kertzmann and 9 others tagged you in their post",
+  "time": "31 Oct",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/temporeanimilabore.png?size=75x75&set=set1"
+}, {
+  "notif": "Maire Rosenbaum and 9 others tagged you in their comment",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/estsaepeea.png?size=75x75&set=set1"
+}, {
+  "notif": "Fredrick Herzog and 976 others liked your post",
+  "time": "31 Jul",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/velquocorporis.png?size=75x75&set=set1"
+}, {
+  "notif": "Willard Balistreri and 998 others tagged you in their comment",
+  "time": "19 Jun",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/quaecupiditateesse.png?size=75x75&set=set1"
+}, {
+  "notif": "Sabine Hickle and 79 others shared your post",
+  "time": "09 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/eamolestiasunde.png?size=75x75&set=set1"
+}, {
+  "notif": "Virgil Jacobson and 999 others commented on your post",
+  "time": "31 Oct",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/aspernaturvoluptatemquisquam.png?size=75x75&set=set1"
+}, {
+  "notif": "Toya Heidenreich commented on your post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/harumfugita.png?size=75x75&set=set1"
+}, {
+  "notif": "Marietta Roberts and 99 others shared your post",
+  "time": "9 Jul",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/rerumenimnihil.png?size=75x75&set=set1"
+}, {
+  "notif": "Ernestine Senger and 99 others tagged you in their comment",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/pariaturducimusdebitis.png?size=75x75&set=set1"
+}, {
+  "notif": "Nelly Jacobi tagged you in their post",
+  "time": "18 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/abbeataeexercitationem.png?size=75x75&set=set1"
+}, {
+  "notif": "Jesus Osinski tagged you in their post",
+  "time": "30 Oct",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/delenitidoloresest.png?size=75x75&set=set1"
+}, {
+  "notif": "Tomasa Lemke tagged you in their comment",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/etreiciendisrecusandae.png?size=75x75&set=set1"
+}, {
+  "notif": "Claudio King liked your post",
+  "time": "7 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/temporeetaspernatur.png?size=75x75&set=set1"
+}, {
+  "notif": "Efren Cronin and 59 others shared your post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/omnisoditeaque.png?size=75x75&set=set1"
+}, {
+  "notif": "Roseline Ward tagged you in their comment",
+  "time": "30 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/accusantiumadipisciaccusamus.png?size=75x75&set=set1"
+}, {
+  "notif": "Franklyn Block tagged you in their post",
+  "time": "31 Sep",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/liberoconsequaturexcepturi.png?size=75x75&set=set1"
+}, {
+  "notif": "Mariel Oberbrunner commented on your post",
+  "time": "28 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/estinnobis.png?size=75x75&set=set1"
+}, {
+  "notif": "Marylou Bode and 98 others tagged you in their comment",
+  "time": "19 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/sitnullaexcepturi.png?size=75x75&set=set1"
+}, {
+  "notif": "Briana Gottlieb tagged you in their post",
+  "time": "9 Oct",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/necessitatibusnisioccaecati.png?size=75x75&set=set1"
+}, {
+  "notif": "Clayton Weimann tagged you in their post",
+  "time": "09 Sep",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/quidemevenietiste.png?size=75x75&set=set1"
+}, {
+  "notif": "Michal Runte tagged you in their post",
+  "time": "09 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/nullaminusmagni.png?size=75x75&set=set1"
+}, {
+  "notif": "Cyril Price commented on your post",
+  "time": "29 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/voluptatempraesentiumquaerat.png?size=75x75&set=set1"
+}, {
+  "notif": "Elvis Torphy and 99 others liked your post",
+  "time": "31 Aug",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/deseruntquibusdamvelit.png?size=75x75&set=set1"
+}, {
+  "notif": "Bernie Dicki shared your post",
+  "time": "9 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/illumatquein.png?size=75x75&set=set1"
+}, {
+  "notif": "Shannon Reynolds and 989 others liked your post",
+  "time": "9 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/facereblanditiisid.png?size=75x75&set=set1"
+}, {
+  "notif": "Merlin Borer and 8 others tagged you in their post",
+  "time": "7 Dec",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/fugitestmollitia.png?size=75x75&set=set1"
+}, {
+  "notif": "Numbers McCullough and 9 others shared your post",
+  "time": "8 Oct",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/eiusvoluptasnemo.png?size=75x75&set=set1"
+}, {
+  "notif": "Chance Botsford tagged you in their comment",
+  "time": "9 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/recusandaequiasit.png?size=75x75&set=set1"
+}, {
+  "notif": "Khadijah Ernser and 989 others tagged you in their post",
+  "time": "30 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/sedquiaaliquam.png?size=75x75&set=set1"
+}, {
+  "notif": "Chi Davis and 999 others commented on your post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/liberosedipsam.png?size=75x75&set=set1"
+}, {
+  "notif": "Emmanuel Harris and 97 others liked your post",
+  "time": "31 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/sitsuscipittenetur.png?size=75x75&set=set1"
+}, {
+  "notif": "Emerald Ortiz liked your post",
+  "time": "31 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/etetipsa.png?size=75x75&set=set1"
+}, {
+  "notif": "Jadwiga Carter and 898 others liked your post",
+  "time": "8 Oct",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/nequeminimaodio.png?size=75x75&set=set1"
+}, {
+  "notif": "Debi Hilpert commented on your post",
+  "time": "30 Dec",
+  "type": "1",
+  "userAvatarLink": "https://robohash.org/accusamusquipossimus.png?size=75x75&set=set1"
+}, {
+  "notif": "Dung Jacobi commented on your post",
+  "time": "5 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/omniseumvoluptates.png?size=75x75&set=set1"
+}, {
+  "notif": "Melonie Grimes and 6 others tagged you in their comment",
+  "time": "9 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/quaeesseeos.png?size=75x75&set=set1"
+}, {
+  "notif": "Elyse Langworth and 88 others tagged you in their comment",
+  "time": "09 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/itaqueillumipsum.png?size=75x75&set=set1"
+}, {
+  "notif": "Mee Welch and 79 others shared your post",
+  "time": "9 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/suntabcupiditate.png?size=75x75&set=set1"
+}, {
+  "notif": "Hattie Bauch and 99 others tagged you in their comment",
+  "time": "31 Jul",
+  "type": "2",
+  "userAvatarLink": "https://robohash.org/totamesttempora.png?size=75x75&set=set1"
+}, {
+  "notif": "Andreas Koch commented on your post",
+  "time": "29 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/authicsunt.png?size=75x75&set=set1"
+}, {
+  "notif": "Roger Vandervort and 888 others liked your post",
+  "time": "31 Nov",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/autemeosbeatae.png?size=75x75&set=set1"
+}, {
+  "notif": "Franklin Rolfson and 9 others tagged you in their comment",
+  "time": "30 Oct",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/praesentiumquounde.png?size=75x75&set=set1"
+}, {
+  "notif": "Selma Abshire tagged you in their post",
+  "time": "30 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/nonoditqui.png?size=75x75&set=set1"
+}, {
+  "notif": "Dirk Dach liked your post",
+  "time": "30 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/evenietnonest.png?size=75x75&set=set1"
+}, {
+  "notif": "Kimberli Beier and 9 others commented on your post",
+  "time": "28 Oct",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/porroperferendisquibusdam.png?size=75x75&set=set1"
+}, {
+  "notif": "Anderson Flatley commented on your post",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/expeditaomnisveniam.png?size=75x75&set=set1"
+}, {
+  "notif": "Ulrike Johnston tagged you in their comment",
+  "time": "31 Dec",
+  "type": "4",
+  "userAvatarLink": "https://robohash.org/saepedignissimosaut.png?size=75x75&set=set1"
+}, {
+  "notif": "Graig Okuneva and 89 others tagged you in their comment",
+  "time": "30 Dec",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/distinctioineligendi.png?size=75x75&set=set1"
+}, {
+  "notif": "Lenny Lockman tagged you in their post",
+  "time": "8 Nov",
+  "type": "3",
+  "userAvatarLink": "https://robohash.org/perspiciatisvelculpa.png?size=75x75&set=set1"
+}]
+    ''';
+  }
 }

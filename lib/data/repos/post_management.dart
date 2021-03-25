@@ -45,11 +45,11 @@ class PostManagement {
         String jsonData = TestData.postData();
         List<dynamic> list = json.decode(jsonData);
 
-        List<Post> posts = list.map((obj) {
+        List<Post> notifsList = list.map((obj) {
           return Post.fromMap(obj);
         }).toList();
 
-        return posts;
+        return notifsList;
       },
     );
   }

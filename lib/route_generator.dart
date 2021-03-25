@@ -30,9 +30,7 @@ class RouteGenerator {
       case '/forget':
         return MaterialPageRoute(builder: (_) => ForgetScreen());
       case '/home':
-        return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => HomeScreen());
       case '/search':
         return MaterialPageRoute(builder: (_) => SearchScreen());
       case '/settings':
