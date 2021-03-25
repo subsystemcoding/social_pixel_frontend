@@ -30,7 +30,7 @@ class _CameraWidgetState extends State<CameraWidget> {
     }
     _controller = CameraController(
       cameraDescription,
-      ResolutionPreset.high,
+      ResolutionPreset.max,
     );
 
     // If the _controller is updated then update the UI.
