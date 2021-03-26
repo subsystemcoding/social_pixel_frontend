@@ -25,8 +25,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   ) async* {
     yield PostLoading();
     try {
-      if (event is FetchInitialPost) {
-        if (event.channelId == 0) {
+      if (event is FetchPosts) {
+        if (event.channelId == -1) {
           var cachedPosts = await postManagement.fetchCachedPosts();
           if (cachedPosts.isNotEmpty) {
             yield PostLoaded(cachedPosts);
@@ -38,22 +38,15 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         ///If both are not available then
         ///connect to internet screen
         yield PostLoaded(
-            await postManagement.fetchFirstPosts(channelId: event.channelId));
-      } else if (event is FetchMorePost) {
-        yield PostLoaded(
-            await postManagement.fetchMorePosts(channelId: event.channelId));
-      } else if (event is FetchNewPost) {
-        /// if no new post available then show snack bar
-        yield PostLoaded(
-            await postManagement.fetchNewPosts(channelId: event.channelId));
+          await postManagement.fetchPosts(
+            channelId: event.channelId,
+            includeComments: event.includeComments,
+          ),
+        );
       } else if (event is FetchSearchedPost) {
         /// Return searched posts with hashtags
         yield PostLoaded(
             await postManagement.fetchSearchedPosts(hashtags: event.hashtags));
-      } else if (event is FetchProfilePost) {
-        /// Return posts that are under user profile
-        yield PostLoaded(
-            await postManagement.fetchProfilePosts(userId: event.userId));
       } else if (event is SendPost) {
         //await postManagement.sendPost(post, PostSending.Successful);
         // TODO

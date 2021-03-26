@@ -35,7 +35,7 @@ class ChannelScreen extends StatelessWidget {
       body: BlocBuilder<ChannelBloc, ChannelState>(
         builder: (context, state) {
           if (state is ChannelLoaded) {
-            postBloc.add(FetchInitialPost(channelId: channelId));
+            postBloc.add(FetchPosts(channelId: channelId));
             gameBloc.add(FetchGames(channelId));
             return DefaultTabController(
               length: 2,

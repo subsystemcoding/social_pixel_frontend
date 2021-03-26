@@ -198,7 +198,7 @@ class UserProfileScreen extends StatelessWidget {
 
   Widget buildPosts(context) {
     List<Widget> posts = [];
-    BlocProvider.of<PostBloc>(context).add(FetchInitialPost());
+    BlocProvider.of<PostBloc>(context).add(FetchPosts());
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),

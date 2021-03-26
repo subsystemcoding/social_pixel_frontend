@@ -47,49 +47,44 @@ class PostManagement {
     });
   }
 
-  Future<List<Post>> fetchFirstPosts({int channelId}) async {
-    final posts = await _fetchPostsFromInternet();
-
-    //delete and add posts in the background
-    _deleteAllPostInCache().then((_) async {
-      await _addPostsToCache(posts);
-    });
-    return posts;
-  }
-
-  Future<List<Post>> fetchMorePosts({int channelId}) async {
-    final posts = await _fetchPostsFromInternet();
-
-    //delete and add posts in the background
-    _addPostsToCache(posts);
-    return posts;
-  }
-
-  Future<List<Post>> fetchNewPosts({int channelId}) async {
-    final posts = await _fetchPostsFromInternet();
-
-    //delete and add posts in the background
-    _addPostsToCache(posts);
-    return posts;
-  }
-
   Future<List<Post>> fetchSearchedPosts({List<String> hashtags}) async {
-    final posts = await _fetchPostsFromInternet();
+    List<Post> posts;
 
     //delete and add posts in the background
     _addPostsToCache(posts);
     return posts;
   }
 
-  Future<List<Post>> fetchProfilePosts({int userId}) async {
-    final posts = await _fetchPostsFromInternet();
+  Future<List<Post>> fetchPosts({int channelId, bool includeComments}) async {
+    //allow for comments
+    String comments = includeComments
+        ? '''
+    comments{
+      commentId
+      author{
+        user{
+          username
+        }
+        image
+      }
+      commentContent
+      dateCreated
+      replies{
+        commentId
+        author{
+          user{
+            username
+          }
+          image
+        }
+        commentContent
+        dateCreated
+      }
+      
+    }
+    '''
+        : '';
 
-    //delete and add posts in the background
-    _addPostsToCache(posts);
-    return posts;
-  }
-
-  Future<List<Post>> _fetchPostsFromInternet() async {
     var response = await GraphqlClient().query(''' 
     query {
       feedPosts{
@@ -109,30 +104,34 @@ class PostManagement {
             username
           }
         }
+        $comments
         image
       } 
     }
     ''');
 
     var jsonResponse = jsonDecode(response)['data']['feedPosts'];
-    bool success = jsonResponse['success'];
-    if (success) {
-      List<Post> post = jsonResponse.map(
-        (item) => Post(
-          postId: item['postId'],
-          userName: item['author']['user']['username'],
-          userAvatarLink: item['author']['image'],
-          postImageLink: item['image'],
-          caption: item['caption'],
-          datePosted: item['dateCreated'],
-          location: Location(
-            latitude: item['gpsLatitude'],
-            longitude: item['gpsLongitude'],
-          ),
+    List<Post> posts = jsonResponse.map(
+      (item) => Post(
+        postId: item['postId'],
+        userName: item['author']['user']['username'],
+        userAvatarLink: item['author']['image'],
+        postImageLink: item['image'],
+        caption: item['caption'],
+        datePosted: item['dateCreated'],
+        comments: item['comments'],
+        location: Location(
+          latitude: item['gpsLatitude'],
+          longitude: item['gpsLongitude'],
         ),
-      );
-    }
-    return null;
+      ),
+    );
+
+    //delete and add posts in the background
+    _deleteAllPostInCache().then((_) async {
+      await _addPostsToCache(posts);
+    });
+    return posts;
   }
 
   Future<List<Post>> fetchCachedPosts() async {

@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     List<Post> posts = [];
     final postBloc = BlocProvider.of<PostBloc>(context);
     // Emitting the fetch event
-    postBloc.add(FetchInitialPost());
+    postBloc.add(FetchPosts());
     return Scaffold(
       appBar: MenuBar().appbar,
       bottomNavigationBar: BottomNavBar(
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
               child: RefreshIndicator(
                 onRefresh: () {
                   return Future(() {
-                    postBloc.add(FetchNewPost());
+                    postBloc.add(FetchPosts());
                   });
                 },
                 //Listener for errors
