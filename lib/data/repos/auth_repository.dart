@@ -138,6 +138,12 @@ class AuthRepository {
     return authObject.token;
   }
 
+  Future<String> getUsername() async {
+    final box = await Hive.openBox(hiveBox);
+    AuthObject authObject = box.get(hiveBox);
+    return authObject.username;
+  }
+
   Future<bool> verifyAccount(String token) async {
     var response = await client.query('''
     mutation {

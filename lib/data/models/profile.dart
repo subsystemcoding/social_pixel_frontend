@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 
 import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/post.dart';
 
 part 'profile.g.dart';
 
@@ -40,6 +41,10 @@ class Profile {
   final List<Game> subscribedGames;
   @HiveField(13)
   final List<Channel> subscribedChannels;
+  @HiveField(14)
+  final List<Post> postsMade;
+  @HiveField(15)
+  final List<Post> upvotedPosts;
   Profile({
     this.userId,
     this.username,
@@ -55,6 +60,8 @@ class Profile {
     this.userCoverImageBytes,
     this.subscribedGames,
     this.subscribedChannels,
+    this.postsMade,
+    this.upvotedPosts,
   });
 
   Profile copyWith({
@@ -72,6 +79,8 @@ class Profile {
     Uint8List userCoverImageBytes,
     List<Game> subscribedGames,
     List<Channel> subscribedChannels,
+    List<Post> postsMade,
+    List<Post> upvotedPosts,
   }) {
     return Profile(
       userId: userId ?? this.userId,
@@ -88,6 +97,8 @@ class Profile {
       userCoverImageBytes: userCoverImageBytes ?? this.userCoverImageBytes,
       subscribedGames: subscribedGames ?? this.subscribedGames,
       subscribedChannels: subscribedChannels ?? this.subscribedChannels,
+      postsMade: postsMade ?? this.postsMade,
+      upvotedPosts: upvotedPosts ?? this.upvotedPosts,
     );
   }
 
@@ -108,6 +119,8 @@ class Profile {
       'subscribedGames': subscribedGames?.map((x) => x?.toMap())?.toList(),
       'subscribedChannels':
           subscribedChannels?.map((x) => x?.toMap())?.toList(),
+      'postsMade': postsMade?.map((x) => x?.toMap())?.toList(),
+      'upvotedPosts': upvotedPosts?.map((x) => x?.toMap())?.toList(),
     };
   }
 
@@ -127,13 +140,13 @@ class Profile {
       isVerified: map['isVerified'],
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
-      subscribedGames: map.containsKey('subscribedGames')
-          ? List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x)))
-          : null,
-      subscribedChannels: map.containsKey('subscribedChannels')
-          ? List<Channel>.from(
-              map['subscribedChannels']?.map((x) => Channel.fromMap(x)))
-          : null,
+      subscribedGames:
+          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
+      subscribedChannels: List<Channel>.from(
+          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
+      postsMade: List<Post>.from(map['postsMade']?.map((x) => Post.fromMap(x))),
+      upvotedPosts:
+          List<Post>.from(map['upvotedPosts']?.map((x) => Post.fromMap(x))),
     );
   }
 
@@ -144,7 +157,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels)';
+    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels, postsMade: $postsMade, upvotedPosts: $upvotedPosts)';
   }
 
   @override
@@ -165,7 +178,9 @@ class Profile {
         o.userImageBytes == userImageBytes &&
         o.userCoverImageBytes == userCoverImageBytes &&
         listEquals(o.subscribedGames, subscribedGames) &&
-        listEquals(o.subscribedChannels, subscribedChannels);
+        listEquals(o.subscribedChannels, subscribedChannels) &&
+        listEquals(o.postsMade, postsMade) &&
+        listEquals(o.upvotedPosts, upvotedPosts);
   }
 
   @override
@@ -183,6 +198,8 @@ class Profile {
         userImageBytes.hashCode ^
         userCoverImageBytes.hashCode ^
         subscribedGames.hashCode ^
-        subscribedChannels.hashCode;
+        subscribedChannels.hashCode ^
+        postsMade.hashCode ^
+        upvotedPosts.hashCode;
   }
 }
