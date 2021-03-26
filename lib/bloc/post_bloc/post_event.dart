@@ -17,6 +17,20 @@ class FetchSearchedPost extends PostEvent {
   FetchSearchedPost({this.hashtags});
 }
 
+class UpvotePost extends PostEvent {
+  final int postId;
+  final bool upvote;
+
+  UpvotePost({this.upvote, this.postId});
+}
+
+class CommentPost extends PostEvent {
+  final int postId;
+  final String text;
+
+  CommentPost({this.text, this.postId});
+}
+
 // Fetch posts in profile
 class SendPost extends PostEvent {
   final imageLib.Image image;

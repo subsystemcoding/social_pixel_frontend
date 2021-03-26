@@ -49,8 +49,20 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             await postManagement.fetchSearchedPosts(hashtags: event.hashtags));
       } else if (event is SendPost) {
         //await postManagement.sendPost(post, PostSending.Successful);
-        // TODO
         yield PostSent(PostSending.Successful);
+      } else if (event is UpvotePost) {
+        var modifier = event.upvote ? "ADD" : "REMOVE";
+        bool success = await postManagement.upvotePost(
+          postId: event.postId,
+          modifier: modifier,
+        );
+        yield PostUpvoted(success);
+      } else if (event is CommentPost) {
+        bool success = await postManagement.addComment(
+          postId: event.postId,
+          text: event.text,
+        );
+        yield PostCommented(success);
       }
     } catch (e) {
       print(e);

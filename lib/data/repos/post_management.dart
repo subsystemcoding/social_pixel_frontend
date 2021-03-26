@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -172,6 +173,29 @@ class PostManagement {
 
       box.put(newPost.postId, newPost);
     }
+  }
+
+  Future<bool> upvotePost({int postId, String modifier = "ADD"}) async {
+    var response = await GraphqlClient().query('''
+      mutation {
+        postUpvote(postId: $postId, modifier: $modifier){
+          success
+        }
+      }
+      ''');
+    var jsonResponse = jsonDecode(response)['data']['postUpvote'];
+    return jsonResponse['success'];
+  }
+
+  Future<bool> addComment({int postId, String text}) {
+    var response = ''' 
+    mutation {
+      postComment(postId: $postId, text : "$text"){
+        success
+      }
+    }
+    ''';
+    return jsonDecode(response)['data']['postComment']['success'];
   }
 
   Future<void> _deleteAllPostInCache() async {

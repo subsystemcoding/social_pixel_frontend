@@ -143,7 +143,9 @@ class PostWidget extends StatelessWidget {
         CustomButtons.standardButton(
           context,
           text: "Upvote",
-          onPressed: () => {},
+          onPressed: () => {
+            
+          },
         ),
         CustomButtons.standardButton(
           context,
