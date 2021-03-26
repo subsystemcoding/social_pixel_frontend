@@ -19,7 +19,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     yield ProfileLoading();
     try {
       if (event is GetProfile) {
-        final profile = await profileRepository.fetchProfile(event.userId);
+        final profile = await profileRepository.fetchProfile(event.username);
+        yield ProfileLoaded(profile);
+      }
+      if (event is GetCurrentProfile) {
+        final profile = await profileRepository.fetchCurrentProfile();
         yield ProfileLoaded(profile);
       }
     } catch (e) {

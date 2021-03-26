@@ -24,19 +24,11 @@ class ProfileRepository {
 
   Profile currentProfile;
 
-  /*Need the following
-    followers
-    points
-    coverImage
-  */
-
   Future<Profile> fetchCurrentProfile() async {
     String username = await AuthRepository().getUsername();
     var response = await _client.query(''' 
     query {
       userprofile(username: "$username"){
-        success,
-        errors,
         user{
           username
           email
@@ -61,45 +53,41 @@ class ProfileRepository {
     }
     ''');
     var jsonResponse = jsonDecode(response)['data']['userprofile'];
-    bool success = jsonResponse['success'];
-    if (success) {
-      Profile profile = Profile(
-        username: jsonResponse['user']['username'],
-        email: jsonResponse['user']['email'],
-        createDate: jsonResponse['user']['dateJoined'],
-        description: jsonResponse['bio'],
-        userAvatarImage: jsonResponse['image'],
-        postsMade: jsonResponse['postedBy'].map(
-          (item) {
-            return Post(
-              postId: item['postId'],
-              postImageLink: item['image150x150'],
-            );
-          },
-        ),
-        upvotedPosts: jsonResponse['upvotedBy'].map(
-          (item) => Post(postId: item['postId']),
-        ),
-        subscribedChannels: jsonResponse['memberIn'].map(
-          (item) => Channel(
-            id: item['id'],
-            name: item['name'],
-          ),
-        ),
-      );
-      await _saveCurrentProfileToCache(profile);
-      return profile;
-    }
 
-    return null;
+    Profile profile = Profile(
+      username: jsonResponse['user']['username'],
+      email: jsonResponse['user']['email'],
+      createDate: jsonResponse['user']['dateJoined'],
+      description: jsonResponse['bio'],
+      userAvatarImage: jsonResponse['image'],
+      postsMade: jsonResponse['postedBy'].map(
+        (item) {
+          return Post(
+            postId: item['postId'],
+            postImageLink: item['image150x150'],
+          );
+        },
+      ),
+      upvotedPosts: jsonResponse['upvotedBy'].map(
+        (item) => Post(postId: item['postId']),
+      ),
+      subscribedChannels: jsonResponse['memberIn'].map(
+        (item) => Channel(
+          id: item['id'],
+          name: item['name'],
+        ),
+      ),
+    );
+    return profile;
   }
 
   Future<Profile> fetchProfile(String username, {bool isUser = false}) async {
+    if (username == await AuthRepository().getUsername()) {
+      return fetchCurrentProfile();
+    }
     var response = await _client.query(''' 
     query {
       userprofile(username: "$username"){
-        success,
-        errors,
         user{
           username
           email
@@ -121,38 +109,31 @@ class ProfileRepository {
     }
     ''');
     var jsonResponse = jsonDecode(response)['data']['userprofile'];
-    bool success = jsonResponse['success'];
-    if (success) {
-      Profile profile = Profile(
-        username: jsonResponse['user']['username'],
-        email: jsonResponse['user']['email'],
-        createDate: jsonResponse['user']['dateJoined'],
-        description: jsonResponse['bio'],
-        userAvatarImage: jsonResponse['image'],
-        postsMade: jsonResponse['postedBy'].map(
-          (item) {
-            return Post(
-              postId: item['postId'],
-              postImageLink: item['image150x150'],
-            );
-          },
+    Profile profile = Profile(
+      username: jsonResponse['user']['username'],
+      email: jsonResponse['user']['email'],
+      createDate: jsonResponse['user']['dateJoined'],
+      description: jsonResponse['bio'],
+      userAvatarImage: jsonResponse['image'],
+      postsMade: jsonResponse['postedBy'].map(
+        (item) {
+          return Post(
+            postId: item['postId'],
+            postImageLink: item['image150x150'],
+          );
+        },
+      ),
+      upvotedPosts: jsonResponse['upvotedBy'].map(
+        (item) => Post(postId: item['postId']),
+      ),
+      subscribedChannels: jsonResponse['memberIn'].map(
+        (item) => Channel(
+          id: item['id'],
+          name: item['name'],
         ),
-        upvotedPosts: jsonResponse['upvotedBy'].map(
-          (item) => Post(postId: item['postId']),
-        ),
-        subscribedChannels: jsonResponse['memberIn'].map(
-          (item) => Channel(
-            id: item['id'],
-            name: item['name'],
-          ),
-        ),
-      );
-
-      await _saveRandUserProfileToCache(profile);
-      return profile;
-    }
-
-    return null;
+      ),
+    );
+    return profile;
   }
 
   Future<List<Game>> updateSubscribedGames() {
@@ -182,15 +163,5 @@ class ProfileRepository {
         return profiles;
       },
     );
-  }
-
-  Future<void> _saveCurrentProfileToCache(Profile profile) async {
-    final box = await Hive.openBox(hiveBox);
-    box.put(userProfileHive, profile);
-  }
-
-  Future<void> _saveRandUserProfileToCache(Profile profile) async {
-    final box = await Hive.openBox(hiveBox);
-    box.put(randUserProfileHive, profile);
   }
 }

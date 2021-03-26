@@ -6,15 +6,20 @@ import 'package:socialpixel/widgets/verified_widget.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  final int userId;
+  final String username;
   const UserProfileScreen({
     Key key,
-    this.userId,
+    this.username,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ProfileBloc>(context).add(GetProfile(userId));
+    bool isUser = false;
+    if (username == null) {
+      BlocProvider.of<ProfileBloc>(context).add(GetCurrentProfile());
+      isUser = true;
+    }
+    BlocProvider.of<ProfileBloc>(context).add(GetProfile(username));
     return Container(
       child: Scaffold(
         body: BlocBuilder<ProfileBloc, ProfileState>(
@@ -46,7 +51,7 @@ class UserProfileScreen extends StatelessWidget {
                       SizedBox(
                         height: 12.0,
                       ),
-                      buildButtons(context, userId == this.userId),
+                      buildButtons(context, isUser),
                       SizedBox(
                         height: 12.0,
                       ),

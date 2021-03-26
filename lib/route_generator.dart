@@ -63,7 +63,7 @@ class RouteGenerator {
       case '/profile':
         return MaterialPageRoute(
           builder: (_) => UserProfileScreen(
-            userId: args,
+            username: args,
           ),
         );
       case '/camera':

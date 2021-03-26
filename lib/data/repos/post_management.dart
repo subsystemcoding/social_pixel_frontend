@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:hive/hive.dart';
+import 'package:socialpixel/data/graphql_client.dart';
+import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/profile.dart';
@@ -87,20 +89,50 @@ class PostManagement {
     return posts;
   }
 
-  Future<List<Post>> _fetchPostsFromInternet() {
-    return Future.delayed(
-      Duration(milliseconds: 100),
-      () {
-        String jsonData = TestData.postData();
-        List<dynamic> list = json.decode(jsonData);
+  Future<List<Post>> _fetchPostsFromInternet() async {
+    var response = await GraphqlClient().query(''' 
+    query {
+      feedPosts{
+        postId
+        author{ 
+          user{
+            username
+          }
+          image
+        }
+        dateCreated
+        caption
+        gpsLongitude
+        gpsLatitude
+        upvotes{
+          user {
+            username
+          }
+        }
+        image
+      } 
+    }
+    ''');
 
-        List<Post> posts = list.map((obj) {
-          return Post.fromMap(obj);
-        }).toList();
-
-        return posts.sublist(5, 10);
-      },
-    );
+    var jsonResponse = jsonDecode(response)['data']['feedPosts'];
+    bool success = jsonResponse['success'];
+    if (success) {
+      List<Post> post = jsonResponse.map(
+        (item) => Post(
+          postId: item['postId'],
+          userName: item['author']['user']['username'],
+          userAvatarLink: item['author']['image'],
+          postImageLink: item['image'],
+          caption: item['caption'],
+          datePosted: item['dateCreated'],
+          location: Location(
+            latitude: item['gpsLatitude'],
+            longitude: item['gpsLongitude'],
+          ),
+        ),
+      );
+    }
+    return null;
   }
 
   Future<List<Post>> fetchCachedPosts() async {

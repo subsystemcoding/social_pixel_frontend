@@ -57,7 +57,7 @@ class _MapScreenState extends State<MapScreen> {
     BlocProvider.of<GeoBloc>(context).add(GetPosition());
     BlocProvider.of<MapBloc>(context).add(GetPosts());
     BlocProvider.of<MapBloc>(context).add(GetSubscribedGames());
-    BlocProvider.of<ProfileBloc>(context).add(GetProfile(1));
+    BlocProvider.of<ProfileBloc>(context).add(GetCurrentProfile());
   }
 
   @override

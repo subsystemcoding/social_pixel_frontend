@@ -4,9 +4,11 @@ part of 'profile_bloc.dart';
 abstract class ProfileEvent {}
 
 class GetProfile extends ProfileEvent {
-  final int userId;
+  final String username;
 
-  GetProfile(this.userId);
+  GetProfile(this.username);
 }
+
+class GetCurrentProfile extends ProfileEvent {}
 
 class GetProfileList extends ProfileEvent {}

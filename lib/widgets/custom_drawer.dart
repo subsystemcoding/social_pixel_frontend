@@ -10,7 +10,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Profile profile;
-    BlocProvider.of<ProfileBloc>(context).add(GetProfile(1));
+    BlocProvider.of<ProfileBloc>(context).add(GetCurrentProfile());
     return Drawer(
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
