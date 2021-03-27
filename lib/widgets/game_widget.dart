@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {
+  final int gameId;
   final String title;
   final String description;
   final ImageProvider<Object> backgroundImage;
   const GameWidget(
-      {Key key, this.title, this.description, this.backgroundImage})
+      {Key key,
+      this.gameId,
+      this.title,
+      this.description,
+      this.backgroundImage})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(28.0),
-      child: Stack(
-        children: [buildImage(context), buildInfo(context)],
+    return GestureDetector(
+      onTap: () {
+        /// TODO
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.all(28.0),
+        child: Stack(
+          children: [buildImage(context), buildInfo(context)],
+        ),
       ),
     );
   }

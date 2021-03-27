@@ -36,7 +36,6 @@ class ChannelScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is ChannelLoaded) {
             postBloc.add(FetchPosts(channelId: channelId));
-            gameBloc.add(FetchGames(channelId));
             return DefaultTabController(
               length: 2,
               child: NestedScrollView(
@@ -90,7 +89,7 @@ class ChannelScreen extends StatelessWidget {
                 },
                 body: TabBarView(
                   children: [
-                    buildPostSection(context),
+                    buildPostSection(context, state.channel.games),
                     buildRooms(context),
                   ],
                 ),
@@ -107,28 +106,12 @@ class ChannelScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostSection(BuildContext context) {
+  Widget buildPostSection(BuildContext context, List<Game> games) {
     List<Game> games = [];
     List<Post> posts = [];
     return ListView(
       children: [
-        BlocBuilder<GameBloc, GameState>(
-          builder: (context, state) {
-            if (state is GameLoaded) {
-              return state.games.isEmpty
-                  ? Container()
-                  : buildGames(context, state.games);
-            } else if (state is GameLoading) {
-              return Container(
-                height: 250,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-            return Container();
-          },
-        ),
+        games.isEmpty ? Container() : buildGames(context, games),
         BlocListener<PostBloc, PostState>(
           listener: (context, state) {
             if (state is PostError)
@@ -160,7 +143,7 @@ class ChannelScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         ///////////////////Debug///////////////////////////
         ///Remove itemCount
-        itemCount: 2,
+        itemCount: games.length,
         itemBuilder: (context, i) {
           final game = games[i];
           return GameWidget(
