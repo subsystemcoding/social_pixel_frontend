@@ -21,6 +21,7 @@ class ChatroomAdapter extends TypeAdapter<Chatroom> {
       name: fields[1] as String,
       messages: (fields[3] as List)?.cast<Message>(),
       messageSeenTimestamp: fields[4] as String,
+      newMessages: fields[5] as int,
     );
   }
 
