@@ -9,6 +9,8 @@ class Login extends AuthEvent {
   Login({this.username, this.password});
 }
 
+class LoginWithHive extends AuthEvent {}
+
 class Register extends AuthEvent {
   final String username;
   final String email;

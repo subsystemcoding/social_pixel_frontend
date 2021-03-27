@@ -34,7 +34,8 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   void initState() async {
     super.initState();
-    currentUsername = await AuthRepository().getUsername();
+    final authObject = await AuthRepository().getAuth();
+    currentUsername = authObject.username;
     timer = Timer.periodic(
         Duration(seconds: 1),
         (t) => BlocProvider.of<MessageBloc>(context)

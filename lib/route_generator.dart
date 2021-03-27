@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:socialpixel/screens/home_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/login_screen.dart';

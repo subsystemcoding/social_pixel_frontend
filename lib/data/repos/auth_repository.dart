@@ -4,6 +4,7 @@ import 'dart:convert';
 // import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:socialpixel/data/graphql_client.dart';
+import 'package:socialpixel/data/models/auth_object.dart';
 
 class AuthRepository {
   GraphqlClient client = GraphqlClient();
@@ -35,7 +36,7 @@ class AuthRepository {
         refreshToken,
       }
     }
-    ''');
+    ''', token: false);
     print("Printing response from login");
     print(response);
 
@@ -73,7 +74,7 @@ class AuthRepository {
         refreshToken,
       }
     }
-    ''');
+    ''', token: false);
 
     var jsonResponse = jsonDecode(response)['data']['refreshToken'];
     if (jsonResponse['success']) {
@@ -111,7 +112,7 @@ class AuthRepository {
         refreshToken
       }
     }
-    ''');
+    ''', token: false);
 
     var jsonResponse = jsonDecode(response)['data']['register'];
     bool success = jsonResponse['success'];
@@ -132,16 +133,10 @@ class AuthRepository {
     }
   }
 
-  Future<String> getToken() async {
+  Future<AuthObject> getAuth() async {
     final box = await Hive.openBox(hiveBox);
     AuthObject authObject = box.get(hiveBox);
-    return authObject.token;
-  }
-
-  Future<String> getUsername() async {
-    final box = await Hive.openBox(hiveBox);
-    AuthObject authObject = box.get(hiveBox);
-    return authObject.username;
+    return authObject;
   }
 
   Future<bool> verifyAccount(String token) async {
@@ -152,7 +147,7 @@ class AuthRepository {
         errors
       }
     }
-    ''');
+    ''', token: false);
 
     return jsonDecode(response)['data']['verifyAccount']['success'];
   }
@@ -170,18 +165,4 @@ class AuthRepository {
     AuthObject map = box.get(hiveBox);
     return map;
   }
-}
-
-@HiveType(typeId: 7)
-class AuthObject {
-  @HiveField(0)
-  String username;
-  @HiveField(1)
-  String email;
-  @HiveField(2)
-  String password;
-  @HiveField(3)
-  String token;
-  @HiveField(4)
-  String refreshToken;
 }

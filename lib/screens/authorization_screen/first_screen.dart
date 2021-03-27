@@ -11,7 +11,7 @@ class FirstScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<AuthBloc>(context).add(Login());
+    BlocProvider.of<AuthBloc>(context).add(LoginWithHive());
     return Scaffold(
         backgroundColor: Color(0xfffafbfd),
         body: BlocListener<AuthBloc, AuthState>(

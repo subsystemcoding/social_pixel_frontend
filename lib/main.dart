@@ -36,8 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(
-        Duration(seconds: 1), (timer) => MessageManagement().fetchMessages());
+
     TfLiteRepository().init();
     //GraphqlClient();
   }
@@ -45,7 +44,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     //GraphqlClient().client.close();
-    timer.cancel();
+    //timer.cancel();
     TfLiteRepository().dispose();
     HiveRepository().dispose();
     super.dispose();
@@ -179,7 +178,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.grey),
           ),
           onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-          initialRoute: '/camera',
+          initialRoute: '/',
           // home: MultiBlocProvider(
           //   providers: [
           //     BlocProvider<PostBloc>(

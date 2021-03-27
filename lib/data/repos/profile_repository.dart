@@ -25,7 +25,8 @@ class ProfileRepository {
   Profile currentProfile;
 
   Future<Profile> fetchCurrentProfile() async {
-    String username = await AuthRepository().getUsername();
+    final authObject = await AuthRepository().getAuth();
+    String username = authObject.username;
     var response = await _client.query(''' 
     query {
       userprofile(username: "$username"){
@@ -82,7 +83,8 @@ class ProfileRepository {
   }
 
   Future<Profile> fetchProfile(String username, {bool isUser = false}) async {
-    if (username == await AuthRepository().getUsername()) {
+    final authObject = await AuthRepository().getAuth();
+    if (username == authObject.username) {
       return fetchCurrentProfile();
     }
     var response = await _client.query(''' 
