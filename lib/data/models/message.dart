@@ -1,42 +1,65 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+import 'package:socialpixel/data/models/post.dart';
+
+part 'message.g.dart';
+
+@HiveType(typeId: 9)
 class Message {
+  @HiveField(0)
+  final int id;
+  @HiveField(1)
   final String createDate;
-  final String messageType;
-  final String messageBody;
-  final String userId;
-  final String recipientId;
+  @HiveField(2)
+  final String imageLink;
+  @HiveField(3)
+  final Post post;
+  @HiveField(4)
+  final String text;
+  @HiveField(5)
+  final String username;
+  @HiveField(6)
+  final String userImage;
   Message({
+    this.id,
     this.createDate,
-    this.messageType,
-    this.messageBody,
-    this.userId,
-    this.recipientId,
+    this.imageLink,
+    this.post,
+    this.text,
+    this.username,
+    this.userImage,
   });
 
   Message copyWith({
+    int id,
     String createDate,
-    String messageType,
-    String messageBody,
-    String userId,
-    String recipientId,
+    String imageLink,
+    Post post,
+    String text,
+    String username,
+    String userImage,
   }) {
     return Message(
+      id: id ?? this.id,
       createDate: createDate ?? this.createDate,
-      messageType: messageType ?? this.messageType,
-      messageBody: messageBody ?? this.messageBody,
-      userId: userId ?? this.userId,
-      recipientId: recipientId ?? this.recipientId,
+      imageLink: imageLink ?? this.imageLink,
+      post: post ?? this.post,
+      text: text ?? this.text,
+      username: username ?? this.username,
+      userImage: userImage ?? this.userImage,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'createDate': createDate,
-      'messageType': messageType,
-      'messageBody': messageBody,
-      'userId': userId,
-      'recipientId': recipientId,
+      'imageLink': imageLink,
+      'post': post?.toMap(),
+      'text': text,
+      'username': username,
+      'userImage': userImage,
     };
   }
 
@@ -44,11 +67,13 @@ class Message {
     if (map == null) return null;
 
     return Message(
+      id: map['id'],
       createDate: map['createDate'],
-      messageType: map['messageType'],
-      messageBody: map['messageBody'],
-      userId: map['userId'],
-      recipientId: map['recipientId'],
+      imageLink: map['imageLink'],
+      post: Post.fromMap(map['post']),
+      text: map['text'],
+      username: map['username'],
+      userImage: map['userImage'],
     );
   }
 
@@ -59,7 +84,7 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(createDate: $createDate, messageType: $messageType, messageBody: $messageBody, userId: $userId, recipientId: $recipientId)';
+    return 'Message(id: $id, createDate: $createDate, imageLink: $imageLink, post: $post, text: $text, username: $username, userImage: $userImage)';
   }
 
   @override
@@ -67,19 +92,23 @@ class Message {
     if (identical(this, o)) return true;
 
     return o is Message &&
+        o.id == id &&
         o.createDate == createDate &&
-        o.messageType == messageType &&
-        o.messageBody == messageBody &&
-        o.userId == userId &&
-        o.recipientId == recipientId;
+        o.imageLink == imageLink &&
+        o.post == post &&
+        o.text == text &&
+        o.username == username &&
+        o.userImage == userImage;
   }
 
   @override
   int get hashCode {
-    return createDate.hashCode ^
-        messageType.hashCode ^
-        messageBody.hashCode ^
-        userId.hashCode ^
-        recipientId.hashCode;
+    return id.hashCode ^
+        createDate.hashCode ^
+        imageLink.hashCode ^
+        post.hashCode ^
+        text.hashCode ^
+        username.hashCode ^
+        userImage.hashCode;
   }
 }
