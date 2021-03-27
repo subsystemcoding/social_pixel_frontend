@@ -48,6 +48,83 @@ class ChannelRepository {
     );
   }
 
+  Future<bool> subscribeToChannel(String channelName, String modifier) async {
+    var response = await GraphqlClient().query('''
+      mutation{
+        channelSubscription(name: "$channelName",modifier: $modifier){
+          success
+        }
+      }
+      ''');
+    return jsonDecode(response)['data']['success'];
+  }
+
+  Future<bool> changeChannelDescription(
+      String channelName, String description) async {
+    var response = await GraphqlClient().query('''
+      mutation{
+        channelChangeDescription(description: "$description", name: "$channelName"){
+          success
+        }
+      }
+      ''');
+    return jsonDecode(response)['data']['success'];
+  }
+
+  Future<bool> changeCoverImage(String channelName, String imagePath) async {
+    var response = await GraphqlClient().query('''
+      mutation{
+        channelChangeCoverImage(description: "$imagePath", name: "$channelName"){
+          success
+        }
+      }
+      ''');
+    return jsonDecode(response)['data']['success'];
+  }
+
+  Future<bool> changeAvatarImage(String channelName, String imagePath) async {
+    var response = await GraphqlClient().query('''
+      mutation{
+        channelChangeAvatarImage(description: "$imagePath", name: "$channelName"){
+          success
+        }
+      }
+      ''');
+    return jsonDecode(response)['data']['success'];
+  }
+
+  Future<bool> createChannel(
+    String channelName,
+    String avatarImagePath,
+    String coverImagePath,
+    String description,
+  ) async {
+    var response = await GraphqlClient().query('''
+      mutation{
+        createChannel(name: "$channelName", avatarImage: "$avatarImagePath" ,coverImage: "$coverImagePath", description: "$description"){
+          success
+        }
+      }
+      ''');
+    return jsonDecode(response)['data']['success'];
+  }
+
+  Future<bool> deleteChannel(
+    String channelName,
+    String avatarImagePath,
+    String coverImagePath,
+    String description,
+  ) async {
+    var response = await GraphqlClient().query('''
+      mutation{
+        deleteChannel(name: "$channelName"){
+          success
+        }
+      }
+      ''');
+    return jsonDecode(response)['data']['success'];
+  }
+
   Future<List<Channel>> fetchChannelList() {
     return Future.delayed(
       Duration(milliseconds: 100),
