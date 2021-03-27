@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/auth_bloc/auth_bloc.dart';
@@ -12,6 +14,7 @@ import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/bloc/tflite_bloc/tflite_bloc.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/repos/hive_repository.dart';
+import 'package:socialpixel/data/repos/message_managament.dart';
 import 'package:socialpixel/data/repos/tflite_repository.dart';
 import 'package:socialpixel/route_generator.dart';
 import 'package:flutter/services.dart';
@@ -29,9 +32,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Timer timer;
   @override
   void initState() {
     super.initState();
+    timer = Timer.periodic(
+        Duration(seconds: 1), (timer) => MessageManagement().fetchMessages());
     TfLiteRepository().init();
     //GraphqlClient();
   }
@@ -39,6 +45,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     //GraphqlClient().client.close();
+    timer.cancel();
     TfLiteRepository().dispose();
     HiveRepository().dispose();
     super.dispose();

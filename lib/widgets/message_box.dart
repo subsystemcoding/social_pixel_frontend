@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
-
-enum MessageType {
-  Text,
-  Photo,
-  SharedPost,
-}
+import 'package:socialpixel/data/models/post.dart';
 
 class MessageBox extends StatelessWidget {
   final bool isUser;
-  final MessageType type;
   final String text;
+  final Post post;
+  final String imageLink;
 
   const MessageBox({
     Key key,
     this.isUser,
     this.text,
-    this.type,
+    this.post,
+    this.imageLink,
   }) : super(key: key);
 
   @override
@@ -50,14 +47,14 @@ class MessageBox extends StatelessWidget {
   }
 
   Widget _buildMessage(BuildContext context) {
-    switch (this.type) {
-      case MessageType.Text:
-        return _buildTextMessage(context);
-      case MessageType.Photo:
+    if (text == null) {
+      if (post != null) {
+        return _buildPostMessage(context);
+      } else if (this.imageLink != null) {
         return _buildPhotoMessage(context);
-      default:
-        return Container();
+      }
     }
+    return _buildTextMessage(context);
   }
 
   Widget _buildTextMessage(BuildContext context) {
@@ -76,7 +73,21 @@ class MessageBox extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),
         child: Image(
-          image: NetworkImage(this.text),
+          image: NetworkImage(this.imageLink),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPostMessage(BuildContext context) {
+    return Container(
+      width: 150,
+      height: 150,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25.0),
+        child: Image(
+          image: NetworkImage(this.post.postImageLink),
           fit: BoxFit.cover,
         ),
       ),

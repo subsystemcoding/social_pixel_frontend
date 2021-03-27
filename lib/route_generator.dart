@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:socialpixel/screens/home_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/login_screen.dart';
@@ -41,6 +43,15 @@ class RouteGenerator {
       case '/message_list':
         return MaterialPageRoute(builder: (_) => MessageListScreen());
       case '/message':
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => MessageScreen(
+              chatroomId: args['id'],
+              name: args['name'],
+              imageLink: args['imageLink'],
+            ),
+          );
+        }
         return MaterialPageRoute(builder: (_) => MessageScreen());
       case '/map':
         return MaterialPageRoute(builder: (_) => MapScreen());

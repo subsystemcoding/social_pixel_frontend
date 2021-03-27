@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/repos/message_managament.dart';
 import 'package:socialpixel/data/models/message.dart';
 
@@ -17,12 +19,17 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     MessageEvent event,
   ) async* {
     yield MessageLoading();
-    if (event is GetMessage) {
-      List<Message> messages = await messageManagement.fetchMessages();
-      yield MessageLoaded(messages);
+    if (event is GetAllChats) {
+      List<Chatroom> chatrooms = await messageManagement.getAllChatrooms();
+      yield ChatroomLoadedAll(chatrooms);
+    } else if (event is GetChat) {
+      Chatroom chatroom = await messageManagement.getChatroom(event.chatroomId);
+      yield ChatroomLoaded(chatroom);
     } else if (event is PostMessage) {
       yield MessageSent();
+    } else if (event is GetNewMessage) {
+      int newMessages = await messageManagement.getNumOfNewMessages();
+      yield NewMessages(newMessages);
     }
-    // TODO: implement mapEventToState
   }
 }

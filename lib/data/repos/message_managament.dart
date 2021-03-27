@@ -7,15 +7,15 @@ import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/data/models/post.dart';
 
 class MessageManagement {
-  MessageManagement();
+  static final MessageManagement _singleton = MessageManagement._internal();
 
-  Future<List<Message>> fetchUserList() {
-    return Future.delayed(Duration(milliseconds: 100), () {
-      return [];
-    });
+  factory MessageManagement() {
+    return _singleton;
   }
 
-  Future<dynamic> fetchMessages() async {
+  MessageManagement._internal();
+
+  Future<void> fetchMessages() async {
     var response = await GraphqlClient().query(''' 
     query {
       chatrooms{
@@ -65,7 +65,9 @@ class MessageManagement {
           ),
         )
         .toList();
-    var oldChatrooms = await _getAllChatrooms();
+    var oldChatrooms = await getAllChatrooms();
+
+    int newMessages = 0;
 
     for (var oldChat in oldChatrooms) {
       for (var newChat in chatrooms) {
@@ -77,6 +79,7 @@ class MessageManagement {
             DateTime messageTime = DateTime.parse(message.createDate);
             if (messageTime.isAfter(messageLastSeen)) {
               newChat.newMessages++;
+              newMessages++;
             } else {
               break;
             }
@@ -87,8 +90,7 @@ class MessageManagement {
     }
 
     _saveMessagesToCache(chatrooms);
-
-    return chatrooms;
+    _saveNewMessages(newMessages);
   }
 
   Future<void> _saveMessagesToCache(List<Chatroom> chatrooms) async {
@@ -96,25 +98,39 @@ class MessageManagement {
     box.put("messages", chatrooms);
   }
 
-  Future<List<Chatroom>> _getAllChatrooms() async {
+  Future<List<Chatroom>> getAllChatrooms() async {
     final box = await Hive.openBox("chatrooms");
     return box.get("messages");
   }
 
+  Future<void> _saveNewMessages(int newMessages) async {
+    final box = await Hive.openBox("chatrooms");
+    box.put("newMessages", newMessages);
+  }
+
+  Future<int> getNumOfNewMessages() async {
+    final box = await Hive.openBox('chatrooms');
+    return box.get("newMessages");
+  }
+
   Future<Chatroom> getChatroom(int chatroomId) async {
-    List<Chatroom> chatrooms = await _getAllChatrooms();
+    List<Chatroom> chatrooms = await getAllChatrooms();
     for (var chat in chatrooms) {
       if (chat.id == chatroomId) {
         return chat;
       }
     }
+    return null;
   }
 
   Future<void> messageSeen(int chatroomId) async {
-    List<Chatroom> chatrooms = await _getAllChatrooms();
+    List<Chatroom> chatrooms = await getAllChatrooms();
     for (var chat in chatrooms) {
       if (chat.id == chatroomId) {
         chat.messageSeenTimestamp = DateTime.now().toString();
+        int newMessages = await getNumOfNewMessages();
+        newMessages -= chat.newMessages;
+        await _saveNewMessages(newMessages);
         chat.newMessages = 0;
         break;
       }

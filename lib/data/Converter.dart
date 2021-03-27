@@ -24,4 +24,14 @@ class Converter {
     }
     return null;
   }
+
+  static String dateTimeStringtoReadable(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    DateTime now = DateTime.now();
+    if (dateTime.day == now.day) {
+      return '${dateTime.hour} : ${dateTime.minute}';
+    } else {
+      return '${dateTime.day}/${dateTime.month}';
+    }
+  }
 }

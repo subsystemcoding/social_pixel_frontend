@@ -9,9 +9,22 @@ class MessageLoading extends MessageState {
   MessageLoading();
 }
 
-class MessageLoaded extends MessageState {
-  final List<Message> messages;
-  MessageLoaded(this.messages);
+class ChatroomLoadedAll extends MessageState {
+  final List<Chatroom> chatrooms;
+
+  ChatroomLoadedAll(this.chatrooms);
+}
+
+class ChatroomLoaded extends MessageState {
+  final Chatroom chatroom;
+
+  ChatroomLoaded(this.chatroom);
+}
+
+class NewMessages extends MessageState {
+  final int messages;
+
+  NewMessages(this.messages);
 }
 
 class MessageSent extends MessageState {}

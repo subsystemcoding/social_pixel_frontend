@@ -1,14 +1,42 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
+import 'package:socialpixel/data/Converter.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
+import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 
-class MessageListScreen extends StatelessWidget {
+class MessageListScreen extends StatefulWidget {
   const MessageListScreen({Key key}) : super(key: key);
 
   @override
+  _MessageListScreenState createState() => _MessageListScreenState();
+}
+
+class _MessageListScreenState extends State<MessageListScreen> {
+  Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 1),
+        (t) => BlocProvider.of<MessageBloc>(context).add(GetAllChats()));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<Chatroom> chatrooms;
     return Scaffold(
       appBar: MenuBar().appbar,
       drawer: CustomDrawer(),
@@ -22,28 +50,46 @@ class MessageListScreen extends StatelessWidget {
           Expanded(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 12.0),
-              child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index % 2 == 0)
-                    return buildUserLists(
-                      context,
-                      username: "Anas Patel",
-                      text: "Hello darkness my old world",
-                      imageLink:
-                          "https://i.pinimg.com/originals/5b/b4/8b/5bb48b07fa6e3840bb3afa2bc821b882.jpg",
-                      time: "02:47",
-                      notification: "12",
-                    );
-                  else {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 12.0),
-                      child: Divider(
-                        indent: 92.0,
-                        endIndent: 16.0,
-                      ),
-                    );
+              child: BlocBuilder<MessageBloc, MessageState>(
+                builder: (context, state) {
+                  if (state is ChatroomLoadedAll) {
+                    chatrooms = state.chatrooms;
                   }
+                  return ListView.builder(
+                    itemCount: chatrooms.length * 2,
+                    itemBuilder: (BuildContext context, int index) {
+                      int i = index ~/ 2;
+                      if (index % 2 == 0) {
+                        String text;
+                        Message message = chatrooms[i].messages[0];
+                        if (message.text != null) {
+                          text = message.text;
+                        } else if (message.post != null) {
+                          text = "*Post*";
+                        } else if (message.imageLink != null) {
+                          text = "*Image*";
+                        }
+                        return buildUserLists(
+                          context,
+                          chatroomId: chatrooms[i].id,
+                          username: chatrooms[i].name,
+                          text: text,
+                          imageLink: message.userImage,
+                          time: Converter.dateTimeStringtoReadable(
+                              message.createDate),
+                          notification: chatrooms[i].newMessages,
+                        );
+                      } else {
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 12.0),
+                          child: Divider(
+                            indent: 92.0,
+                            endIndent: 16.0,
+                          ),
+                        );
+                      }
+                    },
+                  );
                 },
               ),
             ),
@@ -57,11 +103,12 @@ class MessageListScreen extends StatelessWidget {
   }
 
   Widget buildUserLists(BuildContext context,
-      {String username,
+      {int chatroomId,
+      String username,
       String text,
       String imageLink,
       String time,
-      String notification}) {
+      int notification}) {
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(imageLink),
@@ -79,25 +126,31 @@ class MessageListScreen extends StatelessWidget {
             style: Theme.of(context).primaryTextTheme.subtitle1,
           ),
           SizedBox(
-            height: 4,
+            height: notification > 0 ? 4 : 0,
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              borderRadius: BorderRadius.all(
-                Radius.circular(25.0),
-              ),
-            ),
-            padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-            child: Text(
-              notification,
-              style: TextStyle(color: Colors.white),
-            ),
-          )
+          notification > 0
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                  child: Text(
+                    notification.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              : Container(),
         ],
       ),
       onTap: () {
-        Navigator.of(context).pushNamed('/message');
+        Navigator.of(context).pushNamed('/message', arguments: {
+          'id': chatroomId,
+          'name': username,
+          'imageLink': imageLink
+        });
       },
     );
   }

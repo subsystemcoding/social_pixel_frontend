@@ -1,35 +1,75 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/message.dart';
+import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/message_box.dart';
 
-class MessageScreen extends StatelessWidget {
-  const MessageScreen({Key key}) : super(key: key);
+class MessageScreen extends StatefulWidget {
+  final int chatroomId;
+  final String name;
+  final String imageLink;
+  const MessageScreen({
+    Key key,
+    this.chatroomId,
+    this.name,
+    this.imageLink,
+  }) : super(key: key);
+
+  @override
+  _MessageScreenState createState() => _MessageScreenState();
+}
+
+class _MessageScreenState extends State<MessageScreen> {
+  Timer timer;
+  Chatroom chatroom;
+  String currentUsername;
+
+  @override
+  void initState() async {
+    super.initState();
+    currentUsername = await AuthRepository().getUsername();
+    timer = Timer.periodic(
+        Duration(seconds: 1),
+        (t) => BlocProvider.of<MessageBloc>(context)
+            .add(GetChat(widget.chatroomId)));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final messageBloc = BlocProvider.of<MessageBloc>(context);
-    messageBloc.add(GetMessage());
+    return BlocBuilder<MessageBloc, MessageState>(
+      builder: (context, state) {
+        if (state is ChatroomLoaded) {
+          chatroom = state.chatroom;
+        }
+        return chatroom == null
+            ? Container()
+            : _buildScaffold(context, chatroom);
+      },
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context, Chatroom chatroom) {
     return Scaffold(
       backgroundColor: Color(0xffe5e5e5),
       appBar: MenuBar().messageAppBar(context,
-          image: NetworkImage(
-              "https://makersforgegames.com/wp-content/uploads/2019/09/IMG_1655-e1546884301904-963x770.jpg"),
-          username: "Riya"),
+          image: NetworkImage(widget.imageLink), username: widget.name),
       body: Column(
         children: [
           Expanded(
-            child: BlocBuilder<MessageBloc, MessageState>(
-              builder: (context, state) {
-                print(state);
-                if (state is MessageLoaded) {
-                  return buildMessageBoxes(context, state.messages);
-                }
-                return Container();
-              },
-            ),
+            child: buildMessageBoxes(context, chatroom.messages),
           ),
           Container(
             height: 60.0,
@@ -83,22 +123,16 @@ class MessageScreen extends StatelessWidget {
       itemCount: messages.length,
       itemBuilder: (BuildContext context, int index) {
         Message message = messages[messages.length - 1 - index];
+        String text = message.text;
+        Post post = message.post;
+        String imageLink = message.imageLink;
         return MessageBox(
-          isUser: message.userId == "001",
-          text: message.messageBody,
-          type: messageTypeConverter(message.messageType),
+          isUser: message.username == currentUsername,
+          text: message.text,
+          post: message.post,
+          imageLink: message.imageLink,
         );
       },
     );
-  }
-
-  MessageType messageTypeConverter(String type) {
-    switch (type) {
-      case "text":
-        return MessageType.Text;
-      case "photo":
-        return MessageType.Photo;
-    }
-    return MessageType.Text;
   }
 }
