@@ -17,4 +17,9 @@ class GetNewMessage extends MessageEvent {
   GetNewMessage(this.newMessages);
 }
 
-class PostMessage extends MessageEvent {}
+class PostMessage extends MessageEvent {
+  final int chatroomId;
+  final Message message;
+
+  PostMessage(this.message, this.chatroomId);
+}

@@ -28,3 +28,5 @@ class NewMessages extends MessageState {
 }
 
 class MessageSent extends MessageState {}
+
+class MessageSendError extends MessageState {}

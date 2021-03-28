@@ -29,7 +29,8 @@ class Converter {
     DateTime dateTime = DateTime.parse(dateTimeString);
     DateTime now = DateTime.now();
     if (dateTime.day == now.day) {
-      return '${dateTime.hour} : ${dateTime.minute}';
+      var add = dateTime.hour < 10 ? '0' : '';
+      return '$add${dateTime.hour}:${dateTime.minute}';
     } else {
       return '${dateTime.day}/${dateTime.month}';
     }

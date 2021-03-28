@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/chatroom.dart';
@@ -10,7 +11,8 @@ import 'package:socialpixel/data/test_data/test_data.dart';
 
 class MessageManagement {
   static final MessageManagement _singleton = MessageManagement._internal();
-
+  Chatroom _currentChatroom;
+  Message _newMessage;
   factory MessageManagement() {
     return _singleton;
   }
@@ -107,6 +109,26 @@ class MessageManagement {
     }
   }
 
+  void setCurrentChatroom(Chatroom chatroom) {
+    this._currentChatroom = chatroom;
+  }
+
+  void setNewMessage(Message message) {
+    this._newMessage = message;
+  }
+
+  Chatroom getCurrentChatroom() {
+    Chatroom chatroom = this._currentChatroom;
+    this._currentChatroom = null;
+    return chatroom;
+  }
+
+  Message getNewMessage() {
+    Message message = this._newMessage;
+    this._newMessage = null;
+    return message;
+  }
+
   Future<void> _saveMessagesToCache(List<Chatroom> chatrooms) async {
     final box = await Hive.openBox("chatrooms");
     for (var chat in chatrooms) {
@@ -135,6 +157,7 @@ class MessageManagement {
 
   Future<Chatroom> getChatroom(int chatroomId) async {
     List<Chatroom> chatrooms = await getAllChatrooms();
+    _messageSeen(chatroomId);
     for (var chat in chatrooms) {
       if (chat.id == chatroomId) {
         return chat;
@@ -143,7 +166,7 @@ class MessageManagement {
     return null;
   }
 
-  Future<void> messageSeen(int chatroomId) async {
+  Future<void> _messageSeen(int chatroomId) async {
     List<Chatroom> chatrooms = await getAllChatrooms();
     for (var chat in chatrooms) {
       if (chat.id == chatroomId) {
@@ -157,28 +180,39 @@ class MessageManagement {
     }
   }
 
-  Future<bool> sendMessage(
-      {int chatroomId, String text, int postId, String imagePath}) async {
-    String mutation = "";
-    var variable;
-    if (text != null) {
-      mutation = "textMessage";
-      variable = text;
-    } else if (postId != null) {
-      mutation = "postMessage";
-      variable = postId;
-    } else if (imagePath != null) {
-      mutation = "imageMessage";
-      variable = imagePath;
-    }
-    var response = await GraphqlClient().query('''
-      mutation {
-        $mutation(room: $chatroomId, text: "$variable"){
+  Future<bool> sendMessage({int chatroomId, Message message}) async {
+    if (message.text != null) {
+      var response = await GraphqlClient().query('''
+      mutation{
+        textMessage(room : $chatroomId, text : "${message.text}"){
           success
         }
       }
       ''');
+      return jsonDecode(response)['data']['textMessage']['success'];
+    } else if (message.post != null) {
+      var response = await GraphqlClient().query('''
+      mutation{
+        postMessage(room : $chatroomId, post : ${message.post.postId}){
+          success
+        }
+      }
+      ''');
+      return jsonDecode(response)['data']['postMessage']['success'];
+    }
 
-    return jsonDecode(response)['data'][mutation]['success'];
+    var response = await GraphqlClient().muiltiPartRequest(fields: {
+      'query': '''
+    mutation{
+      imageMessage(room : 1, image: "imageLink"){
+        success
+      }
+    }
+    ''',
+    }, files: {
+      'imageLink': message.imageLink
+    });
+
+    return jsonDecode(response)['data']['imageMessage']['success'];
   }
 }

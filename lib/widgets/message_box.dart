@@ -61,8 +61,8 @@ class MessageBox extends StatelessWidget {
     return Text(
       this.text,
       style: isUser
-          ? TextStyle(color: Colors.white, fontSize: 12.0)
-          : TextStyle(color: Theme.of(context).accentColor, fontSize: 12.0),
+          ? Theme.of(context).textTheme.bodyText1
+          : Theme.of(context).textTheme.bodyText2,
     );
   }
 

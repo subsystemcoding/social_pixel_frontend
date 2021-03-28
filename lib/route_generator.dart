@@ -9,6 +9,7 @@ import 'package:socialpixel/screens/channel_screen/leaderboard_screen.dart';
 import 'package:socialpixel/screens/map_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_list_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_screen.dart';
+import 'package:socialpixel/screens/message_screen/preview_message_screen.dart';
 import 'package:socialpixel/screens/post_screen/camera_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_preview_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_details_screen.dart';
@@ -41,16 +42,22 @@ class RouteGenerator {
       case '/message_list':
         return MaterialPageRoute(builder: (_) => MessageListScreen());
       case '/message':
+        return MaterialPageRoute(
+          builder: (_) => MessageScreen(
+            chatroom: args,
+          ),
+        );
+
+        return MaterialPageRoute(builder: (_) => MessageScreen());
+      case '/preview_screen':
         if (args is Map) {
           return MaterialPageRoute(
-            builder: (_) => MessageScreen(
-              chatroomId: args['id'],
-              name: args['name'],
-              imageLink: args['imageLink'],
+            builder: (_) => PreviewMessageScreen(
+              imageFilePath: args['path'],
             ),
           );
         }
-        return MaterialPageRoute(builder: (_) => MessageScreen());
+        return MaterialPageRoute(builder: (_) => Container());
       case '/map':
         return MaterialPageRoute(builder: (_) => MapScreen());
       case '/channel':
@@ -76,8 +83,16 @@ class RouteGenerator {
           ),
         );
       case '/camera':
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => CameraScreen(
+              route: args['route'],
+              isSquare: args['isSquare'],
+            ),
+          );
+        }
         return MaterialPageRoute(
-          builder: (_) => CameraScreen(),
+          builder: (_) => Container(),
         );
       case '/post_preview':
         return MaterialPageRoute(builder: (_) {

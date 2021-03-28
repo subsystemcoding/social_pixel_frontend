@@ -10,7 +10,9 @@ import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:image/image.dart' as imageLib;
 
 class CameraWidget extends StatefulWidget {
-  CameraWidget({Key key}) : super(key: key);
+  final String route;
+  final bool isSquare;
+  CameraWidget({Key key, this.route, this.isSquare}) : super(key: key);
 
   @override
   _CameraWidgetState createState() => _CameraWidgetState();
@@ -75,25 +77,28 @@ class _CameraWidgetState extends State<CameraWidget> {
             },
           ),
         ),
-        Positioned.fill(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Expanded(
-              child: Container(
-                color: Colors.black.withOpacity(0.3),
-              ),
-            ),
-            AspectRatio(
-              aspectRatio: 1,
-              child: Container(),
-            ),
-            Expanded(
-              child: Container(
-                color: Colors.black.withOpacity(0.3),
-              ),
-            ),
-          ]),
-        ),
+        widget.isSquare
+            ? Positioned.fill(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      ),
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        child: Container(
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      ),
+                    ]),
+              )
+            : Container(),
         Positioned(
           bottom: 50,
           left: 20,
@@ -156,7 +161,7 @@ class _CameraWidgetState extends State<CameraWidget> {
       //arg[0] = imagePath
       //arg[1] = isCamera (picture taken from camera?)
       Navigator.of(context).pushNamed(
-        "/post_preview",
+        widget.route,
         arguments: {
           'path': pickedFile.path,
           'isCamera': false,
@@ -178,7 +183,7 @@ class _CameraWidgetState extends State<CameraWidget> {
       //arg[0] = imagePath
       //arg[1] = isCamera (picture taken from camera?)
       Navigator.of(context).pushNamed(
-        "/post_preview",
+        widget.route,
         arguments: {
           'path': file.path,
           'isCamera': true,

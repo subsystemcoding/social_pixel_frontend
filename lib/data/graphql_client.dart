@@ -41,4 +41,39 @@ class GraphqlClient {
       return null;
     }
   }
+
+  Future<String> muiltiPartRequest({
+    Map<String, String> fields,
+    Map<String, String> files,
+    bool token = true,
+  }) async {
+    String auth = '';
+    if (token) {
+      final authObject = await AuthRepository().getAuth();
+      String tokenString = authObject.token;
+      auth = 'JWT $tokenString';
+    }
+    try {
+      var headers = {'Authorization': '$auth'};
+      http.MultipartRequest request = http.MultipartRequest("POST", uri)
+        ..fields.addAll(fields);
+
+      List<http.MultipartFile> mpFiles = [];
+
+      for (var field in files.keys) {
+        mpFiles.add(await http.MultipartFile.fromPath(field, files[field]));
+      }
+      request.files.addAll(mpFiles);
+      request.headers.addAll(headers);
+
+      var response = await request.send();
+      var body = await response.stream.bytesToString();
+      print(body);
+      return body;
+    } catch (e) {
+      print("Priniting Error");
+      print(e);
+      return null;
+    }
+  }
 }

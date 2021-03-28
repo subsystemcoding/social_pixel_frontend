@@ -26,7 +26,13 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       Chatroom chatroom = await messageManagement.getChatroom(event.chatroomId);
       yield ChatroomLoaded(chatroom);
     } else if (event is PostMessage) {
-      yield MessageSent();
+      var result = await messageManagement.sendMessage(
+          chatroomId: event.chatroomId, message: event.message);
+      if (result) {
+        yield MessageSent();
+      } else {
+        yield MessageSendError();
+      }
     } else if (event is GetNewMessage) {
       int newMessages = await messageManagement.getNumOfNewMessages();
       yield NewMessages(newMessages);

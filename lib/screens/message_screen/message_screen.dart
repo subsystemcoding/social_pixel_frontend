@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/data/debug_mode.dart';
@@ -9,18 +10,15 @@ import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/repos/auth_repository.dart';
+import 'package:socialpixel/data/repos/message_managament.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/message_box.dart';
 
 class MessageScreen extends StatefulWidget {
-  final int chatroomId;
-  final String name;
-  final String imageLink;
+  final Chatroom chatroom;
   const MessageScreen({
     Key key,
-    this.chatroomId,
-    this.name,
-    this.imageLink,
+    this.chatroom,
   }) : super(key: key);
 
   @override
@@ -31,7 +29,10 @@ class _MessageScreenState extends State<MessageScreen> {
   Timer timer;
   Chatroom chatroom;
   String currentUsername;
-
+  Icon textButtonIcon;
+  Function onPressed;
+  bool textEmpty = true;
+  TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -40,8 +41,25 @@ class _MessageScreenState extends State<MessageScreen> {
       timer = Timer.periodic(
           Duration(seconds: 1),
           (t) => BlocProvider.of<MessageBloc>(context)
-              .add(GetChat(widget.chatroomId)));
+              .add(GetChat(widget.chatroom.id)));
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    textButtonIcon = Icon(
+      Icons.camera_alt_outlined,
+      color: Theme.of(context).primaryColor,
+    );
+    onPressed = () {
+      // TODO
+      MessageManagement().setCurrentChatroom(chatroom);
+      Navigator.of(context).pushNamed("/camera", arguments: {
+        'route': '/preview_screen',
+        'isSquare': false,
+      });
+    };
   }
 
   @override
@@ -65,21 +83,22 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Widget _buildScaffold(BuildContext context, Chatroom chatroom) {
+    // TODO
     var networkImage;
-    if (widget.imageLink != '') {
-      networkImage = NetworkImage(widget.imageLink);
+    if (widget.chatroom.messages[0].userImage != '') {
+      networkImage = NetworkImage(widget.chatroom.messages[0].userImage);
     }
     return Scaffold(
       backgroundColor: Color(0xffe5e5e5),
-      appBar: MenuBar()
-          .messageAppBar(context, image: networkImage, username: widget.name),
+      appBar: MenuBar().messageAppBar(context,
+          image: networkImage, username: widget.chatroom.name),
       body: Column(
         children: [
           Expanded(
             child: buildMessageBoxes(context, chatroom.messages),
           ),
           Container(
-            height: 60.0,
+            height: 45.0,
             margin: EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -89,31 +108,69 @@ class _MessageScreenState extends State<MessageScreen> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _controller,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                       border: InputBorder.none,
                       hintText: "Type a message",
-                      hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
+                    onChanged: (val) {
+                      if (val.isNotEmpty && textEmpty) {
+                        setState(() {
+                          textEmpty = false;
+                          textButtonIcon = Icon(
+                            Icons.send,
+                            color: Theme.of(context).primaryColor,
+                          );
+                          onPressed = () {
+                            BlocProvider.of<MessageBloc>(context).add(
+                              PostMessage(
+                                Message(
+                                  text: _controller.text,
+                                ),
+                                chatroom.id,
+                              ),
+                            );
+                            print(val);
+
+                            setState(() {
+                              _controller.clear();
+                            });
+                          };
+                        });
+                      } else if (val.isEmpty && !textEmpty) {
+                        setState(() {
+                          textEmpty = true;
+                          textButtonIcon = Icon(
+                            Icons.camera_alt_outlined,
+                            color: Theme.of(context).primaryColor,
+                          );
+                          onPressed = () {
+                            Navigator.of(context).pushNamed("/camera",
+                                arguments: "/preview_screen");
+                          };
+                        });
+                      }
+                    },
                   ),
                 ),
                 Container(
-                  width: 60,
-                  height: 50,
-                  margin: EdgeInsets.symmetric(horizontal: 8.0),
+                  width: 47,
+                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                   child: TextButton(
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                    child: textButtonIcon,
                     style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 0.0),
-                        elevation: 2,
-                        backgroundColor: Theme.of(context).accentColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25.0)))),
-                    onPressed: () {},
+                      padding: EdgeInsets.symmetric(horizontal: 0.0),
+                      elevation: 2,
+                      backgroundColor: Theme.of(context).accentColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(25.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: onPressed,
                   ),
                 )
               ],
@@ -129,7 +186,7 @@ class _MessageScreenState extends State<MessageScreen> {
       reverse: true,
       itemCount: messages.length,
       itemBuilder: (BuildContext context, int index) {
-        Message message = messages[messages.length - 1 - index];
+        Message message = messages[index];
         return MessageBox(
           isUser: message.username == currentUsername,
           text: message.text,

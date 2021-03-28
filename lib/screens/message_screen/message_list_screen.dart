@@ -73,8 +73,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
                         }
                         return buildUserLists(
                           context,
-                          chatroomId: chatrooms[i].id,
-                          username: chatrooms[i].name,
+                          chatroom: chatrooms[i],
                           text: text,
                           imageLink: message.userImage,
                           time: Converter.dateTimeStringtoReadable(
@@ -106,8 +105,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
 
   Widget buildUserLists(
     BuildContext context, {
-    int chatroomId,
-    String username,
+    Chatroom chatroom,
     String text,
     String imageLink,
     String time,
@@ -123,7 +121,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
         backgroundColor: Theme.of(context).accentColor.withAlpha(60),
         radius: 30,
       ),
-      title: Text(username),
+      title: Text(chatroom.name),
       subtitle: Text(text),
       trailing: SizedBox(
         height: 50,
@@ -160,11 +158,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
         ),
       ),
       onTap: () {
-        Navigator.of(context).pushNamed('/message', arguments: {
-          'id': chatroomId,
-          'name': username,
-          'imageLink': imageLink
-        });
+        Navigator.of(context).pushNamed('/message', arguments: chatroom);
       },
     );
   }
