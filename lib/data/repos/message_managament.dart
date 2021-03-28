@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/test_data/test_data.dart';
 
 class MessageManagement {
   static final MessageManagement _singleton = MessageManagement._internal();
@@ -16,7 +18,9 @@ class MessageManagement {
   MessageManagement._internal();
 
   Future<void> fetchMessages() async {
-    var response = await GraphqlClient().query(''' 
+    var response = TestData.chatroomsData();
+    if (!DebugMode.debug) {
+      response = await GraphqlClient().query(''' 
     query {
       chatrooms{
         id
@@ -40,77 +44,93 @@ class MessageManagement {
       }
     }
     ''');
+    }
 
     var jsonResponse = jsonDecode(response)['data']['chatrooms'];
-
-    List<Chatroom> chatrooms = jsonResponse['chatrooms']
-        .map(
+    if (jsonResponse.isNotEmpty) {
+      List<Chatroom> chatrooms = List<Chatroom>.from(
+        jsonResponse.map(
           (item) => Chatroom(
-            id: item['id'],
+            id: int.parse(item['id']),
             name: item['name'],
-            messages: item['messageSet'].map(
-              (message) => Message(
-                id: message['id'],
-                createDate: message['timestamp'],
-                post: Post(
-                  postId: message['post']['postId'],
-                  postImageLink: message['post']['image200x200'],
+            messages: List<Message>.from(
+              item['messageSet']?.map(
+                (message) => Message(
+                  id: int.parse(message['id']),
+                  createDate: message['timestamp'],
+                  post: message['post'] != null
+                      ? Post(
+                          postId: int.parse(message['post']['postId']),
+                          postImageLink: message['post']['image200x200'],
+                        )
+                      : null,
+                  imageLink: message['image'],
+                  text: message['text'],
+                  username: message['author']['user']['username'],
+                  userImage: message['author']['image'],
                 ),
-                imageLink: message['image'],
-                text: message['text'],
-                username: message['author']['user']['username'],
-                userImage: message['author']['image'],
               ),
             ),
           ),
-        )
-        .toList();
-    var oldChatrooms = await getAllChatrooms();
+        ),
+      );
+      List<Chatroom> oldChatrooms = await getAllChatrooms();
+      int newMessages = 0;
 
-    int newMessages = 0;
-
-    for (var oldChat in oldChatrooms) {
-      for (var newChat in chatrooms) {
-        if (newChat.id == oldChat.id) {
-          newChat.messageSeenTimestamp = oldChat.messageSeenTimestamp;
-          DateTime messageLastSeen =
-              DateTime.parse(oldChat.messageSeenTimestamp);
-          for (var message in newChat.messages) {
-            DateTime messageTime = DateTime.parse(message.createDate);
-            if (messageTime.isAfter(messageLastSeen)) {
-              newChat.newMessages++;
-              newMessages++;
-            } else {
-              break;
+      for (int i = 0; i < chatrooms.length; i++) {
+        bool matched = false;
+        Chatroom chat = chatrooms[i];
+        chat.newMessages = 0;
+        for (int j = 0; j < oldChatrooms.length; j++) {
+          Chatroom oldChat = oldChatrooms[j];
+          if (chat.id == oldChat.id) {
+            matched = true;
+            for (int k = 0; k < chatrooms[i].messages.length; k++) {
+              if (DateTime.parse(chat.messages[i].createDate)
+                  .isAfter(DateTime.parse(oldChat.messageSeenTimestamp))) {
+                chat.newMessages++;
+                newMessages++;
+              }
             }
+            chat.messageSeenTimestamp = oldChat.messageSeenTimestamp;
+            break;
           }
         }
-        continue;
+        if (!matched) {
+          chat.messageSeenTimestamp = chat.messages.last.createDate;
+          chat.newMessages = chat.messages.length;
+          newMessages += chat.newMessages;
+        }
       }
+      _saveMessagesToCache(chatrooms);
+      _saveNewMessages(newMessages);
     }
-
-    _saveMessagesToCache(chatrooms);
-    _saveNewMessages(newMessages);
   }
 
   Future<void> _saveMessagesToCache(List<Chatroom> chatrooms) async {
     final box = await Hive.openBox("chatrooms");
-    box.put("messages", chatrooms);
+    for (var chat in chatrooms) {
+      box.put(chat.id.toString(), chat);
+    }
   }
 
   Future<List<Chatroom>> getAllChatrooms() async {
     final box = await Hive.openBox("chatrooms");
-    return box.get("messages");
+    List<Chatroom> chatrooms = [];
+    for (int i = 0; i < box.length; i++) {
+      chatrooms.add(box.getAt(i));
+    }
+    return chatrooms;
   }
 
   Future<void> _saveNewMessages(int newMessages) async {
-    final box = await Hive.openBox("chatrooms");
+    final box = await Hive.openBox<int>("chatroomsNewMessages");
     box.put("newMessages", newMessages);
   }
 
   Future<int> getNumOfNewMessages() async {
-    final box = await Hive.openBox('chatrooms');
-    return box.get("newMessages");
+    final box = await Hive.openBox<int>('chatroomsNewMessages');
+    return box.get("newMessages", defaultValue: 0);
   }
 
   Future<Chatroom> getChatroom(int chatroomId) async {

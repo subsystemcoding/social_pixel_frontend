@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/game.dart';
@@ -25,6 +26,9 @@ class ProfileRepository {
   Profile currentProfile;
 
   Future<Profile> fetchCurrentProfile() async {
+    if (DebugMode.debug) {
+      return _fetchProfileDebug();
+    }
     final authObject = await AuthRepository().getAuth();
     String username = authObject.username;
     var response = await _client.query(''' 
@@ -61,21 +65,27 @@ class ProfileRepository {
       createDate: jsonResponse['user']['dateJoined'],
       description: jsonResponse['bio'],
       userAvatarImage: jsonResponse['image'],
-      postsMade: jsonResponse['postedBy'].map(
-        (item) {
-          return Post(
-            postId: item['postId'],
-            postImageLink: item['image150x150'],
-          );
-        },
+      postsMade: List<Post>.from(
+        jsonResponse['postedBy'].map(
+          (item) {
+            return Post(
+              postId: int.parse(item['postId']),
+              postImageLink: item['image150x150'],
+            );
+          },
+        ),
       ),
-      upvotedPosts: jsonResponse['upvotedBy'].map(
-        (item) => Post(postId: item['postId']),
+      upvotedPosts: List<Post>.from(
+        jsonResponse['upvotedBy']?.map(
+          (item) => Post(postId: int.parse(item['postId'])),
+        ),
       ),
-      subscribedChannels: jsonResponse['memberIn'].map(
-        (item) => Channel(
-          id: item['id'],
-          name: item['name'],
+      subscribedChannels: List<Channel>.from(
+        jsonResponse['memberIn']?.map(
+          (item) => Channel(
+            id: int.parse(item['id']),
+            name: item['name'],
+          ),
         ),
       ),
     );
@@ -83,6 +93,10 @@ class ProfileRepository {
   }
 
   Future<Profile> fetchProfile(String username, {bool isUser = false}) async {
+    if (DebugMode.debug) {
+      return _fetchProfileDebug();
+    }
+
     final authObject = await AuthRepository().getAuth();
     if (username == authObject.username) {
       return fetchCurrentProfile();
@@ -117,25 +131,40 @@ class ProfileRepository {
       createDate: jsonResponse['user']['dateJoined'],
       description: jsonResponse['bio'],
       userAvatarImage: jsonResponse['image'],
-      postsMade: jsonResponse['postedBy'].map(
-        (item) {
-          return Post(
-            postId: item['postId'],
-            postImageLink: item['image150x150'],
-          );
-        },
+      postsMade: List<Post>.from(
+        jsonResponse['postedBy']?.map(
+          (item) {
+            return Post(
+              postId: int.parse(item['postId']),
+              postImageLink: item['image150x150'],
+            );
+          },
+        ),
       ),
-      upvotedPosts: jsonResponse['upvotedBy'].map(
-        (item) => Post(postId: item['postId']),
+      upvotedPosts: List<Post>.from(
+        jsonResponse['upvotedBy']?.map(
+          (item) => Post(postId: int.parse(item['postId'])),
+        ),
       ),
-      subscribedChannels: jsonResponse['memberIn'].map(
-        (item) => Channel(
-          id: item['id'],
-          name: item['name'],
+      subscribedChannels: List<Channel>.from(
+        jsonResponse['memberIn']?.map(
+          (item) => Channel(
+            id: int.parse(item['id']),
+            name: item['name'],
+          ),
         ),
       ),
     );
     return profile;
+  }
+
+  Future<Profile> _fetchProfileDebug() {
+    return Future.delayed(Duration(milliseconds: 50), () {
+      var data = TestData.profileData();
+      Profile profile = Profile.fromJson(data);
+
+      return profile;
+    });
   }
 
   Future<List<Game>> updateSubscribedGames() {

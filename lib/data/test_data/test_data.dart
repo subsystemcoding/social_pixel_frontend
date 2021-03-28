@@ -1248,4 +1248,34 @@ class TestData {
     {"subscribedGames":[{"gameId":8179,"name":"Little brown bat","leaderboardId":3241,"pinColorHex":"ffeb24ee","mapPosts":[{"post":{"postId":8731,"location":{"latitude":50.7444784,"longitude":26.0171919},"postImageLink":"http://dummyimage.com/400x400.jpg/cc0000/ffffff"}},{"post":{"postId":9161,"location":{"latitude":39.8088955,"longitude":-8.7332644},"postImageLink":"http://dummyimage.com/400x400.jpg/5fa2dd/ffffff"}},{"post":{"postId":5154,"location":{"latitude":-9.2993916,"longitude":14.9096846},"postImageLink":"http://dummyimage.com/400x400.png/dddddd/000000"}}],"channelId":"Red-tailed hawk"},{"gameId":2045,"name":"Chestnut weaver","leaderboardId":4390,"pinColorHex":"ffd234f2","mapPosts":[{"post":{"postId":2071,"location":{"latitude":-7.2035144,"longitude":106.5241371},"postImageLink":"http://dummyimage.com/400x400.bmp/dddddd/000000"}},{"post":{"postId":3740,"location":{"latitude":43.5409901,"longitude":21.7183695},"postImageLink":"http://dummyimage.com/400x400.bmp/dddddd/000000"}},{"post":{"postId":6673,"location":{"latitude":21.2573126,"longitude":105.8480203},"postImageLink":"http://dummyimage.com/400x400.png/5fa2dd/ffffff"}},{"post":{"postId":6441,"location":{"latitude":-6.9895044,"longitude":110.4329118},"postImageLink":"http://dummyimage.com/400x400.jpg/5fa2dd/ffffff"}},{"post":{"postId":5865,"location":{"latitude":46.3698404,"longitude":15.8995273},"postImageLink":"http://dummyimage.com/400x400.png/ff4444/ffffff"}}],"channelId":"Red-shouldered glossy starling"},{"gameId":568,"name":"Stork, painted","leaderboardId":7995,"pinColorHex":"ff11a33d","mapPosts":[{"post":{"postId":7828,"location":{"latitude":-9.6612173,"longitude":20.3904598},"postImageLink":"http://dummyimage.com/400x400.jpg/cc0000/ffffff"}},{"post":{"postId":898,"location":{"latitude":5.23113,"longitude":96.7524103},"postImageLink":"http://dummyimage.com/400x400.png/5fa2dd/ffffff"}},{"post":{"postId":731,"location":{"latitude":31.5769405,"longitude":72.4156898},"postImageLink":"http://dummyimage.com/400x400.bmp/5fa2dd/ffffff"}},{"post":{"postId":8504,"location":{"latitude":29.236985,"longitude":110.66263},"postImageLink":"http://dummyimage.com/400x400.png/dddddd/000000"}},{"post":{"postId":8190,"location":{"latitude":48.5225505,"longitude":23.5051414},"postImageLink":"http://dummyimage.com/400x400.bmp/dddddd/000000"}}],"channelId":"Black-footed ferret"}]}
     ''';
   }
+
+  static String chatroomsData() {
+    return '''
+    {
+    "data": {
+        "chatrooms": [
+            {
+                "id": "1",
+                "name": "MainRoom",
+                "messageSet": [
+                    {
+                        "id": "1",
+                        "timestamp": "2021-03-28T05:24:20.707569+00:00",
+                        "post": null,
+                        "image": "",
+                        "text": "Hello my friend",
+                        "author": {
+                            "user": {
+                                "username": "admin"
+                            },
+                            "image": ""
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+    ''';
+  }
 }

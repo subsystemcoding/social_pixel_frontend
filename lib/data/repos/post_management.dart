@@ -112,27 +112,33 @@ class PostManagement {
     ''');
 
     var jsonResponse = jsonDecode(response)['data']['feedPosts'];
-    List<Post> posts = jsonResponse.map(
-      (item) => Post(
-        postId: item['postId'],
-        userName: item['author']['user']['username'],
-        userAvatarLink: item['author']['image'],
-        postImageLink: item['image'],
-        caption: item['caption'],
-        datePosted: item['dateCreated'],
-        comments: item['comments'],
-        location: Location(
-          latitude: item['gpsLatitude'],
-          longitude: item['gpsLongitude'],
+    print("Printing jsonResponse ${jsonResponse.toString()}");
+    if (jsonResponse.isNotEmpty) {
+      List<Post> posts = List<Post>.from(
+        jsonResponse.map(
+          (item) => Post(
+            postId: item['postId'],
+            userName: item['author']['user']['username'],
+            userAvatarLink: item['author']['image'],
+            postImageLink: item['image'],
+            caption: item['caption'],
+            datePosted: item['dateCreated'],
+            comments: item['comments'],
+            location: Location(
+              latitude: item['gpsLatitude'],
+              longitude: item['gpsLongitude'],
+            ),
+          ),
         ),
-      ),
-    );
+      );
 
-    //delete and add posts in the background
-    _deleteAllPostInCache().then((_) async {
-      await _addPostsToCache(posts);
-    });
-    return posts;
+      //delete and add posts in the background
+      _deleteAllPostInCache().then((_) async {
+        await _addPostsToCache(posts);
+      });
+      return posts;
+    }
+    return [];
   }
 
   Future<List<Post>> fetchCachedPosts() async {

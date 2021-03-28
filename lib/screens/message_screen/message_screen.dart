@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
+import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -32,14 +33,15 @@ class _MessageScreenState extends State<MessageScreen> {
   String currentUsername;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    final authObject = await AuthRepository().getAuth();
-    currentUsername = authObject.username;
-    timer = Timer.periodic(
-        Duration(seconds: 1),
-        (t) => BlocProvider.of<MessageBloc>(context)
-            .add(GetChat(widget.chatroomId)));
+    AuthRepository().getAuth().then((authObject) {
+      currentUsername = authObject.username;
+      timer = Timer.periodic(
+          Duration(seconds: 1),
+          (t) => BlocProvider.of<MessageBloc>(context)
+              .add(GetChat(widget.chatroomId)));
+    });
   }
 
   @override
@@ -63,10 +65,14 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Widget _buildScaffold(BuildContext context, Chatroom chatroom) {
+    var networkImage;
+    if (widget.imageLink != '') {
+      networkImage = NetworkImage(widget.imageLink);
+    }
     return Scaffold(
       backgroundColor: Color(0xffe5e5e5),
-      appBar: MenuBar().messageAppBar(context,
-          image: NetworkImage(widget.imageLink), username: widget.name),
+      appBar: MenuBar()
+          .messageAppBar(context, image: networkImage, username: widget.name),
       body: Column(
         children: [
           Expanded(
@@ -124,9 +130,6 @@ class _MessageScreenState extends State<MessageScreen> {
       itemCount: messages.length,
       itemBuilder: (BuildContext context, int index) {
         Message message = messages[messages.length - 1 - index];
-        String text = message.text;
-        Post post = message.post;
-        String imageLink = message.imageLink;
         return MessageBox(
           isUser: message.username == currentUsername,
           text: message.text,

@@ -38,13 +38,15 @@ class ChannelRepository {
       subscribers: subscribers,
       coverImageLink: jsonResponse['coverImage'],
       avatarImageLink: jsonResponse['avatarImage'],
-      games: jsonResponse['gameSet'].map((item) {
-        return Game(
-            gameId: item['id'],
-            name: item['name'],
-            description: item['description'],
-            image: item['image']);
-      }),
+      games: jsonResponse['gameSet'].isNotEmpty
+          ? List<Game>.from(jsonResponse['gameSet'].map((item) {
+              return Game(
+                  gameId: int.parse(item['id']),
+                  name: item['name'],
+                  description: item['description'],
+                  image: item['image']);
+            }))
+          : null,
     );
   }
 

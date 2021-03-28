@@ -4,6 +4,7 @@ import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
 
@@ -51,6 +52,43 @@ class HomeScreen extends StatelessWidget {
                       if (state is PostLoaded) {
                         //update the posts
                         posts = state.posts;
+                        if (posts.isEmpty) {
+                          return Center(
+                            child: Container(
+                              height: 150,
+                              width: 300,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(12.5),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Seems like you are new, please follow other users or subscribe to channels to view posts",
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  CustomButtons.standardButton(
+                                    context,
+                                    text: "Search Channels and Profiles",
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed('/search');
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
                       }
                       //build the posts
                       return buildPosts(context, posts);

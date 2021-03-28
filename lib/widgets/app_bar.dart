@@ -55,6 +55,7 @@ class MenuBar {
               radius: 30,
               backgroundColor: Theme.of(context).accentColor,
               child: CircleAvatar(
+                backgroundColor: Theme.of(context).accentColor.withAlpha(60),
                 backgroundImage: image,
                 radius: 25,
               ),

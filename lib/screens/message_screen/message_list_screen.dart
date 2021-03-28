@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/message_bloc/bloc/message_bloc.dart';
 import 'package:socialpixel/data/Converter.dart';
+import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
@@ -20,6 +21,7 @@ class MessageListScreen extends StatefulWidget {
 
 class _MessageListScreenState extends State<MessageListScreen> {
   Timer timer;
+  bool debug = true;
 
   @override
   void initState() {
@@ -36,7 +38,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Chatroom> chatrooms;
+    List<Chatroom> chatrooms = [];
     return Scaffold(
       appBar: MenuBar().appbar,
       drawer: CustomDrawer(),
@@ -102,48 +104,60 @@ class _MessageListScreenState extends State<MessageListScreen> {
     );
   }
 
-  Widget buildUserLists(BuildContext context,
-      {int chatroomId,
-      String username,
-      String text,
-      String imageLink,
-      String time,
-      int notification}) {
+  Widget buildUserLists(
+    BuildContext context, {
+    int chatroomId,
+    String username,
+    String text,
+    String imageLink,
+    String time,
+    int notification,
+  }) {
+    var backgroundImage;
+    if (imageLink != '' && imageLink != null) {
+      backgroundImage = NetworkImage(imageLink);
+    }
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(imageLink),
+        backgroundImage: backgroundImage,
+        backgroundColor: Theme.of(context).accentColor.withAlpha(60),
         radius: 30,
       ),
       title: Text(username),
       subtitle: Text(text),
-      trailing: Column(
-        children: [
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            time,
-            style: Theme.of(context).primaryTextTheme.subtitle1,
-          ),
-          SizedBox(
-            height: notification > 0 ? 4 : 0,
-          ),
-          notification > 0
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25.0),
+      trailing: SizedBox(
+        height: 50,
+        width: 50,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              time,
+              style: Theme.of(context).primaryTextTheme.subtitle1,
+            ),
+            SizedBox(
+              height: notification > 0 ? 4 : 0,
+            ),
+            notification > 0
+                ? Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).accentColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(25.0),
+                      ),
                     ),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-                  child: Text(
-                    notification.toString(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-              : Container(),
-        ],
+                    padding:
+                        EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                    child: Text(
+                      notification.toString(),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
       onTap: () {
         Navigator.of(context).pushNamed('/message', arguments: {
