@@ -5,11 +5,15 @@ import 'package:bloc/bloc.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
+import 'package:socialpixel/data/models/comment.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/data/repos/post_management.dart';
 import 'package:exif/exif.dart';
+import 'package:socialpixel/data/repos/profile_repository.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';
@@ -40,7 +44,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         yield PostLoaded(
           await postManagement.fetchPosts(
             channelId: event.channelId,
-            includeComments: event.includeComments,
           ),
         );
       } else if (event is FetchSearchedPost) {
@@ -51,18 +54,44 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         //await postManagement.sendPost(post, PostSending.Successful);
         yield PostSent(PostSending.Successful);
       } else if (event is UpvotePost) {
-        var modifier = event.upvote ? "ADD" : "REMOVE";
-        bool success = await postManagement.upvotePost(
-          postId: event.postId,
-          modifier: modifier,
-        );
-        yield PostUpvoted(success);
+        try {
+          var modifier = event.upvote ? "ADD" : "REMOVE";
+          bool success = await postManagement.upvotePost(
+            postId: event.postId,
+            modifier: modifier,
+          );
+          yield PostUpvoted();
+        } catch (e) {
+          yield PostUpvotedError();
+        }
       } else if (event is CommentPost) {
-        bool success = await postManagement.addComment(
-          postId: event.postId,
-          text: event.text,
-        );
-        yield PostCommented(success);
+        try {
+          await postManagement.addComment(
+            postId: event.postId,
+            text: event.text,
+          );
+          print("Dis in postbloc CommentPost");
+          final profile = await ProfileRepository().fetchCurrentProfile();
+          yield PostCommented(
+            Comment(
+              commentContent: event.text,
+              dateCreated: DateTime.now().toString(),
+              user: profile,
+              replies: [],
+            ),
+          );
+        } catch (e) {
+          print(e);
+          yield PostCommentError();
+        }
+      } else if (event is FetchComments) {
+        try {
+          final post = await postManagement.fetchPostComments(event.post);
+          yield PostCommentsFetched(post);
+        } catch (e) {
+          print(e);
+          yield PostCommentsFetchedError();
+        }
       }
     } catch (e) {
       print(e);

@@ -31,6 +31,12 @@ class CommentPost extends PostEvent {
   CommentPost({this.text, this.postId});
 }
 
+class FetchComments extends PostEvent {
+  final Post post;
+
+  FetchComments(this.post);
+}
+
 // Fetch posts in profile
 class SendPost extends PostEvent {
   final imageLib.Image image;

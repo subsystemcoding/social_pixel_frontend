@@ -41,10 +41,17 @@ class HomeScreen extends StatelessWidget {
                 //Listener for errors
                 child: BlocListener<PostBloc, PostState>(
                   listener: (context, state) {
-                    if (state is PostError)
+                    if (state is PostError) {
                       return Scaffold.of(context).showSnackBar(SnackBar(
                           content: Text(
                               "Posts are not loaded, please check your internet connection")));
+                    } else if (state is PostUpvotedError) {
+                      return Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Could not upvote post"),
+                        ),
+                      );
+                    }
                   },
                   //builds a list of post after receiving posts from the bloc
                   child: BlocBuilder<PostBloc, PostState>(
@@ -114,14 +121,7 @@ class HomeScreen extends StatelessWidget {
 
         /// returns a post widget with the available info
         return PostWidget(
-          userName: post.userName,
-          userAvatar: post.userAvatarLink,
-          datePosted: post.datePosted,
-          postImage: post.postImageLink,
-          caption: post.caption,
-          location: post.location,
-          userAvatarBytes: post.userImageBytes,
-          postImageBytes: post.postImageBytes,
+          post: post,
         );
       },
     );

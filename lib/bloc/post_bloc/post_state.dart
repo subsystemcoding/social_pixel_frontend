@@ -16,17 +16,25 @@ class PostLoaded extends PostState {
   PostLoaded(this.posts);
 }
 
-class PostUpvoted extends PostState {
-  final bool success;
+class PostUpvoted extends PostState {}
 
-  PostUpvoted(this.success);
+class PostUpvotedError extends PostState {}
+
+class PostCommentsFetched extends PostState {
+  final Post post;
+
+  PostCommentsFetched(this.post);
 }
+
+class PostCommentsFetchedError extends PostState {}
 
 class PostCommented extends PostState {
-  final bool success;
+  final Comment comment;
 
-  PostCommented(this.success);
+  PostCommented(this.comment);
 }
+
+class PostCommentError extends PostState {}
 
 class PostError extends PostState {
   final String message;

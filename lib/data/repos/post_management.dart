@@ -4,12 +4,14 @@ import 'dart:math';
 import 'package:geocoder/geocoder.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/comment.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/data/repos/connectivity.dart';
 import 'package:socialpixel/data/repos/hive_repository.dart';
 import 'package:socialpixel/data/test_data/test_data.dart';
@@ -58,35 +60,10 @@ class PostManagement {
     return posts;
   }
 
-  Future<List<Post>> fetchPosts({int channelId, bool includeComments}) async {
+  Future<List<Post>> fetchPosts({int channelId}) async {
     //allow for comments
-    String comments = includeComments
-        ? '''
-    comments{
-      commentId
-      author{
-        user{
-          username
-        }
-        image
-      }
-      commentContent
-      dateCreated
-      replies{
-        commentId
-        author{
-          user{
-            username
-          }
-          image
-        }
-        commentContent
-        dateCreated
-      }
-      
-    }
-    '''
-        : '';
+    var auth = await AuthRepository().getAuth();
+    var username = auth.username;
 
     var response = await GraphqlClient().query(''' 
     query {
@@ -107,7 +84,9 @@ class PostManagement {
             username
           }
         }
-        $comments
+        comments {
+          commentId
+        }
         image
       } 
     }
@@ -117,54 +96,35 @@ class PostManagement {
     if (jsonResponse.isNotEmpty) {
       List<Post> posts = List<Post>.from(
         jsonResponse.map(
-          (item) => Post(
-            postId: int.parse(item['postId']),
-            userName: item['author']['user']['username'],
-            userAvatarLink: item['author']['image'],
-            postImageLink: item['image'],
-            caption: item['caption'],
-            datePosted: item['dateCreated'],
-            comments: item.containsKey('comments') && includeComments
-                ? List<Comment>.from(
-                    item['comments'].map(
-                      (comment) => Comment(
-                        commentId: comment['commentId'],
-                        commentContent: comment['commentContent'],
-                        user: Profile(
-                          username: comment['author']['user']['username'],
-                          userAvatarImage: comment['author']['image'],
-                        ),
-                        dateCreated: comment['dateCreated'],
-                        replies: item.containsKey('replies')
-                            ? List<Comment>.from(
-                                item['replies'].map(
-                                  (comment) => Comment(
-                                    commentId: comment['commentId'],
-                                    commentContent: comment['commentContent'],
-                                    user: Profile(
-                                      username: comment['author']['user']
-                                          ['username'],
-                                      userAvatarImage: comment['author']
-                                          ['image'],
-                                    ),
-                                    dateCreated: comment['dateCreated'],
-                                  ),
-                                ),
-                              )
-                            : null,
-                      ),
-                    ),
-                  )
-                : null,
-            location: Location(
-              latitude: item['gpsLatitude'] != null
-                  ? double.parse(item['gpsLatitude'])
-                  : null,
-              longitude: item['gpsLongitude'] != null
-                  ? double.parse(item['gpsLongitude'])
-                  : null,
-            ),
-          ),
+          (item) {
+            Post post = Post(
+              upvotes: item['upvotes'].length,
+              postId: int.parse(item['postId']),
+              userName: item['author']['user']['username'],
+              userAvatarLink: item['author']['image'],
+              postImageLink: item['image'],
+              caption: item['caption'],
+              datePosted: item['dateCreated'],
+              location: Location(
+                latitude: item['gpsLatitude'] != null
+                    ? double.parse(item['gpsLatitude'])
+                    : null,
+                longitude: item['gpsLongitude'] != null
+                    ? double.parse(item['gpsLongitude'])
+                    : null,
+              ),
+            );
+            post.isUpvoted = false;
+            for (var upvote in item['upvotes']) {
+              if (upvote['user']['username'] == username) {
+                post.isUpvoted = true;
+                break;
+              }
+            }
+            post.commentCount =
+                item['comments'] == null ? 0 : item['comments'].length;
+            return post;
+          },
         ),
       );
       print("//////////////////////Priniting posts////////////////////");
@@ -184,6 +144,70 @@ class PostManagement {
       posts.add(box.getAt(i));
     }
     return posts;
+  }
+
+  Future<Post> fetchPostComments(Post post) async {
+    var response = await GraphqlClient().query(''' 
+    query{
+      post(id: ${post.postId}){
+        comments{
+          commentId
+          commentContent
+          author{
+            user{
+              username
+            }
+            image
+          }
+          dateCreated
+          replies{
+            commentId
+            author{
+              user{
+                username
+              }
+              image
+            }
+            commentContent
+            dateCreated
+          }
+        }
+      }
+    }
+    ''');
+
+    var jsonResponse = jsonDecode(response)['data']['post']['comments'];
+    List<Comment> comments = List<Comment>.from(
+      jsonResponse.map(
+        (comment) {
+          return Comment(
+            commentId: int.parse(comment['commentId']),
+            commentContent: comment['commentContent'],
+            user: Profile(
+                username: comment['author']['user']['username'],
+                userAvatarImage: comment['author']['image']),
+            dateCreated: comment['dateCreated'],
+            replies: List<Comment>.from(
+              comment['replies'].map(
+                (reply) {
+                  return Comment(
+                    commentId: int.parse(reply['commentId']),
+                    commentContent: reply['commentContent'],
+                    user: Profile(
+                        username: reply['author']['user']['username'],
+                        userAvatarImage: reply['author']['image']),
+                    dateCreated: reply['dateCreated'],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    post.comments = comments;
+
+    return post;
   }
 
   Future<void> _addPostsToCache(List<Post> posts) async {
@@ -210,13 +234,13 @@ class PostManagement {
       final addressString = address != null
           ? '${address.first.adminArea}, ${address.first.countryName}'
           : '';
-      Location location = post.location.copyWith(address: addressString);
+      post.location.address = addressString;
 
       // add the new post to the box
       final newPost = post.copyWith(
-          userImageBytes: userAvatar,
-          postImageBytes: postImage,
-          location: location);
+        userImageBytes: userAvatar,
+        postImageBytes: postImage,
+      );
 
       box.put(newPost.postId, newPost);
     }
@@ -234,14 +258,14 @@ class PostManagement {
     return jsonResponse['success'];
   }
 
-  Future<bool> addComment({int postId, String text}) {
-    var response = ''' 
+  Future<bool> addComment({int postId, String text}) async {
+    var response = await GraphqlClient().query(''' 
     mutation {
       postComment(postId: $postId, text : "$text"){
         success
       }
     }
-    ''';
+    ''');
     return jsonDecode(response)['data']['postComment']['success'];
   }
 

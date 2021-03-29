@@ -168,12 +168,7 @@ class ChannelScreen extends StatelessWidget {
     return Column(
       children: posts
           .map((post) => PostWidget(
-                userName: post.userName,
-                userAvatar: post.userAvatarLink,
-                datePosted: post.datePosted,
-                postImage: post.postImageLink,
-                caption: post.caption,
-                location: post.location,
+                post: post,
               ))
           .toList(),
     );

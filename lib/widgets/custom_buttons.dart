@@ -42,4 +42,43 @@ class CustomButtons {
       ),
     );
   }
+
+  static Widget standardButtonIcon(
+    BuildContext context, {
+    IconData icondata,
+    double iconSize = 20,
+    @required Function onPressed,
+    EdgeInsets margin,
+    double width = 40,
+    double height,
+    ButtonStyleType type = ButtonStyleType.PurpleButton,
+  }) {
+    var iconColor;
+    var backgroundColor;
+    if (type == ButtonStyleType.PurpleButton) {
+      iconColor = Theme.of(context).primaryColor;
+      backgroundColor = Theme.of(context).accentColor;
+    } else if (type == ButtonStyleType.DisabledPurpleButton) {
+      iconColor = Theme.of(context).accentColor;
+      backgroundColor = Theme.of(context).disabledColor;
+    }
+    return Container(
+      width: width,
+      height: height,
+      margin: margin,
+      child: TextButton(
+        child: Icon(
+          icondata,
+          color: iconColor,
+          size: iconSize,
+        ),
+        style: TextButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 0.0),
+            backgroundColor: backgroundColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0))),
+        onPressed: onPressed,
+      ),
+    );
+  }
 }

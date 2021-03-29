@@ -1,42 +1,29 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/location.dart';
+import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/custom_buttons.dart';
 
 class PostWidget extends StatelessWidget {
-  final String userName;
-  final String userAvatar;
-  final String datePosted;
-  final String postImage;
-  final String caption;
-  final int upvotes;
-  final int comments;
-  final Location location;
-  final Uint8List userAvatarBytes;
-  final Uint8List postImageBytes;
+  final Post post;
+  final bool inPostScreen;
 
   const PostWidget({
     Key key,
-    this.userAvatar,
-    this.datePosted,
-    this.postImage,
-    this.caption,
-    this.userName,
-    this.upvotes,
-    this.comments,
-    this.location,
-    this.userAvatarBytes,
-    this.postImageBytes,
+    this.post,
+    this.inPostScreen = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 24.0, horizontal: 28.0),
-      padding: EdgeInsets.all(20.0),
+      margin: EdgeInsets.symmetric(vertical: 24.0, horizontal: 8.0),
+      padding: EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(25.0),
@@ -54,12 +41,12 @@ class PostWidget extends StatelessWidget {
           SizedBox(
             height: 12.0,
           ),
-          post(),
+          _buildpost(context),
           SizedBox(
             height: 12.0,
           ),
-          this.location.latitude != null
-              ? getGpsTag(text: this.location.address)
+          this.post.location.latitude != null
+              ? getGpsTag(text: this.post.location.address)
               : Container(),
           getCaption(context),
           SizedBox(
@@ -79,12 +66,13 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget profile(BuildContext context) {
+    var dateTime = Converter.dateTimeStringtoReadable(this.post.datePosted);
     return Row(children: [
       CircleAvatar(
-        backgroundImage:
-            this.userAvatarBytes != null && this.userAvatarBytes.isNotEmpty
-                ? MemoryImage(this.userAvatarBytes)
-                : NetworkImage(this.userAvatar),
+        backgroundImage: this.post.userImageBytes != null &&
+                this.post.userImageBytes.isNotEmpty
+            ? MemoryImage(this.post.userImageBytes)
+            : NetworkImage(this.post.userAvatarLink),
         radius: 30,
       ),
       SizedBox(
@@ -95,12 +83,12 @@ class PostWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              this.userName,
+              this.post.userName,
               textAlign: TextAlign.left,
               style: Theme.of(context).primaryTextTheme.headline4,
             ),
             Text(
-              datePosted,
+              dateTime,
               textAlign: TextAlign.left,
               style: Theme.of(context).primaryTextTheme.subtitle1,
             )
@@ -110,16 +98,21 @@ class PostWidget extends StatelessWidget {
     ]);
   }
 
-  Widget post() {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 300.0),
+  Widget _buildpost(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (!inPostScreen) {
+          Navigator.of(context).pushNamed("/post_widget", arguments: post);
+        }
+      },
+      //padding: EdgeInsets.symmetric(horizontal: 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),
         child: Image(
-          image: this.postImageBytes != null
-              ? MemoryImage(this.postImageBytes)
-              : NetworkImage(this.postImage),
-          fit: BoxFit.scaleDown,
+          image: this.post.postImageBytes != null
+              ? MemoryImage(this.post.postImageBytes)
+              : NetworkImage(this.post.postImageLink),
+          fit: BoxFit.fitWidth,
         ),
       ),
     );
@@ -128,31 +121,60 @@ class PostWidget extends StatelessWidget {
   Widget getCaption(BuildContext context) {
     return Container(
       child: Text(
-        this.caption,
+        this.post.caption,
         textAlign: TextAlign.left,
-        style: Theme.of(context).primaryTextTheme.bodyText1,
+        style: Theme.of(context).textTheme.headline6,
       ),
     );
   }
 
   Widget buttons(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CustomButtons.standardButton(
-          context,
-          text: "Upvote",
-          onPressed: () => {},
+        BlocBuilder<PostBloc, PostState>(
+          builder: (context, state) {
+            {
+              if (state is PostUpvoted) {
+                this.post.isUpvoted = !this.post.isUpvoted;
+              }
+              return CustomButtons.standardButtonIcon(
+                context,
+                icondata: Icons.thumb_up_rounded,
+                type: this.post.isUpvoted
+                    ? ButtonStyleType.PurpleButton
+                    : ButtonStyleType.DisabledPurpleButton,
+                onPressed: () => {
+                  BlocProvider.of<PostBloc>(context).add(
+                    UpvotePost(
+                      upvote: !this.post.isUpvoted,
+                      postId: this.post.postId,
+                    ),
+                  )
+                },
+              );
+            }
+          },
         ),
-        CustomButtons.standardButton(
+        SizedBox(width: 12.0),
+        CustomButtons.standardButtonIcon(
           context,
-          text: "Comment",
-          onPressed: () => {},
-          type: ButtonStyleType.DisabledPurpleButton,
+          icondata: Icons.add_comment,
+          onPressed: () => {
+            if (!inPostScreen)
+              {
+                Navigator.of(context)
+                    .pushNamed("/post_widget", arguments: post),
+              }
+          },
+          type: inPostScreen
+              ? ButtonStyleType.PurpleButton
+              : ButtonStyleType.DisabledPurpleButton,
         ),
-        CustomButtons.standardButton(
+        SizedBox(width: 12.0),
+        CustomButtons.standardButtonIcon(
           context,
-          text: "Share",
+          icondata: Icons.share,
           onPressed: () => {},
           type: ButtonStyleType.DisabledPurpleButton,
         ),
@@ -183,13 +205,25 @@ class PostWidget extends StatelessWidget {
   }
 
   Widget information(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          this.upvotes.toString() + " " + this.comments.toString() ?? '',
-          style: Theme.of(context).primaryTextTheme.subtitle1,
-        )
-      ],
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
+        if (state is PostUpvoted) {
+          this.post.upvotes = this.post.isUpvoted
+              ? this.post.upvotes + 1
+              : this.post.upvotes - 1;
+        }
+        return Row(
+          children: [
+            Text(
+              this.post.upvotes.toString() +
+                  " upvotes " +
+                  this.post.commentCount.toString() +
+                  ' comments ',
+              style: Theme.of(context).primaryTextTheme.subtitle1,
+            )
+          ],
+        );
+      },
     );
   }
 

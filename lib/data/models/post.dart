@@ -28,17 +28,19 @@ class Post {
   @HiveField(6)
   final List<Profile> otherUsers;
   @HiveField(7)
-  final int upvotes;
+  int upvotes;
   @HiveField(8)
-  final int commentCount;
+  int commentCount;
   @HiveField(9)
-  final List<Comment> comments;
+  List<Comment> comments;
   @HiveField(10)
   final Location location;
   @HiveField(11)
   Uint8List userImageBytes;
   @HiveField(12)
   Uint8List postImageBytes;
+  @HiveField(13)
+  bool isUpvoted;
 
   Post({
     this.postId,
@@ -54,6 +56,7 @@ class Post {
     this.location,
     this.userImageBytes,
     this.postImageBytes,
+    this.isUpvoted,
   });
 
   Post copyWith({
@@ -70,6 +73,7 @@ class Post {
     Location location,
     Uint8List userImageBytes,
     Uint8List postImageBytes,
+    bool isUpvoted,
   }) {
     return Post(
       postId: postId ?? this.postId,
@@ -85,6 +89,7 @@ class Post {
       location: location ?? this.location,
       userImageBytes: userImageBytes ?? this.userImageBytes,
       postImageBytes: postImageBytes ?? this.postImageBytes,
+      isUpvoted: isUpvoted ?? this.isUpvoted,
     );
   }
 
@@ -103,6 +108,7 @@ class Post {
       'location': location?.toMap(),
       // 'userImageBytes': userImageBytes?.toMap(),
       // 'postImageBytes': postImageBytes?.toMap(),
+      'isUpvoted': isUpvoted,
     };
   }
 
@@ -116,18 +122,16 @@ class Post {
       datePosted: map['datePosted'],
       postImageLink: map['postImageLink'],
       caption: map['caption'],
-      otherUsers: map.containsKey('ohterUsers')
-          ? List<Profile>.from(
-              map['otherUsers']?.map((x) => Profile.fromMap(x)))
-          : null,
+      otherUsers:
+          List<Profile>.from(map['otherUsers']?.map((x) => Profile.fromMap(x))),
       upvotes: map['upvotes'],
       commentCount: map['commentCount'],
-      comments: map.containsKey("comments")
-          ? List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x)))
-          : null,
+      comments:
+          List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
       location: Location.fromMap(map['location']),
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // postImageBytes: Uint8List.fromMap(map['postImageBytes']),
+      isUpvoted: map['isUpvoted'],
     );
   }
 
@@ -137,7 +141,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location, userImageBytes: $userImageBytes, postImageBytes: $postImageBytes)';
+    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location, userImageBytes: $userImageBytes, postImageBytes: $postImageBytes, isUpvoted: $isUpvoted)';
   }
 
   @override
@@ -157,7 +161,8 @@ class Post {
         listEquals(o.comments, comments) &&
         o.location == location &&
         o.userImageBytes == userImageBytes &&
-        o.postImageBytes == postImageBytes;
+        o.postImageBytes == postImageBytes &&
+        o.isUpvoted == isUpvoted;
   }
 
   @override
@@ -174,6 +179,7 @@ class Post {
         comments.hashCode ^
         location.hashCode ^
         userImageBytes.hashCode ^
-        postImageBytes.hashCode;
+        postImageBytes.hashCode ^
+        isUpvoted.hashCode;
   }
 }

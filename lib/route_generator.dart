@@ -13,6 +13,7 @@ import 'package:socialpixel/screens/message_screen/preview_message_screen.dart';
 import 'package:socialpixel/screens/post_screen/camera_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_preview_screen.dart';
 import 'package:socialpixel/screens/post_screen/post_details_screen.dart';
+import 'package:socialpixel/screens/post_widget_screen.dart';
 import 'package:socialpixel/screens/search_screen.dart';
 import 'package:socialpixel/screens/user_profile_screen.dart';
 
@@ -34,6 +35,12 @@ class RouteGenerator {
       case '/home':
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
+        );
+      case '/post_widget':
+        return MaterialPageRoute(
+          builder: (_) => PostWidgetScreen(
+            post: args,
+          ),
         );
       case '/settings':
         return MaterialPageRoute(builder: (_) => SettingsScreen());

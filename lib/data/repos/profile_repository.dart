@@ -26,9 +26,9 @@ class ProfileRepository {
   Profile currentProfile;
 
   Future<Profile> fetchCurrentProfile() async {
-    if (DebugMode.debug) {
-      return _fetchProfileDebug();
-    }
+    // if (DebugMode.debug) {
+    //   return _fetchProfileDebug();
+    // }
     final authObject = await AuthRepository().getAuth();
     String username = authObject.username;
     var response = await _client.query(''' 
