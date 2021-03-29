@@ -9,6 +9,7 @@ import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
 
 class LeaderboardScreen extends StatelessWidget {
+  final int id;
   final String title;
   final String description;
   final ImageProvider<Object> coverImage;
@@ -18,6 +19,7 @@ class LeaderboardScreen extends StatelessWidget {
     this.title,
     this.description,
     this.coverImage,
+    this.id,
   }) : super(key: key);
 
   @override

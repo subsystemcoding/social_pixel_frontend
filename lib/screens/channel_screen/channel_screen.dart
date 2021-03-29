@@ -27,7 +27,7 @@ class ChannelScreen extends StatelessWidget {
     List<Game> games = [];
     //Getting the post and game blocs
     final postBloc = BlocProvider.of<PostBloc>(context);
-    final gameBloc = BlocProvider.of<GameBloc>(context);
+    //final gameBloc = BlocProvider.of<GameBloc>(context);
     //getting the channel information from the bloc
     BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
     return Scaffold(
@@ -150,6 +150,14 @@ class ChannelScreen extends StatelessWidget {
             title: game.name,
             description: game.description,
             backgroundImage: NetworkImage(game.image),
+            onTap: () {
+              Navigator.of(context).pushNamed('/leaderboard', arguments: {
+                'id': game.gameId,
+                'title': game.name,
+                'description': game.description,
+                'image': game.image,
+              });
+            },
           );
         },
       ),
@@ -164,9 +172,6 @@ class ChannelScreen extends StatelessWidget {
                 userAvatar: post.userAvatarLink,
                 datePosted: post.datePosted,
                 postImage: post.postImageLink,
-                otherUsers: post.otherUsers
-                    .map((user) => user.userAvatarImage)
-                    .toList(),
                 caption: post.caption,
                 location: post.location,
               ))

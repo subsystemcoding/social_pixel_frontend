@@ -6,8 +6,8 @@ import 'package:socialpixel/data/repos/auth_repository.dart';
 //This is a singleton class
 class GraphqlClient {
   final client = http.Client();
-  final url = 'http://localhost:8000/graphql';
-  Uri uri = Uri.http('localhost:8000', '/graphql');
+  final url = 'http://socialpixel-backend.herokuapp.com/graphql';
+  Uri uri = Uri.http('socialpixel-backend.herokuapp.com', '/graphql');
 
   GraphqlClient._internal();
 

@@ -19,23 +19,26 @@ class CommentAdapter extends TypeAdapter<Comment> {
     return Comment(
       commentId: fields[0] as int,
       commentContent: fields[1] as String,
-      repliedCommentId: fields[2] as int,
+      replies: (fields[2] as List)?.cast<Comment>(),
       dateCreated: fields[3] as String,
+      user: fields[4] as Profile,
     );
   }
 
   @override
   void write(BinaryWriter writer, Comment obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.commentId)
       ..writeByte(1)
       ..write(obj.commentContent)
       ..writeByte(2)
-      ..write(obj.repliedCommentId)
+      ..write(obj.replies)
       ..writeByte(3)
-      ..write(obj.dateCreated);
+      ..write(obj.dateCreated)
+      ..writeByte(4)
+      ..write(obj.user);
   }
 
   @override

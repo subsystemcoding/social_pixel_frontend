@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+
+import 'package:socialpixel/data/models/profile.dart';
 
 part 'comment.g.dart';
 
@@ -11,27 +14,33 @@ class Comment {
   @HiveField(1)
   String commentContent;
   @HiveField(2)
-  int repliedCommentId;
+  List<Comment> replies;
   @HiveField(3)
   String dateCreated;
+  @HiveField(4)
+  Profile user;
+
   Comment({
     this.commentId,
     this.commentContent,
-    this.repliedCommentId,
+    this.replies,
     this.dateCreated,
+    this.user,
   });
 
   Comment copyWith({
     int commentId,
     String commentContent,
-    int repliedCommentId,
-    int dateCreated,
+    List<Comment> replies,
+    String dateCreated,
+    Profile user,
   }) {
     return Comment(
       commentId: commentId ?? this.commentId,
       commentContent: commentContent ?? this.commentContent,
-      repliedCommentId: repliedCommentId ?? this.repliedCommentId,
+      replies: replies ?? this.replies,
       dateCreated: dateCreated ?? this.dateCreated,
+      user: user ?? this.user,
     );
   }
 
@@ -39,8 +48,9 @@ class Comment {
     return {
       'commentId': commentId,
       'commentContent': commentContent,
-      'repliedCommentId': repliedCommentId,
+      'replies': replies?.map((x) => x?.toMap())?.toList(),
       'dateCreated': dateCreated,
+      'user': user?.toMap(),
     };
   }
 
@@ -50,8 +60,10 @@ class Comment {
     return Comment(
       commentId: map['commentId'],
       commentContent: map['commentContent'],
-      repliedCommentId: map['repliedCommentId'],
+      replies:
+          List<Comment>.from(map['replies']?.map((x) => Comment.fromMap(x))),
       dateCreated: map['dateCreated'],
+      user: Profile.fromMap(map['user']),
     );
   }
 
@@ -62,7 +74,7 @@ class Comment {
 
   @override
   String toString() {
-    return 'Comment(commentId: $commentId, commentContent: $commentContent, repliedCommentId: $repliedCommentId, dateCreated: $dateCreated)';
+    return 'Comment(commentId: $commentId, commentContent: $commentContent, replies: $replies, dateCreated: $dateCreated, user: $user)';
   }
 
   @override
@@ -72,15 +84,17 @@ class Comment {
     return o is Comment &&
         o.commentId == commentId &&
         o.commentContent == commentContent &&
-        o.repliedCommentId == repliedCommentId &&
-        o.dateCreated == dateCreated;
+        listEquals(o.replies, replies) &&
+        o.dateCreated == dateCreated &&
+        o.user == user;
   }
 
   @override
   int get hashCode {
     return commentId.hashCode ^
         commentContent.hashCode ^
-        repliedCommentId.hashCode ^
-        dateCreated.hashCode;
+        replies.hashCode ^
+        dateCreated.hashCode ^
+        user.hashCode;
   }
 }

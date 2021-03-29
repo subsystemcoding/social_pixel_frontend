@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:geocoder/geocoder.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:socialpixel/data/graphql_client.dart';
+import 'package:socialpixel/data/models/comment.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/game.dart';
@@ -112,30 +114,64 @@ class PostManagement {
     ''');
 
     var jsonResponse = jsonDecode(response)['data']['feedPosts'];
-    print("Printing jsonResponse ${jsonResponse.toString()}");
     if (jsonResponse.isNotEmpty) {
       List<Post> posts = List<Post>.from(
         jsonResponse.map(
           (item) => Post(
-            postId: item['postId'],
+            postId: int.parse(item['postId']),
             userName: item['author']['user']['username'],
             userAvatarLink: item['author']['image'],
             postImageLink: item['image'],
             caption: item['caption'],
             datePosted: item['dateCreated'],
-            comments: item['comments'],
+            comments: item.containsKey('comments') && includeComments
+                ? List<Comment>.from(
+                    item['comments'].map(
+                      (comment) => Comment(
+                        commentId: comment['commentId'],
+                        commentContent: comment['commentContent'],
+                        user: Profile(
+                          username: comment['author']['user']['username'],
+                          userAvatarImage: comment['author']['image'],
+                        ),
+                        dateCreated: comment['dateCreated'],
+                        replies: item.containsKey('replies')
+                            ? List<Comment>.from(
+                                item['replies'].map(
+                                  (comment) => Comment(
+                                    commentId: comment['commentId'],
+                                    commentContent: comment['commentContent'],
+                                    user: Profile(
+                                      username: comment['author']['user']
+                                          ['username'],
+                                      userAvatarImage: comment['author']
+                                          ['image'],
+                                    ),
+                                    dateCreated: comment['dateCreated'],
+                                  ),
+                                ),
+                              )
+                            : null,
+                      ),
+                    ),
+                  )
+                : null,
             location: Location(
-              latitude: item['gpsLatitude'],
-              longitude: item['gpsLongitude'],
+              latitude: item['gpsLatitude'] != null
+                  ? double.parse(item['gpsLatitude'])
+                  : null,
+              longitude: item['gpsLongitude'] != null
+                  ? double.parse(item['gpsLongitude'])
+                  : null,
             ),
           ),
         ),
       );
-
+      print("//////////////////////Priniting posts////////////////////");
+      print(posts);
       //delete and add posts in the background
-      _deleteAllPostInCache().then((_) async {
-        await _addPostsToCache(posts);
-      });
+      await _deleteAllPostInCache();
+      await _addPostsToCache(posts);
       return posts;
     }
     return [];
@@ -161,21 +197,26 @@ class PostManagement {
       //convert postImageLink to base64
       final postImage =
           await Connectivity.networkImageToBytes(post.postImageLink);
+
       //convert otherUsers avatar to base64
-      List<Profile> otherUsers = [];
-      for (int j = 0; j < post.otherUsers.length; j++) {
-        final user = post.otherUsers[j];
-        final avatar =
-            await Connectivity.networkImageToBytes(user.userAvatarImage);
-        otherUsers.add(user.copyWith(userImageBytes: avatar));
-      }
+      final address = post.location.latitude != null
+          ? await Geocoder.local.findAddressesFromCoordinates(
+              Coordinates(
+                post.location.latitude,
+                post.location.longitude,
+              ),
+            )
+          : null;
+      final addressString = address != null
+          ? '${address.first.adminArea}, ${address.first.countryName}'
+          : '';
+      Location location = post.location.copyWith(address: addressString);
 
       // add the new post to the box
       final newPost = post.copyWith(
-        userImageBytes: userAvatar,
-        postImageBytes: postImage,
-        otherUsers: otherUsers,
-      );
+          userImageBytes: userAvatar,
+          postImageBytes: postImage,
+          location: location);
 
       box.put(newPost.postId, newPost);
     }

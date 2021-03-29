@@ -12,20 +12,17 @@ class PostWidget extends StatelessWidget {
   final String datePosted;
   final String postImage;
   final String caption;
-  final List<String> otherUsers;
   final int upvotes;
   final int comments;
   final Location location;
   final Uint8List userAvatarBytes;
   final Uint8List postImageBytes;
-  final List<Uint8List> otherUsersBytes;
 
   const PostWidget({
     Key key,
     this.userAvatar,
     this.datePosted,
     this.postImage,
-    this.otherUsers,
     this.caption,
     this.userName,
     this.upvotes,
@@ -33,7 +30,6 @@ class PostWidget extends StatelessWidget {
     this.location,
     this.userAvatarBytes,
     this.postImageBytes,
-    this.otherUsersBytes,
   }) : super(key: key);
 
   @override
@@ -62,7 +58,9 @@ class PostWidget extends StatelessWidget {
           SizedBox(
             height: 12.0,
           ),
-          getGpsTag(text: this.location.toString()),
+          this.location.latitude != null
+              ? getGpsTag(text: this.location.address)
+              : Container(),
           getCaption(context),
           SizedBox(
             height: 12.0,
@@ -83,9 +81,10 @@ class PostWidget extends StatelessWidget {
   Widget profile(BuildContext context) {
     return Row(children: [
       CircleAvatar(
-        backgroundImage: this.userAvatarBytes != null
-            ? MemoryImage(this.userAvatarBytes)
-            : NetworkImage(this.userAvatar),
+        backgroundImage:
+            this.userAvatarBytes != null && this.userAvatarBytes.isNotEmpty
+                ? MemoryImage(this.userAvatarBytes)
+                : NetworkImage(this.userAvatar),
         radius: 30,
       ),
       SizedBox(
@@ -143,9 +142,7 @@ class PostWidget extends StatelessWidget {
         CustomButtons.standardButton(
           context,
           text: "Upvote",
-          onPressed: () => {
-            
-          },
+          onPressed: () => {},
         ),
         CustomButtons.standardButton(
           context,
@@ -188,20 +185,6 @@ class PostWidget extends StatelessWidget {
   Widget information(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 120,
-          height: 45,
-          child: getavatars(context,
-              images: (this.otherUsersBytes == null ||
-                      this.otherUsersBytes.isEmpty ||
-                      this.otherUsersBytes[0] == null)
-                  ? this.otherUsers.map((link) => NetworkImage(link)).toList()
-                  : this
-                      .otherUsersBytes
-                      .map((bytes) => MemoryImage(bytes))
-                      .toList(),
-              radius: 20),
-        ),
         Text(
           this.upvotes.toString() + " " + this.comments.toString() ?? '',
           style: Theme.of(context).primaryTextTheme.subtitle1,
@@ -243,7 +226,7 @@ class PostWidget extends StatelessWidget {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: 16.0, color: Colors.blue),
+            style: TextStyle(fontSize: 14.0, color: Colors.blue),
           )
         ],
       ),

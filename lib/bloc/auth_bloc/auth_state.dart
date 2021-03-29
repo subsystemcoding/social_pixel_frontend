@@ -22,3 +22,5 @@ class RegistrationUnsuccessful extends AuthState {
 }
 
 class AuthWait extends AuthState {}
+
+class AuthError extends AuthState {}

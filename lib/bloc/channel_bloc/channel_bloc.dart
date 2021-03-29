@@ -31,6 +31,13 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       } catch (e) {
         yield ChannelError("No channel found");
       }
+    } else if (event is SearchChannel) {
+      try {
+        final channel = await channelRepository.fetchChannelsByName(event.name);
+        yield ChannelListLoaded([channel]);
+      } catch (e) {
+        yield ChannelError("No channel found");
+      }
     }
     // TODO: implement mapEventToState
   }

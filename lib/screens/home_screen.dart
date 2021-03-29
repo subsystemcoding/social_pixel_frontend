@@ -118,14 +118,10 @@ class HomeScreen extends StatelessWidget {
           userAvatar: post.userAvatarLink,
           datePosted: post.datePosted,
           postImage: post.postImageLink,
-          otherUsers:
-              post.otherUsers.map((user) => user.userAvatarImage).toList(),
           caption: post.caption,
           location: post.location,
           userAvatarBytes: post.userImageBytes,
           postImageBytes: post.postImageBytes,
-          otherUsersBytes:
-              post.otherUsers.map((user) => user.userImageBytes).toList(),
         );
       },
     );

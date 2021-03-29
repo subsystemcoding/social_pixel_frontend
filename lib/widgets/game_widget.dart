@@ -5,20 +5,20 @@ class GameWidget extends StatelessWidget {
   final String title;
   final String description;
   final ImageProvider<Object> backgroundImage;
+  final Function onTap;
   const GameWidget(
       {Key key,
       this.gameId,
       this.title,
       this.description,
-      this.backgroundImage})
+      this.backgroundImage,
+      this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        /// TODO
-      },
+      onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(28.0),

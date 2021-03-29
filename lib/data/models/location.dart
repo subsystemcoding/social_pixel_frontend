@@ -10,18 +10,23 @@ class Location {
   double latitude;
   @HiveField(1)
   double longitude;
+  @HiveField(2)
+  String address;
   Location({
     this.latitude,
     this.longitude,
+    this.address,
   });
 
   Location copyWith({
     double latitude,
     double longitude,
+    String address,
   }) {
     return Location(
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      address: address ?? this.address,
     );
   }
 
@@ -29,6 +34,7 @@ class Location {
     return {
       'latitude': latitude,
       'longitude': longitude,
+      'address': address,
     };
   }
 
@@ -38,6 +44,7 @@ class Location {
     return Location(
       latitude: map['latitude'],
       longitude: map['longitude'],
+      address: map['address'],
     );
   }
 
@@ -47,15 +54,19 @@ class Location {
       Location.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Location(latitude: $latitude, longitude: $longitude)';
+  String toString() =>
+      'Location(latitude: $latitude, longitude: $longitude, address: $address)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Location && o.latitude == latitude && o.longitude == longitude;
+    return o is Location &&
+        o.latitude == latitude &&
+        o.longitude == longitude &&
+        o.address == address;
   }
 
   @override
-  int get hashCode => latitude.hashCode ^ longitude.hashCode;
+  int get hashCode => latitude.hashCode ^ longitude.hashCode ^ address.hashCode;
 }

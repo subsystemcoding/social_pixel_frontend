@@ -127,6 +127,32 @@ class ChannelRepository {
     return jsonDecode(response)['data']['success'];
   }
 
+  Future<Channel> fetchChannelsByName(String name) async {
+    var response = await GraphqlClient().query(''' 
+      query{
+        channelname(name:"$name"){
+          id
+          subscribers{
+            user{
+              username
+            }
+          }
+          avatar
+          name
+        }
+      }
+    ''');
+
+    var jsonResponse = jsonDecode(response)['data']['channelname'];
+    var subscribers = List.from(jsonResponse['subscribers']).length;
+    return Channel(
+      id: int.parse(jsonResponse['id']),
+      subscribers: subscribers,
+      avatarImageLink: jsonResponse['avatar'],
+      name: jsonResponse['name'],
+    );
+  }
+
   Future<List<Channel>> fetchChannelList() {
     return Future.delayed(
       Duration(milliseconds: 100),

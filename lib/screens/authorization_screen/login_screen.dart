@@ -26,6 +26,12 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginSuccessful) {
             Navigator.of(context).pushNamed("/home");
+          } else if (state is AuthError) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text("You may have lost connection to the server"),
+              ),
+            );
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(

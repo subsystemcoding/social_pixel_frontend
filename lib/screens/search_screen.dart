@@ -13,53 +13,89 @@ import 'package:socialpixel/widgets/search_bar.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 import 'package:tinycolor/tinycolor.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  SearchScreen({Key key}) : super(key: key);
+
+  @override
+  _SearchScreenState createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen>
+    with SingleTickerProviderStateMixin {
+  TabController _controller;
+  TextEditingController textController = TextEditingController();
+  List<Profile> profiles = [];
+  List<Post> posts = [];
+  List<Channel> channels = [];
+  List<String> searchString = ['', '', ''];
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
+    BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
+    _controller = TabController(
+      vsync: this,
+      length: 3,
+    );
+    _controller.addListener(() {
+      textController.text = searchString[_controller.index];
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
-    BlocProvider.of<ChannelBloc>(context).add(GetChannelList());
-    BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
     return Scaffold(
       appBar: MenuBar().appbar,
       drawer: CustomDrawer(),
       bottomNavigationBar: BottomNavBar(
         currentRoute: '/search',
       ),
-      body: DefaultTabController(
-        length: 3,
-        child: Column(
-          children: [
-            SearchBar(),
-            CustomTabBar().tabBar(
-              context,
-              tabs: [
-                Text("People"),
-                Text("Posts"),
-                Text("Channel"),
+      body: Column(
+        children: [
+          SearchBar(
+            onSubmitted: () {
+              searchString[_controller.index] = textController.text;
+              if (_controller.index == 2) {
+                BlocProvider.of<ChannelBloc>(context).add(
+                  SearchChannel(textController.text),
+                );
+              }
+            },
+          ),
+          CustomTabBar().tabBar(
+            context,
+            tabs: [
+              Text("People"),
+              Text("Posts"),
+              Text("Channel"),
+            ],
+            controller: _controller,
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _controller,
+              children: [
+                buildPeopleSection(),
+                buildPostSection(),
+                buildChannelSection(),
               ],
             ),
-            SizedBox(
-              height: 8.0,
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  buildPeopleSection(),
-                  buildPostSection(),
-                  buildChannelSection(),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget buildPeopleSection() {
-    List<Profile> profiles = [];
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (state is ProfileListLoaded) {
@@ -90,7 +126,6 @@ class SearchScreen extends StatelessWidget {
   }
 
   Widget buildPostSection() {
-    List<Post> posts = [];
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         if (state is PostLoaded) {
@@ -120,7 +155,6 @@ class SearchScreen extends StatelessWidget {
   }
 
   Widget buildChannelSection() {
-    List<Channel> channels = [];
     return BlocBuilder<ChannelBloc, ChannelState>(
       builder: (context, state) {
         if (state is ChannelListLoaded) {

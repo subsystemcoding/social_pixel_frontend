@@ -19,17 +19,20 @@ class LocationAdapter extends TypeAdapter<Location> {
     return Location(
       latitude: fields[0] as double,
       longitude: fields[1] as double,
+      address: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Location obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.latitude)
       ..writeByte(1)
-      ..write(obj.longitude);
+      ..write(obj.longitude)
+      ..writeByte(2)
+      ..write(obj.address);
   }
 
   @override
