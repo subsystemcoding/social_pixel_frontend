@@ -92,6 +92,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           print(e);
           yield PostCommentsFetchedError();
         }
+      } else if (event is ReplyComment) {
+        await postManagement.postReplyToComment(
+          postId: event.postId,
+          commentId: event.commentId,
+          text: event.text,
+        );
+        final profile = await ProfileRepository().fetchCurrentProfile();
+
+        yield PostReplied(Comment(
+          commentContent: event.text,
+          dateCreated: DateTime.now().toString(),
+          user: profile,
+        ));
       }
     } catch (e) {
       print(e);

@@ -15,7 +15,11 @@ class PostWidgetScreen extends StatefulWidget {
 }
 
 class _PostWidgetScreenState extends State<PostWidgetScreen> {
+  FocusNode _focusNode = FocusNode();
   TextEditingController _controller = TextEditingController();
+  String hintText = "Type a comment..";
+  bool isReplyKeyboard = false;
+  Comment replyComment;
   List<Comment> comments;
 
   @override
@@ -58,23 +62,38 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      focusNode: _focusNode,
                       controller: _controller,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                         border: InputBorder.none,
-                        hintText: "Type a message",
+                        hintText: hintText,
                         hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       onSubmitted: (val) {
                         if (_controller.text.isNotEmpty) {
-                          BlocProvider.of<PostBloc>(context).add(
-                            CommentPost(
-                              text: _controller.text,
-                              postId: widget.post.postId,
-                            ),
-                          );
+                          if (!isReplyKeyboard) {
+                            BlocProvider.of<PostBloc>(context).add(
+                              CommentPost(
+                                text: _controller.text,
+                                postId: widget.post.postId,
+                              ),
+                            );
+                          } else {
+                            BlocProvider.of<PostBloc>(context).add(
+                              ReplyComment(
+                                widget.post.postId,
+                                replyComment.commentId,
+                                _controller.text,
+                              ),
+                            );
+                          }
                           _controller.clear();
                           FocusScope.of(context).unfocus();
+                          setState(() {
+                            hintText = "Type a comment..";
+                            isReplyKeyboard = false;
+                          });
                         }
                       },
                     ),
@@ -101,14 +120,28 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
                       ),
                       onPressed: () {
                         if (_controller.text.isNotEmpty) {
-                          BlocProvider.of<PostBloc>(context).add(
-                            CommentPost(
-                              text: _controller.text,
-                              postId: widget.post.postId,
-                            ),
-                          );
+                          if (!isReplyKeyboard) {
+                            BlocProvider.of<PostBloc>(context).add(
+                              CommentPost(
+                                text: _controller.text,
+                                postId: widget.post.postId,
+                              ),
+                            );
+                          } else {
+                            BlocProvider.of<PostBloc>(context).add(
+                              ReplyComment(
+                                widget.post.postId,
+                                replyComment.commentId,
+                                _controller.text,
+                              ),
+                            );
+                          }
                           _controller.clear();
                           FocusScope.of(context).unfocus();
+                          setState(() {
+                            hintText = "Type a comment..";
+                            isReplyKeyboard = false;
+                          });
                         } else {
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
@@ -132,11 +165,11 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         if (state is PostCommentsFetched) {
-          print("Hello dis is postCommentsFetchd");
           comments = state.post.comments;
         } else if (state is PostCommented) {
-          print("Hello dis is postCommented");
           comments.insert(0, state.comment);
+        } else if (state is PostReplied) {
+          replyComment.replies.add(state.comment);
         }
         return Column(
           children: comments
@@ -202,7 +235,12 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
                           size: 16,
                         ),
                         onTap: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
+                          FocusScope.of(context).requestFocus(_focusNode);
+                          setState(() {
+                            replyComment = comment;
+                            hintText = "Reply ..";
+                            isReplyKeyboard = true;
+                          });
                         },
                       ),
                     )
@@ -210,23 +248,7 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
             ],
           ),
         ),
-        // ListTile(
-        //   shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.circular(12.0),
-        //   ),
-        //   leading: CircleAvatar(
-        //     backgroundImage: NetworkImage(comment.user.userAvatarImage),
-        //   ),
-        //   title: Text(
-        //     comment.user.username,
-        //     style: Theme.of(context).textTheme.headline6,
-        //   ),
-        //   subtitle: Text(
-        //     comment.commentContent,
-        //     style: Theme.of(context).primaryTextTheme.subtitle1,
-        //   ),
-        // ),
-        hasReplies ? _buildReplies(comment.replies) : Container(),
+        hasReplies ? _buildReplies(comment.replies ?? []) : Container(),
       ],
     );
   }
@@ -235,7 +257,7 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
     return Column(
       children: comments
           .map(
-            (comment) => _buildComment(comment, true),
+            (comment) => _buildComment(comment, false),
           )
           .toList(),
     );

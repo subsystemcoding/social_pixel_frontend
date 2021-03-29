@@ -31,6 +31,14 @@ class CommentPost extends PostEvent {
   CommentPost({this.text, this.postId});
 }
 
+class ReplyComment extends PostEvent {
+  final int postId;
+  final int commentId;
+  final String text;
+
+  ReplyComment(this.postId, this.commentId, this.text);
+}
+
 class FetchComments extends PostEvent {
   final Post post;
 

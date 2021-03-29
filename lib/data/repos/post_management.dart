@@ -137,6 +137,19 @@ class PostManagement {
     return [];
   }
 
+  Future<bool> postReplyToComment(
+      {int postId, int commentId, String text}) async {
+    var response = await GraphqlClient().query('''
+    mutation{
+      postCommentReply(postId: $postId, replyToId: $commentId, text: "$text"){
+        success
+      }
+    }
+    ''');
+
+    return jsonDecode(response)['data']['postCommentReply']['success'];
+  }
+
   Future<List<Post>> fetchCachedPosts() async {
     final box = await Hive.openBox('posts');
     List<Post> posts = [];

@@ -28,6 +28,14 @@ class PostCommentsFetched extends PostState {
 
 class PostCommentsFetchedError extends PostState {}
 
+class PostReplied extends PostState {
+  final Comment comment;
+
+  PostReplied(this.comment);
+}
+
+class PostRepliedError extends PostState {}
+
 class PostCommented extends PostState {
   final Comment comment;
 
