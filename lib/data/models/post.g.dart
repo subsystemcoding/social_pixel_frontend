@@ -30,7 +30,8 @@ class PostAdapter extends TypeAdapter<Post> {
       location: fields[10] as Location,
       userImageBytes: fields[11] as Uint8List,
       postImageBytes: fields[12] as Uint8List,
-    )..isUpvoted = fields[13] as bool;
+      isUpvoted: fields[13] as bool,
+    );
   }
 
   @override

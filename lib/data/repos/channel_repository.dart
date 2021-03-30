@@ -3,12 +3,17 @@ import 'dart:convert';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/location.dart';
+import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/data/test_data/test_data.dart';
 
 class ChannelRepository {
   Future<Channel> fetchChannel(int channelId) async {
+    var authObject = await AuthRepository().getAuth();
+    var username = authObject.username;
     var response = await GraphqlClient().query('''
-      query {
+      query{
         channel(id: $channelId){
           name
           description
@@ -20,9 +25,31 @@ class ChannelRepository {
           coverImage
           avatar
           gameSet{
-            name
             id
+            name
             description
+            image
+          }
+          postSet{
+            postId 
+            author{
+              user{
+                username
+              }
+              image
+            }
+            dateCreated
+            caption
+            gpsLongitude
+            gpsLatitude
+            upvotes{
+              user{
+                username
+              }
+            }
+            comments {
+              commentId
+            }
             image
           }
         }
@@ -37,16 +64,55 @@ class ChannelRepository {
       description: jsonResponse['description'],
       subscribers: subscribers,
       coverImageLink: jsonResponse['coverImage'],
-      avatarImageLink: jsonResponse['avatarImage'],
+      avatarImageLink: jsonResponse['avatar'],
       games: jsonResponse['gameSet'].isNotEmpty
-          ? List<Game>.from(jsonResponse['gameSet'].map((item) {
-              return Game(
-                  gameId: int.parse(item['id']),
-                  name: item['name'],
-                  description: item['description'],
-                  image: item['image']);
-            }))
-          : null,
+          ? List<Game>.from(
+              jsonResponse['gameSet'].map(
+                (item) {
+                  return Game(
+                      gameId: int.parse(item['id']),
+                      name: item['name'],
+                      description: item['description'],
+                      image: item['image']);
+                },
+              ),
+            )
+          : [],
+      posts: jsonResponse['postSet'].isEmpty
+          ? []
+          : List<Post>.from(
+              jsonResponse.map(
+                (item) {
+                  Post post = Post(
+                    upvotes: item['upvotes'].length,
+                    postId: int.parse(item['postId']),
+                    userName: item['author']['user']['username'],
+                    userAvatarLink: item['author']['image'],
+                    postImageLink: item['image'],
+                    caption: item['caption'],
+                    datePosted: item['dateCreated'],
+                    location: Location(
+                      latitude: item['gpsLatitude'] != null
+                          ? double.parse(item['gpsLatitude'])
+                          : null,
+                      longitude: item['gpsLongitude'] != null
+                          ? double.parse(item['gpsLongitude'])
+                          : null,
+                    ),
+                  );
+                  post.isUpvoted = false;
+                  for (var upvote in item['upvotes']) {
+                    if (upvote['user']['username'] == username) {
+                      post.isUpvoted = true;
+                      break;
+                    }
+                  }
+                  post.commentCount =
+                      item['comments'] == null ? 0 : item['comments'].length;
+                  return post;
+                },
+              ),
+            ),
     );
   }
 

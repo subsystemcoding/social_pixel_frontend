@@ -26,7 +26,6 @@ class ChannelScreen extends StatelessWidget {
     List<Post> posts = [];
     List<Game> games = [];
     //Getting the post and game blocs
-    final postBloc = BlocProvider.of<PostBloc>(context);
     //final gameBloc = BlocProvider.of<GameBloc>(context);
     //getting the channel information from the bloc
     BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
@@ -36,7 +35,8 @@ class ChannelScreen extends StatelessWidget {
       body: BlocBuilder<ChannelBloc, ChannelState>(
         builder: (context, state) {
           if (state is ChannelLoaded) {
-            postBloc.add(FetchPosts(channelId: channelId));
+            posts = state.channel.posts;
+            games = state.channel.games;
             return DefaultTabController(
               length: 2,
               child: NestedScrollView(
@@ -90,7 +90,8 @@ class ChannelScreen extends StatelessWidget {
                 },
                 body: TabBarView(
                   children: [
-                    buildPostSection(context, state.channel.games),
+                    buildPostSection(
+                        context, state.channel.games, state.channel.posts),
                     buildRooms(context),
                   ],
                 ),
@@ -107,32 +108,17 @@ class ChannelScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostSection(BuildContext context, List<Game> games) {
-    List<Game> games = [];
-    List<Post> posts = [];
+  Widget buildPostSection(
+      BuildContext context, List<Game> games, List<Post> posts) {
     return ListView(
       children: [
-        games.isEmpty ? Container() : buildGames(context, games),
-        BlocListener<PostBloc, PostState>(
-          listener: (context, state) {
-            if (state is PostError)
-              return Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "Posts are not loaded, please check your internet connection")));
-          },
-          child: BlocBuilder<PostBloc, PostState>(
-            builder: (context, state) {
-              if (state is PostLoaded) {
-                posts = state.posts;
-              } else if (state is PostLoading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return buildPosts(context, posts);
-            },
-          ),
-        ),
+        games.isEmpty
+            ? _buildEmpty(context, "No Games available")
+            : buildGames(context, games),
+        posts.isEmpty
+            ? _buildEmpty(
+                context, "No has posted yet, be the first one to post")
+            : buildPosts(context, posts),
       ],
     );
   }
@@ -287,6 +273,31 @@ class ChannelScreen extends StatelessWidget {
             height: 4,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmpty(BuildContext context, String text) {
+    return Center(
+      child: Container(
+        width: 300,
+        margin: EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 40),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
