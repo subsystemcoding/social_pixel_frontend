@@ -41,7 +41,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     if (event is StartProfileInitial) {
       yield ProfileInitial();
-    }
+    } else if (event is FollowUser) {
+      await profileRepository.followUserProfile(event.profile);
+      yield UserFollowed();
+    } else if (event is MessageUser) {}
     // TODO: implement mapEventToState
   }
 }

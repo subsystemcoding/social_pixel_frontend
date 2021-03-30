@@ -18,3 +18,15 @@ class GetProfileList extends ProfileEvent {
 
   GetProfileList(this.name);
 }
+
+class FollowUser extends ProfileEvent {
+  final Profile profile;
+
+  FollowUser(this.profile);
+}
+
+class MessageUser extends ProfileEvent {
+  final Profile profile;
+
+  MessageUser(this.profile);
+}

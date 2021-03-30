@@ -28,7 +28,7 @@ class Profile {
   @HiveField(6)
   final int points;
   @HiveField(7)
-  final int followers;
+  int followers;
   @HiveField(8)
   final String createDate;
   @HiveField(9)
@@ -45,6 +45,8 @@ class Profile {
   final List<Post> postsMade;
   @HiveField(15)
   final List<Post> upvotedPosts;
+  @HiveField(16)
+  bool isFollowing;
   Profile({
     this.userId,
     this.username,

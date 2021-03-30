@@ -24,3 +24,11 @@ class ProfileError extends ProfileState {
 
   ProfileError(this.message);
 }
+
+class UserFollowed extends ProfileState {}
+
+class UserFollowedError extends ProfileState {}
+
+class MessageUserSuccess extends ProfileState {}
+
+class MessageUserError extends ProfileState {}

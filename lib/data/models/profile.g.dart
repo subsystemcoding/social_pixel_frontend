@@ -33,13 +33,13 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       subscribedChannels: (fields[13] as List)?.cast<Channel>(),
       postsMade: (fields[14] as List)?.cast<Post>(),
       upvotedPosts: (fields[15] as List)?.cast<Post>(),
-    );
+    )..isFollowing = fields[16] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Profile obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -71,7 +71,9 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       ..writeByte(14)
       ..write(obj.postsMade)
       ..writeByte(15)
-      ..write(obj.upvotedPosts);
+      ..write(obj.upvotedPosts)
+      ..writeByte(16)
+      ..write(obj.isFollowing);
   }
 
   @override

@@ -34,13 +34,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         body: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoaded) {
-              print("profile yeeted");
               profile = state.profile;
             } else if (state is ProfileLoading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            }
+            } else if (state is UserFollowed) {}
             if (profile == null) {
               return Center(
                 child: CircularProgressIndicator(),
@@ -178,7 +177,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             buildButton(context, "Stats"),
           ]
         : [
-            buildButton(context, "Follow"),
+            buildButton(
+              context,
+              this.profile.isFollowing ? "Unfollow" : "Follow",
+              onPressed: () {
+                BlocProvider.of<ProfileBloc>(context)
+                    .add(FollowUser(this.profile));
+              },
+              primaryColor: this.profile.isFollowing
+                  ? Theme.of(context).accentColor
+                  : null,
+              backgroundColor: this.profile.isFollowing
+                  ? Theme.of(context).disabledColor
+                  : null,
+            ),
             buildButton(context, "Message"),
             buildButton(context, "Stats"),
           ];
@@ -194,11 +206,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget buildButton(BuildContext context, String text,
-      {Color primaryColor, Color backgroundColor}) {
+      {Color primaryColor, Color backgroundColor, Function onPressed}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.0),
       child: TextButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: TextButton.styleFrom(
           primary: primaryColor ?? Theme.of(context).primaryColor,
           backgroundColor: backgroundColor ?? Theme.of(context).accentColor,

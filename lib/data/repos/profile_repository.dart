@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/graphql_client.dart';
+import 'package:socialpixel/data/models/auth_object.dart';
 import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -155,6 +157,9 @@ class ProfileRepository {
             )
           : [],
     );
+
+    profile.isFollowing = await _isUserFollowing(profile.username);
+    profile.followers = await _getNumOfFollowersOfUser(profile.username);
     return profile;
   }
 
@@ -165,6 +170,37 @@ class ProfileRepository {
 
       return profile;
     });
+  }
+
+  Future<int> _getNumOfFollowersOfUser(String username) async {
+    var response = await GraphqlClient().query(''' 
+    query{
+      userprofilefollowersnumberbyusername(username: "$username")
+    }
+    ''');
+
+    return jsonDecode(response)['data']['userprofilefollowersnumberbyusername'];
+  }
+
+  Future<bool> _isUserFollowing(String username) async {
+    var response = await GraphqlClient().query(''' 
+    query{
+      userprofilefollowing{
+        user{
+          username
+        }
+      }
+    }
+    ''');
+
+    var jsonResponse = jsonDecode(response)['data']['userprofilefollowing'];
+    for (var user in jsonResponse) {
+      if (user['user']['username'] == username) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   Future<List<Profile>> searchProfiles() {
@@ -198,5 +234,27 @@ class ProfileRepository {
         return profiles;
       },
     );
+  }
+
+  Future<bool> followUserProfile(Profile profile) async {
+    var modifier = !profile.isFollowing ? "ADD" : "REMOVE";
+    var response = await GraphqlClient().query('''
+    mutation{
+      userRelationship(username: "${profile.username}", modifier: $modifier){
+        success
+      }
+    }
+    ''');
+
+    var result = jsonDecode(response)['data']['userRelationship']['success'];
+
+    if (profile.isFollowing) {
+      profile.followers--;
+    } else {
+      profile.followers++;
+    }
+    profile.isFollowing = !profile.isFollowing;
+
+    return result;
   }
 }
