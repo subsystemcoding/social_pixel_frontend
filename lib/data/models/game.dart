@@ -26,7 +26,8 @@ class Game {
   String pinColorHex;
   @HiveField(7)
   Channel channel;
-
+  @HiveField(8)
+  bool isSubscribed;
   Game({
     this.gameId,
     this.image,

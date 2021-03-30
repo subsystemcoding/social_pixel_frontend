@@ -43,7 +43,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       yield ChannelInitial();
     } else if (event is SubscribeChannel) {
       try {
-        var result = await channelRepository.subscribeToChannel(
+        await channelRepository.subscribeToChannel(
             event.channel.name, event.channel.isSubscribed);
         event.channel.isSubscribed = !event.channel.isSubscribed;
         if (event.channel.isSubscribed) {

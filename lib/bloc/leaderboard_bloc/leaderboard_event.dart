@@ -4,7 +4,13 @@ part of 'leaderboard_bloc.dart';
 abstract class LeaderboardEvent {}
 
 class GetLeaderboard extends LeaderboardEvent {
-  final int leaderboardId;
+  final int gameId;
 
-  GetLeaderboard(this.leaderboardId);
+  GetLeaderboard(this.gameId);
+}
+
+class SubscribeToGame extends LeaderboardEvent {
+  final int gameId;
+
+  SubscribeToGame(this.gameId);
 }

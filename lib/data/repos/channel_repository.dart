@@ -38,6 +38,9 @@ class ChannelRepository {
             name
             description
             image
+            leaderboard{
+              id
+            }
           }
           postSet{
             postId 
@@ -86,10 +89,14 @@ class ChannelRepository {
               jsonResponse['gameSet'].map(
                 (item) {
                   return Game(
-                      gameId: int.parse(item['id']),
-                      name: item['name'],
-                      description: item['description'],
-                      image: item['image']);
+                    gameId: int.parse(item['id']),
+                    name: item['name'],
+                    description: item['description'],
+                    image: item['image'],
+                    leaderboardId: int.parse(
+                      item['leaderboard']['id'],
+                    ),
+                  );
                 },
               ),
             )

@@ -13,6 +13,8 @@ class LeaderboardLoaded extends LeaderboardState {
   LeaderboardLoaded(this.leaderboard);
 }
 
+class GameSubscribed extends LeaderboardState {}
+
 class LeaderboardError extends LeaderboardState {
   final String message;
   LeaderboardError(this.message);

@@ -8,7 +8,7 @@ import 'package:socialpixel/data/models/leaderboard.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
 
-class LeaderboardScreen extends StatelessWidget {
+class LeaderboardScreen extends StatefulWidget {
   final int id;
   final String title;
   final String description;
@@ -23,10 +23,16 @@ class LeaderboardScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _LeaderboardScreenState createState() => _LeaderboardScreenState();
+}
+
+class _LeaderboardScreenState extends State<LeaderboardScreen> {
+  Leaderboard leaderboard;
+  @override
   Widget build(BuildContext context) {
     //// Needs to add a valid leaderboardId
     //// Get Leaderboard Id from the game Screen
-    BlocProvider.of<LeaderboardBloc>(context).add(GetLeaderboard(1));
+    BlocProvider.of<LeaderboardBloc>(context).add(GetLeaderboard(widget.id));
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: Column(
@@ -57,7 +63,7 @@ class LeaderboardScreen extends StatelessWidget {
               height: coverImageHeight,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
-              image: this.coverImage,
+              image: this.widget.coverImage,
               color: Color(0x66000000),
               colorBlendMode: BlendMode.darken,
             ),
@@ -84,12 +90,13 @@ class LeaderboardScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(this.title, style: Theme.of(context).primaryTextTheme.headline2),
+          Text(this.widget.title,
+              style: Theme.of(context).primaryTextTheme.headline2),
           SizedBox(
             height: 8.0,
           ),
           Text(
-            this.description,
+            this.widget.description,
             textAlign: TextAlign.center,
             style: Theme.of(context).primaryTextTheme.subtitle1,
           ),
@@ -144,34 +151,44 @@ class LeaderboardScreen extends StatelessWidget {
             child: BlocBuilder<LeaderboardBloc, LeaderboardState>(
               builder: (context, state) {
                 if (state is LeaderboardLoaded) {
-                  return ListView.builder(
-                    padding: EdgeInsets.only(top: 12.0),
-                    itemCount: state.leaderboard.rows.length * 2,
-                    itemBuilder: (context, i) {
-                      if (i % 2 == 0 || i == 0) {
-                        int index = i ~/ 2;
-                        return buildListTile(
-                          context,
-                          name: state.leaderboard.rows[index].user.username,
-                          points: state.leaderboard.rows[index].points,
-                          image: NetworkImage(state
-                              .leaderboard.rows[index].user.userAvatarImage),
-                          rank: index + 1,
-                        );
-                      }
-                      return Divider(
-                        indent: 28.0,
-                        endIndent: 28.0,
-                      );
-                    },
-                  );
+                  leaderboard = state.leaderboard;
                 } else if (state is LeaderboardLoading) {
+                  if (leaderboard == null) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }
+
+                if (leaderboard == null) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
+                } else if (leaderboard.rows.isEmpty) {
+                  return _buildEmpty(context,
+                      "No has played the game yet. You could be the first one to complete");
                 }
-                //// No leaderboard should be displayed
-                return Container();
+                return ListView.builder(
+                  padding: EdgeInsets.only(top: 12.0),
+                  itemCount: leaderboard.rows.length * 2,
+                  itemBuilder: (context, i) {
+                    if (i % 2 == 0 || i == 0) {
+                      int index = i ~/ 2;
+                      return buildListTile(
+                        context,
+                        name: leaderboard.rows[index].user.username,
+                        points: leaderboard.rows[index].points,
+                        image: NetworkImage(
+                            leaderboard.rows[index].user.userAvatarImage),
+                        rank: index + 1,
+                      );
+                    }
+                    return Divider(
+                      indent: 28.0,
+                      endIndent: 28.0,
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -223,6 +240,31 @@ class LeaderboardScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmpty(BuildContext context, String text) {
+    return Center(
+      child: Container(
+        width: 300,
+        margin: EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 28),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

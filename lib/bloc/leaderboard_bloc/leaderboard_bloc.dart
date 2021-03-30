@@ -19,8 +19,7 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     yield LeaderboardLoading();
     try {
       if (event is GetLeaderboard) {
-        Leaderboard leaderboard =
-            await repo.fetchLeaderboard(event.leaderboardId);
+        Leaderboard leaderboard = await repo.fetchLeaderboard(event.gameId);
         yield LeaderboardLoaded(leaderboard);
       }
     } catch (e) {
