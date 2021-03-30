@@ -33,6 +33,7 @@ class _SearchScreenState extends State<SearchScreen>
     super.initState();
     BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
     BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
+    BlocProvider.of<ChannelBloc>(context).add(StartChannelIniital());
     _controller = TabController(
       vsync: this,
       length: 3,
@@ -59,6 +60,7 @@ class _SearchScreenState extends State<SearchScreen>
       body: Column(
         children: [
           SearchBar(
+            controller: textController,
             onSubmitted: () {
               searchString[_controller.index] = textController.text;
               if (_controller.index == 2) {
@@ -163,6 +165,12 @@ class _SearchScreenState extends State<SearchScreen>
           return Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state is ChannelInitial) {
+          return _buildWhenEmpty("Please search to explore some new channels");
+        }
+        if (channels.isEmpty) {
+          return _buildWhenEmpty(
+              "No channels found with the name ${searchString[2]}");
         }
         return ListView.builder(
           itemCount: channels.length * 2,
@@ -403,6 +411,31 @@ class _SearchScreenState extends State<SearchScreen>
                       style: Theme.of(context).primaryTextTheme.subtitle2),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhenEmpty(String text) {
+    return Center(
+      child: Container(
+        height: 150,
+        width: 300,
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(12.5),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
             ),
           ],
         ),

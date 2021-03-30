@@ -30,6 +30,7 @@ class ChannelScreen extends StatelessWidget {
     //final gameBloc = BlocProvider.of<GameBloc>(context);
     //getting the channel information from the bloc
     BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
+
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: BlocBuilder<ChannelBloc, ChannelState>(

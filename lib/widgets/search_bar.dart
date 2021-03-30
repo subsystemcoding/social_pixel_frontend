@@ -48,7 +48,9 @@ class _SearchBarState extends State<SearchBar> {
                 hintText: "Search",
                 hintStyle: TextStyle(color: Colors.grey),
               ),
-              onSubmitted: widget.onSubmitted(),
+              onSubmitted: (val) {
+                widget.onSubmitted();
+              },
             ),
           ),
         ],

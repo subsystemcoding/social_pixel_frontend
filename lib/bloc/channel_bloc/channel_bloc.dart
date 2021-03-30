@@ -38,6 +38,8 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       } catch (e) {
         yield ChannelError("No channel found");
       }
+    } else if (event is StartChannelIniital) {
+      yield ChannelInitial();
     }
     // TODO: implement mapEventToState
   }

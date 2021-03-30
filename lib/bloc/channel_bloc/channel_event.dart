@@ -3,6 +3,8 @@ part of 'channel_bloc.dart';
 @immutable
 abstract class ChannelEvent {}
 
+class StartChannelIniital extends ChannelEvent {}
+
 class GetChannelList extends ChannelEvent {}
 
 class SearchChannel extends ChannelEvent {
