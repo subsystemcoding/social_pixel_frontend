@@ -25,13 +25,14 @@ class ChannelAdapter extends TypeAdapter<Channel> {
       avatarImageLink: fields[5] as String,
       games: (fields[6] as List)?.cast<Game>(),
       posts: (fields[7] as List)?.cast<Post>(),
+      isSubscribed: fields[8] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Channel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class ChannelAdapter extends TypeAdapter<Channel> {
       ..writeByte(6)
       ..write(obj.games)
       ..writeByte(7)
-      ..write(obj.posts);
+      ..write(obj.posts)
+      ..writeByte(8)
+      ..write(obj.isSubscribed);
   }
 
   @override

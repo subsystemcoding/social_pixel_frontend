@@ -22,6 +22,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
         final channel = await channelRepository.fetchChannel(event.channelId);
         yield ChannelLoaded(channel);
       } catch (e) {
+        print(e);
         yield ChannelError("Channel does not exist");
       }
     } else if (event is GetChannelList) {
@@ -40,6 +41,20 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       }
     } else if (event is StartChannelIniital) {
       yield ChannelInitial();
+    } else if (event is SubscribeChannel) {
+      try {
+        var result = await channelRepository.subscribeToChannel(
+            event.channel.name, event.channel.isSubscribed);
+        event.channel.isSubscribed = !event.channel.isSubscribed;
+        if (event.channel.isSubscribed) {
+          event.channel.subscribers++;
+        } else {
+          event.channel.subscribers--;
+        }
+        yield ChannelSubscribed();
+      } catch (e) {
+        yield ChannelSubscribedError();
+      }
     }
     // TODO: implement mapEventToState
   }

@@ -18,3 +18,9 @@ class GetChannel extends ChannelEvent {
 
   GetChannel(this.channelId);
 }
+
+class SubscribeChannel extends ChannelEvent {
+  final Channel channel;
+
+  SubscribeChannel(this.channel);
+}

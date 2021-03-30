@@ -167,6 +167,8 @@ class _SearchScreenState extends State<SearchScreen>
           );
         } else if (state is ChannelInitial) {
           return _buildWhenEmpty("Please search to explore some new channels");
+        } else if (state is ChannelError) {
+          channels = [];
         }
         if (channels.isEmpty) {
           return _buildWhenEmpty(
@@ -383,7 +385,7 @@ class _SearchScreenState extends State<SearchScreen>
       onTap: () {
         Navigator.of(context).pushNamed('/channel', arguments: channelId);
       },
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
         child: Row(
           children: [
@@ -412,6 +414,9 @@ class _SearchScreenState extends State<SearchScreen>
                 ],
               ),
             ),
+            Expanded(
+              child: Container(),
+            )
           ],
         ),
       ),

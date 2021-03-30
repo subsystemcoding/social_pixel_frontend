@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/game_bloc/game_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
@@ -13,7 +14,7 @@ import 'package:socialpixel/widgets/game_widget.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 
-class ChannelScreen extends StatelessWidget {
+class ChannelScreen extends StatefulWidget {
   final int channelId;
 
   const ChannelScreen({
@@ -22,87 +23,101 @@ class ChannelScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    List<Post> posts = [];
-    List<Game> games = [];
-    //Getting the post and game blocs
-    //final gameBloc = BlocProvider.of<GameBloc>(context);
-    //getting the channel information from the bloc
-    BlocProvider.of<ChannelBloc>(context).add(GetChannel(channelId));
+  _ChannelScreenState createState() => _ChannelScreenState();
+}
 
+class _ChannelScreenState extends State<ChannelScreen> {
+  String subscribeText = "+ Subscribe";
+  Channel channel;
+  List<Post> posts = [];
+  List<Game> games = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    BlocProvider.of<ChannelBloc>(context).add(GetChannel(widget.channelId));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: BlocBuilder<ChannelBloc, ChannelState>(
         builder: (context, state) {
           if (state is ChannelLoaded) {
+            print("Channel Loaded");
+            channel = state.channel;
             posts = state.channel.posts;
             games = state.channel.games;
-            return DefaultTabController(
-              length: 2,
-              child: NestedScrollView(
-                headerSliverBuilder: (context, value) {
-                  return [
-                    //Appvar
-                    SliverAppBar(
-                      collapsedHeight: 170,
-                      flexibleSpace: Column(
-                        children: [
-                          CoverImageHeader(
-                            coverImage:
-                                NetworkImage(state.channel.coverImageLink),
-                            avatarImage:
-                                NetworkImage(state.channel.avatarImageLink),
-                            coverImageHeight: 150,
-                            avatarImageRadius: 40,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          buildInfo(
-                            context,
-                            state.channel.name,
-                            state.channel.description,
-                            state.channel.subscribers,
-                          ),
-                          CustomTabBar().tabBar(
-                            context,
-                            tabs: [
-                              Text("Posts"),
-                              Text("Rooms"),
+          } else if (state is ChannelLoading) {
+            if (channel == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }
+          return channel == null
+              ? Container()
+              : DefaultTabController(
+                  length: 2,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, value) {
+                      return [
+                        //Appvar
+                        SliverAppBar(
+                          collapsedHeight: 170,
+                          flexibleSpace: Column(
+                            children: [
+                              CoverImageHeader(
+                                coverImage:
+                                    NetworkImage(channel.coverImageLink),
+                                avatarImage:
+                                    NetworkImage(channel.avatarImageLink),
+                                coverImageHeight: 150,
+                                avatarImageRadius: 40,
+                              ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              buildInfo(
+                                context,
+                                channel.name,
+                                channel.description,
+                                channel.subscribers,
+                              ),
+                              CustomTabBar().tabBar(
+                                context,
+                                tabs: [
+                                  Text("Posts"),
+                                  Text("Rooms"),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        // title: Column(
+                        //   children: [
+                        // buildImages(context),
+                        // buildInfo(context),
+                        // SizedBox(
+                        //   height: 12.0,
+                        // ),
+                        //   ],
+                        // ),
+                      ];
+                    },
+                    body: TabBarView(
+                      children: [
+                        buildPostSection(context, channel.games, channel.posts),
+                        buildRooms(context),
+                      ],
                     ),
-                    // title: Column(
-                    //   children: [
-                    // buildImages(context),
-                    // buildInfo(context),
-                    // SizedBox(
-                    //   height: 12.0,
-                    // ),
-                    //   ],
-                    // ),
-                  ];
-                },
-                body: TabBarView(
-                  children: [
-                    buildPostSection(
-                        context, state.channel.games, state.channel.posts),
-                    buildRooms(context),
-                  ],
-                ),
-              ),
-            );
-          } else if (state is ChannelLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return Container();
+                  ),
+                );
         },
       ),
     );
@@ -205,24 +220,36 @@ class ChannelScreen extends StatelessWidget {
 
   Widget buildInfo(
       BuildContext context, String title, String description, int subscribers) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 12,
-        ),
-        Text(
-          title,
-          style: Theme.of(context).primaryTextTheme.headline3,
-        ),
-        Text(description, style: Theme.of(context).primaryTextTheme.subtitle1),
-        Text('$subscribers subscribers',
-            style: Theme.of(context).primaryTextTheme.subtitle1),
-        CustomButtons.standardButton(
-          context,
-          text: "Subscribe",
-          onPressed: () {},
-        ),
-      ],
+    return BlocBuilder<ChannelBloc, ChannelState>(
+      builder: (context, state) {
+        if (state is ChannelSubscribed) {}
+        return Column(
+          children: [
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+              title,
+              style: Theme.of(context).primaryTextTheme.headline3,
+            ),
+            Text(description,
+                style: Theme.of(context).primaryTextTheme.subtitle1),
+            Text('$subscribers subscribers',
+                style: Theme.of(context).primaryTextTheme.subtitle1),
+            CustomButtons.standardButton(
+              context,
+              text: channel.isSubscribed ? "Unsubscribe" : "Subscribe",
+              type: channel.isSubscribed
+                  ? ButtonStyleType.DisabledPurpleButton
+                  : ButtonStyleType.PurpleButton,
+              onPressed: () {
+                BlocProvider.of<ChannelBloc>(context)
+                    .add(SubscribeChannel(channel));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

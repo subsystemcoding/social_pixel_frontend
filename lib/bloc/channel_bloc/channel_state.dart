@@ -19,6 +19,10 @@ class ChannelListLoaded extends ChannelState {
   ChannelListLoaded(this.channels);
 }
 
+class ChannelSubscribed extends ChannelState {}
+
+class ChannelSubscribedError extends ChannelState {}
+
 class ChannelError extends ChannelState {
   final String message;
 

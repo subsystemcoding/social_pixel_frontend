@@ -17,7 +17,7 @@ class Channel {
   @HiveField(2)
   final String description;
   @HiveField(3)
-  final int subscribers;
+  int subscribers;
   @HiveField(4)
   final String coverImageLink;
   @HiveField(5)
@@ -26,6 +26,8 @@ class Channel {
   final List<Game> games;
   @HiveField(7)
   final List<Post> posts;
+  @HiveField(8)
+  bool isSubscribed;
 
   Channel({
     this.id,
@@ -36,6 +38,7 @@ class Channel {
     this.avatarImageLink,
     this.games,
     this.posts,
+    this.isSubscribed,
   });
 
   Channel copyWith({
@@ -47,6 +50,7 @@ class Channel {
     String avatarImageLink,
     List<Game> games,
     List<Post> posts,
+    bool isSubscribed,
   }) {
     return Channel(
       id: id ?? this.id,
@@ -57,6 +61,7 @@ class Channel {
       avatarImageLink: avatarImageLink ?? this.avatarImageLink,
       games: games ?? this.games,
       posts: posts ?? this.posts,
+      isSubscribed: isSubscribed ?? this.isSubscribed,
     );
   }
 
@@ -70,6 +75,7 @@ class Channel {
       'avatarImageLink': avatarImageLink,
       'games': games?.map((x) => x?.toMap())?.toList(),
       'posts': posts?.map((x) => x?.toMap())?.toList(),
+      'isSubscribed': isSubscribed,
     };
   }
 
@@ -85,6 +91,7 @@ class Channel {
       avatarImageLink: map['avatarImageLink'],
       games: List<Game>.from(map['games']?.map((x) => Game.fromMap(x))),
       posts: List<Post>.from(map['posts']?.map((x) => Post.fromMap(x))),
+      isSubscribed: map['isSubscribed'],
     );
   }
 
@@ -95,7 +102,7 @@ class Channel {
 
   @override
   String toString() {
-    return 'Channel(id: $id, name: $name, description: $description, subscribers: $subscribers, coverImageLink: $coverImageLink, avatarImageLink: $avatarImageLink, games: $games, posts: $posts)';
+    return 'Channel(id: $id, name: $name, description: $description, subscribers: $subscribers, coverImageLink: $coverImageLink, avatarImageLink: $avatarImageLink, games: $games, posts: $posts, isSubscribed: $isSubscribed)';
   }
 
   @override
@@ -110,7 +117,8 @@ class Channel {
         o.coverImageLink == coverImageLink &&
         o.avatarImageLink == avatarImageLink &&
         listEquals(o.games, games) &&
-        listEquals(o.posts, posts);
+        listEquals(o.posts, posts) &&
+        o.isSubscribed == isSubscribed;
   }
 
   @override
@@ -122,6 +130,7 @@ class Channel {
         coverImageLink.hashCode ^
         avatarImageLink.hashCode ^
         games.hashCode ^
-        posts.hashCode;
+        posts.hashCode ^
+        isSubscribed.hashCode;
   }
 }

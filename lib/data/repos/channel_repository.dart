@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:socialpixel/data/graphql_client.dart';
+import 'package:socialpixel/data/models/auth_object.dart';
 import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/location.dart';
@@ -9,6 +10,14 @@ import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/data/test_data/test_data.dart';
 
 class ChannelRepository {
+  static final ChannelRepository _singleton = ChannelRepository._internal();
+
+  factory ChannelRepository() {
+    return _singleton;
+  }
+
+  ChannelRepository._internal();
+
   Future<Channel> fetchChannel(int channelId) async {
     var authObject = await AuthRepository().getAuth();
     var username = authObject.username;
@@ -58,11 +67,18 @@ class ChannelRepository {
 
     var jsonResponse = jsonDecode(response)['data']['channel'];
     int subscribers = jsonResponse['subscribers'].length;
+    List<String> _listsubscribers = List<String>.from(
+            jsonResponse['subscribers']
+                ?.map((subscriber) => subscriber['user']["username"])) ??
+        [];
+
     return Channel(
       id: channelId,
       name: jsonResponse['name'],
       description: jsonResponse['description'],
       subscribers: subscribers,
+      isSubscribed:
+          _listsubscribers.contains(authObject.username) ? true : false,
       coverImageLink: jsonResponse['coverImage'],
       avatarImageLink: jsonResponse['avatar'],
       games: jsonResponse['gameSet'].isNotEmpty
@@ -81,7 +97,7 @@ class ChannelRepository {
       posts: jsonResponse['postSet'].isEmpty
           ? []
           : List<Post>.from(
-              jsonResponse.map(
+              jsonResponse['postSet'].map(
                 (item) {
                   Post post = Post(
                     upvotes: item['upvotes'].length,
@@ -116,7 +132,8 @@ class ChannelRepository {
     );
   }
 
-  Future<bool> subscribeToChannel(String channelName, String modifier) async {
+  Future<bool> subscribeToChannel(String channelName, bool isSub) async {
+    var modifier = isSub ? "REMOVE" : "ADD";
     var response = await GraphqlClient().query('''
       mutation{
         channelSubscription(name: "$channelName",modifier: $modifier){
@@ -124,6 +141,7 @@ class ChannelRepository {
         }
       }
       ''');
+
     return jsonDecode(response)['data']['success'];
   }
 
