@@ -36,9 +36,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             if (state is ProfileLoaded) {
               profile = state.profile;
             } else if (state is ProfileLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              if (profile == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             } else if (state is UserFollowed) {}
             if (profile == null) {
               return Center(
@@ -191,8 +193,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ? Theme.of(context).disabledColor
                   : null,
             ),
-            buildButton(context, "Message"),
-            buildButton(context, "Stats"),
+            buildButton(context, "Message",
+                primaryColor: Theme.of(context).primaryColor, onPressed: () {
+              BlocProvider.of<ProfileBloc>(context)
+                  .add(MessageUser(this.profile));
+            }),
+            buildButton(context, "Stats",
+                primaryColor: Theme.of(context).primaryColor, onPressed: () {}),
           ];
 
     return Container(

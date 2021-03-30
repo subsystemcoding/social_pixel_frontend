@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
 
@@ -47,6 +48,8 @@ class Profile {
   final List<Post> upvotedPosts;
   @HiveField(16)
   bool isFollowing;
+  @HiveField(17)
+  List<Chatroom> chatrooms;
   Profile({
     this.userId,
     this.username,
@@ -64,6 +67,8 @@ class Profile {
     this.subscribedChannels,
     this.postsMade,
     this.upvotedPosts,
+    this.isFollowing,
+    this.chatrooms,
   });
 
   Profile copyWith({
@@ -83,6 +88,8 @@ class Profile {
     List<Channel> subscribedChannels,
     List<Post> postsMade,
     List<Post> upvotedPosts,
+    bool isFollowing,
+    List<Chatroom> chatrooms,
   }) {
     return Profile(
       userId: userId ?? this.userId,
@@ -101,6 +108,8 @@ class Profile {
       subscribedChannels: subscribedChannels ?? this.subscribedChannels,
       postsMade: postsMade ?? this.postsMade,
       upvotedPosts: upvotedPosts ?? this.upvotedPosts,
+      isFollowing: isFollowing ?? this.isFollowing,
+      chatrooms: chatrooms ?? this.chatrooms,
     );
   }
 
@@ -123,6 +132,8 @@ class Profile {
           subscribedChannels?.map((x) => x?.toMap())?.toList(),
       'postsMade': postsMade?.map((x) => x?.toMap())?.toList(),
       'upvotedPosts': upvotedPosts?.map((x) => x?.toMap())?.toList(),
+      'isFollowing': isFollowing,
+      'chatrooms': chatrooms?.map((x) => x?.toMap())?.toList(),
     };
   }
 
@@ -149,6 +160,9 @@ class Profile {
       postsMade: List<Post>.from(map['postsMade']?.map((x) => Post.fromMap(x))),
       upvotedPosts:
           List<Post>.from(map['upvotedPosts']?.map((x) => Post.fromMap(x))),
+      isFollowing: map['isFollowing'],
+      chatrooms: List<Chatroom>.from(
+          map['chatrooms']?.map((x) => Chatroom.fromMap(x))),
     );
   }
 
@@ -159,7 +173,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels, postsMade: $postsMade, upvotedPosts: $upvotedPosts)';
+    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels, postsMade: $postsMade, upvotedPosts: $upvotedPosts, isFollowing: $isFollowing, chatrooms: $chatrooms)';
   }
 
   @override
@@ -182,7 +196,9 @@ class Profile {
         listEquals(o.subscribedGames, subscribedGames) &&
         listEquals(o.subscribedChannels, subscribedChannels) &&
         listEquals(o.postsMade, postsMade) &&
-        listEquals(o.upvotedPosts, upvotedPosts);
+        listEquals(o.upvotedPosts, upvotedPosts) &&
+        o.isFollowing == isFollowing &&
+        listEquals(o.chatrooms, chatrooms);
   }
 
   @override
@@ -202,6 +218,8 @@ class Profile {
         subscribedGames.hashCode ^
         subscribedChannels.hashCode ^
         postsMade.hashCode ^
-        upvotedPosts.hashCode;
+        upvotedPosts.hashCode ^
+        isFollowing.hashCode ^
+        chatrooms.hashCode;
   }
 }

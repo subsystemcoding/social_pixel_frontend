@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/auth_object.dart';
 import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
@@ -55,6 +57,21 @@ class ProfileRepository {
           id
           name 
         }
+        subscribed{
+          id
+          name
+          avatar
+        }
+        gameSet{
+          id
+          name
+          leaderboard{
+            id
+          }
+          channel{
+            name
+          }
+        }
         
       }
     }
@@ -82,14 +99,31 @@ class ProfileRepository {
           (item) => Post(postId: int.parse(item['postId'])),
         ),
       ),
-      subscribedChannels: List<Channel>.from(
+      chatrooms: List<Chatroom>.from(
         jsonResponse['memberIn']?.map(
-          (item) => Channel(
+          (item) => Chatroom(
             id: int.parse(item['id']),
             name: item['name'],
           ),
         ),
       ),
+      subscribedChannels: List<Channel>.from(
+        jsonResponse['subscribed']?.map(
+          (item) => Channel(
+            id: int.parse(item['id']),
+            name: item['name'],
+            avatarImageLink: item['avatar'],
+          ),
+        ),
+      ),
+      subscribedGames: List<Game>.from(jsonResponse['gameSet']?.map(
+        (item) => Game(
+          gameId: int.parse(item['id']),
+          channel: Channel(name: item['channel']['name']),
+          name: item['name'],
+          leaderboardId: int.parse(item['leaderboard']['id']),
+        ),
+      )),
     );
     return profile;
   }
@@ -146,10 +180,10 @@ class ProfileRepository {
               ),
             )
           : [],
-      subscribedChannels: jsonResponse['memberIn'] != null
-          ? List<Channel>.from(
+      chatrooms: jsonResponse['memberIn'] != null
+          ? List<Chatroom>.from(
               jsonResponse['memberIn'].map(
-                (item) => Channel(
+                (item) => Chatroom(
                   id: int.parse(item['id']),
                   name: item['name'],
                 ),
@@ -256,5 +290,31 @@ class ProfileRepository {
     profile.isFollowing = !profile.isFollowing;
 
     return result;
+  }
+
+  Future<int> _getChatroom(Profile profile) async {
+    var authObject = await AuthRepository().getAuth();
+    for (var chatroom in profile.chatrooms) {
+      if (chatroom.name == "${authObject.username}${profile.username}" ||
+          chatroom.name == "${profile.username}${authObject.username}") {
+        return chatroom.id;
+      }
+    }
+    return null;
+  }
+
+  Future<int> createChatroom(Profile profile) async {
+    var authObject = await AuthRepository().getAuth();
+    var chatroomId = await _getChatroom(profile);
+    if (chatroomId == null) {
+      var response = await GraphqlClient().query('''
+    mutation{
+      createChatroom(name: "${authObject.username}${profile.username}", members:["${authObject.username}", "${profile.username}"]){
+        success
+      }
+    }
+    ''');
+    }
+    return chatroomId;
   }
 }
