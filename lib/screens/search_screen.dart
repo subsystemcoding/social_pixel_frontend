@@ -31,9 +31,9 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ProfileBloc>(context).add(GetProfileList());
     BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
     BlocProvider.of<ChannelBloc>(context).add(StartChannelIniital());
+    BlocProvider.of<ProfileBloc>(context).add(StartProfileInitial());
     _controller = TabController(
       vsync: this,
       length: 3,
@@ -66,6 +66,10 @@ class _SearchScreenState extends State<SearchScreen>
               if (_controller.index == 2) {
                 BlocProvider.of<ChannelBloc>(context).add(
                   SearchChannel(textController.text),
+                );
+              } else if (_controller.index == 0) {
+                BlocProvider.of<ProfileBloc>(context).add(
+                  GetProfileList(textController.text),
                 );
               }
             },
@@ -106,7 +110,16 @@ class _SearchScreenState extends State<SearchScreen>
           return Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state is ProfileInitial) {
+          return _buildWhenEmpty("Please search to explore some profiles");
+        } else if (state is ChannelError) {
+          profiles = [];
         }
+        if (profiles.isEmpty) {
+          return _buildWhenEmpty(
+              "No profiles found with the name ${searchString[0]}");
+        }
+
         return ListView.builder(
           itemCount: profiles.length * 2,
           itemBuilder: (context, i) {
@@ -114,7 +127,6 @@ class _SearchScreenState extends State<SearchScreen>
               int index = i == 0 ? i : (i ~/ 2);
               return buildUser(
                 context,
-                userId: profiles[index].userId,
                 username: profiles[index].username,
                 description: profiles[index].description,
                 image: NetworkImage(profiles[index].userAvatarImage),
@@ -196,7 +208,6 @@ class _SearchScreenState extends State<SearchScreen>
 
   Widget buildUser(
     BuildContext context, {
-    int userId,
     String username,
     String description,
     ImageProvider<Object> image,
@@ -206,7 +217,7 @@ class _SearchScreenState extends State<SearchScreen>
       onTap: () {
         Navigator.of(context).pushNamed(
           '/profile',
-          arguments: userId,
+          arguments: username,
         );
       },
       child: Padding(

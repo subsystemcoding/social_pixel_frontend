@@ -11,4 +11,10 @@ class GetProfile extends ProfileEvent {
 
 class GetCurrentProfile extends ProfileEvent {}
 
-class GetProfileList extends ProfileEvent {}
+class StartProfileInitial extends ProfileEvent {}
+
+class GetProfileList extends ProfileEvent {
+  final String name;
+
+  GetProfileList(this.name);
+}

@@ -93,32 +93,30 @@ class ProfileRepository {
   }
 
   Future<Profile> fetchProfile(String username, {bool isUser = false}) async {
-    if (DebugMode.debug) {
-      return _fetchProfileDebug();
-    }
-
     final authObject = await AuthRepository().getAuth();
     if (username == authObject.username) {
       return fetchCurrentProfile();
     }
+
     var response = await _client.query(''' 
     query {
       userprofile(username: "$username"){
         user{
           username
-          email
           dateJoined
+          email
         }
         bio
-        visibility
         image
-        postedBy {
+        points
+        coverImage 
+        postedBy{
           postId
-          image150x150
+          image200x200
         }
         memberIn{
           id
-          name 
+          name
         }
         
       }
@@ -130,30 +128,32 @@ class ProfileRepository {
       email: jsonResponse['user']['email'],
       createDate: jsonResponse['user']['dateJoined'],
       description: jsonResponse['bio'],
+      points: jsonResponse['points'],
+      followers: 0,
       userAvatarImage: jsonResponse['image'],
-      postsMade: List<Post>.from(
-        jsonResponse['postedBy']?.map(
-          (item) {
-            return Post(
-              postId: int.parse(item['postId']),
-              postImageLink: item['image150x150'],
-            );
-          },
-        ),
-      ),
-      upvotedPosts: List<Post>.from(
-        jsonResponse['upvotedBy']?.map(
-          (item) => Post(postId: int.parse(item['postId'])),
-        ),
-      ),
-      subscribedChannels: List<Channel>.from(
-        jsonResponse['memberIn']?.map(
-          (item) => Channel(
-            id: int.parse(item['id']),
-            name: item['name'],
-          ),
-        ),
-      ),
+      userCoverImage: jsonResponse['coverImage'],
+      postsMade: jsonResponse['postedBy'] != null
+          ? List<Post>.from(
+              jsonResponse['postedBy'].map(
+                (item) {
+                  return Post(
+                    postId: int.parse(item['postId']),
+                    postImageLink: item['image200x200'],
+                  );
+                },
+              ),
+            )
+          : [],
+      subscribedChannels: jsonResponse['memberIn'] != null
+          ? List<Channel>.from(
+              jsonResponse['memberIn'].map(
+                (item) => Channel(
+                  id: int.parse(item['id']),
+                  name: item['name'],
+                ),
+              ),
+            )
+          : [],
     );
     return profile;
   }
@@ -165,6 +165,10 @@ class ProfileRepository {
 
       return profile;
     });
+  }
+
+  Future<List<Profile>> searchProfiles() {
+    return null;
   }
 
   Future<List<Game>> updateSubscribedGames() {

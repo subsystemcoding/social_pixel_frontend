@@ -20,6 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       if (event is GetProfile) {
         final profile = await profileRepository.fetchProfile(event.username);
+        print("Going to be yeeted");
         yield ProfileLoaded(profile);
       }
       if (event is GetCurrentProfile) {
@@ -31,11 +32,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     try {
       if (event is GetProfileList) {
-        final profiles = await profileRepository.fetchProfileList();
-        yield ProfileListLoaded(profiles);
+        final profiles = await profileRepository.fetchProfile(event.name);
+        yield ProfileListLoaded([profiles]);
       }
     } catch (e) {
+      print(e);
       yield ProfileError("No users found");
+    }
+    if (event is StartProfileInitial) {
+      yield ProfileInitial();
     }
     // TODO: implement mapEventToState
   }

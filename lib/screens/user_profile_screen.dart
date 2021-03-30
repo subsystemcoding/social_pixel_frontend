@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/models/profile.dart';
 import 'package:socialpixel/widgets/verified_widget.dart';
 import 'package:tinycolor/tinycolor.dart';
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   final String username;
   const UserProfileScreen({
     Key key,
@@ -13,40 +15,55 @@ class UserProfileScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _UserProfileScreenState createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  bool isUser = false;
+  Profile profile;
+
+  @override
   Widget build(BuildContext context) {
-    bool isUser = false;
-    if (username == null) {
+    if (widget.username == null) {
       BlocProvider.of<ProfileBloc>(context).add(GetCurrentProfile());
       isUser = true;
     }
-    BlocProvider.of<ProfileBloc>(context).add(GetProfile(username));
+    BlocProvider.of<ProfileBloc>(context).add(GetProfile(widget.username));
     return Container(
       child: Scaffold(
         body: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoaded) {
+              print("profile yeeted");
+              profile = state.profile;
+            } else if (state is ProfileLoading) {
               return Center(
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, bool) {
-                    return [
-                      SliverAppBar(
-                        expandedHeight: 200,
-                        flexibleSpace: buildImages(
-                          context,
-                          state.profile.userCoverImage,
-                          state.profile.userAvatarImage,
-                        ),
-                      ),
-                    ];
-                  },
-                  body: Column(
-                    children: [
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (profile == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Center(
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: 200,
+                    flexibleSpace: buildImages(
+                      context,
+                      profile.userCoverImage,
+                      profile.userAvatarImage,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
                       buildInfo(
                         context,
-                        state.profile.username,
-                        state.profile.isVerified,
-                        state.profile.points.toString(),
-                        state.profile.followers.toString(),
+                        profile.username,
+                        profile.points.toString(),
+                        profile.followers.toString(),
                       ),
                       SizedBox(
                         height: 12.0,
@@ -56,13 +73,16 @@ class UserProfileScreen extends StatelessWidget {
                         height: 12.0,
                       ),
                       buildPosts(context),
-                    ],
+                    ]),
                   ),
-                ),
-              );
-            }
-            return Center(
-              child: CircularProgressIndicator(),
+                ],
+
+                // body: Column(
+                //   children: [
+
+                //   ],
+                // ),
+              ),
             );
           },
         ),
@@ -105,10 +125,10 @@ class UserProfileScreen extends StatelessWidget {
   Widget buildInfo(
     BuildContext context,
     String username,
-    bool isVerified,
     String points,
-    String followers,
-  ) {
+    String followers, {
+    bool isVerified = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -165,8 +185,8 @@ class UserProfileScreen extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 28.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Wrap(
+        alignment: WrapAlignment.center,
         //mainAxisSize: MainAxisSize.min,
         children: buttons,
       ),
@@ -198,71 +218,34 @@ class UserProfileScreen extends StatelessWidget {
 
   Widget buildPosts(context) {
     List<Widget> posts = [];
-    BlocProvider.of<PostBloc>(context).add(FetchPosts());
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "Pictures Posted",
-            style: Theme.of(context).primaryTextTheme.headline4,
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Expanded(
-            child: BlocBuilder<PostBloc, PostState>(
-              builder: (context, state) {
-                if (state is PostLoaded) {
-                  print(state);
-                  posts = state.posts
-                      .map((post) =>
-                          buildPostImage(NetworkImage(post.postImageLink)))
-                      .toList();
-                } else if (state is PostLoading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 1.0,
-                  crossAxisSpacing: 1.0,
-                  children: posts,
-                );
-              },
-            ),
-          ),
-        ]),
-      ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          "Pictures Posted",
+          style: Theme.of(context).primaryTextTheme.headline4,
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          mainAxisSpacing: 1.0,
+          crossAxisSpacing: 1.0,
+          children:
+              profile.postsMade.map((post) => buildPostImage(post)).toList(),
+        ),
+      ]),
     );
   }
 
-  Widget buildPostsRow() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        buildPostImage(
-          NetworkImage(
-              "https://i.pinimg.com/originals/5b/b4/8b/5bb48b07fa6e3840bb3afa2bc821b882.jpg"),
-        ),
-        buildPostImage(
-          NetworkImage(
-              "https://i.pinimg.com/originals/5b/b4/8b/5bb48b07fa6e3840bb3afa2bc821b882.jpg"),
-        ),
-        buildPostImage(
-          NetworkImage(
-              "https://i.pinimg.com/originals/5b/b4/8b/5bb48b07fa6e3840bb3afa2bc821b882.jpg"),
-        ),
-      ],
-    );
-  }
-
-  Widget buildPostImage(ImageProvider<Object> image) {
+  Widget buildPostImage(Post post) {
     return GridTile(
       child: Image(
         fit: BoxFit.cover,
-        image: image,
+        image: NetworkImage(post.postImageLink),
       ),
     );
   }
