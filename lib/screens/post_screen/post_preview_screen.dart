@@ -18,7 +18,8 @@ import 'package:socialpixel/widgets/raised_container.dart';
 class PostPreviewScreen extends StatefulWidget {
   final String path;
   final bool isCamera;
-  const PostPreviewScreen({Key key, this.path, this.isCamera})
+  final imageLib.Image image;
+  const PostPreviewScreen({Key key, this.path, this.isCamera, this.image})
       : super(key: key);
 
   @override
@@ -35,15 +36,21 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
   @override
   void initState() {
     super.initState();
-    this.imageFile = File(this.widget.path);
-    this.imageFile.readAsBytes().then((bytes) async {
-      image = imageLib.decodeImage(bytes);
-      getInfo();
-      BlocProvider.of<TfliteBloc>(this.context)
-          .add(CheckImageForPerson(this.imageFile));
-    });
     gotInfo = false;
-    imageFile = File(widget.path);
+    if (widget.image != null) {
+      image = widget.image;
+      getInfo();
+    } else {
+      this.imageFile = File(this.widget.path);
+      this.imageFile.readAsBytes().then((bytes) async {
+        image = imageLib.decodeImage(bytes);
+        getInfo();
+        BlocProvider.of<TfliteBloc>(this.context)
+            .add(CheckImageForPerson(this.imageFile));
+      });
+
+      imageFile = File(widget.path);
+    }
   }
 
   @override

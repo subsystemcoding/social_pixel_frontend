@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:image/image.dart' as imageLib;
+import 'package:socialpixel/bloc/tflite_bloc/tflite_bloc.dart';
 import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -22,6 +24,7 @@ enum LoadLocation {
 
 class PostDetailScreen extends StatefulWidget {
   final imageLib.Image image;
+  final String path;
   //location of the picture
   final Location location;
   //date time when the photo was taken
@@ -34,6 +37,7 @@ class PostDetailScreen extends StatefulWidget {
     this.location,
     this.photoDate,
     this.isCamera,
+    this.path,
   }) : super(key: key);
 
   @override
@@ -45,11 +49,31 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   String caption;
   Location foundLocation;
   DateTime foundTime;
+  File imageFile;
   LoadLocation loaded;
+  bool isVisible = true;
+  bool isCapture = false;
+  imageLib.Image image;
+  Location location;
+  DateTime date;
+  bool gotInfo = false;
 
   @override
   void initState() {
     super.initState();
+    //getting an image directly mean
+    //the image is from the post preview
+    // else its from the camera
+    if (widget.image != null) {
+      isVisible = true;
+      isCapture = false;
+    } else if (widget.path != null) {
+      isVisible = false;
+      isCapture = true;
+      getInfo();
+      BlocProvider.of<TfliteBloc>(this.context)
+          .add(CheckImageForPerson(this.imageFile));
+    }
     loaded = LoadLocation.NotLoading;
     caption = '';
   }
@@ -57,92 +81,161 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("New Post"),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        centerTitle: true,
-      ),
-      body: BlocListener<PostBloc, PostState>(
-        listener: (context, state) {
-          // TODO: implement listener
-          if (state is PostSent) {
-            if (state.value == PostSending.Successful) {
-              _showDialog(
-                context,
-                title: "Successful",
-                text: "Post Successfully Submitted",
+        appBar: AppBar(
+          title: Text("New Post"),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
+        ),
+        body: BlocListener<TfliteBloc, TfliteState>(
+          listener: (context, state) {
+            if (state is ImageChecking) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 12.0),
+                        Text(
+                          "Validating Image for humans",
+                          style: Theme.of(context).textTheme.headline6,
+                        )
+                      ],
+                    ),
+                  );
+                },
               );
-            } else if (state.value == PostSending.Unsuccessful) {
-              _showDialog(
-                context,
-                title: "Unsuccessful",
-                text: "Post was not submitted. Please try again",
-              );
-            } else if (state.value == PostSending.NoInternet) {
-              _showDialog(
-                context,
-                title: "No Internet",
-                text:
-                    "No connection to internet. Post will be submitted when online",
-              );
+            } else if (state is ImageChecked) {
+              if (state.image != null) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return _buildDialog(state.image, this.context);
+                  },
+                );
+              }
             }
-          }
-        },
-        child: ListView(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          },
+          child: BlocListener<PostBloc, PostState>(
+            listener: (context, state) {
+              // TODO: implement listener
+              if (state is PostSent) {
+                if (state.value == PostSending.Successful) {
+                  _showDialog(
+                    context,
+                    title: "Successful",
+                    text: "Post Successfully Submitted",
+                  );
+                } else if (state.value == PostSending.Unsuccessful) {
+                  _showDialog(
+                    context,
+                    title: "Unsuccessful",
+                    text: "Post was not submitted. Please try again",
+                  );
+                } else if (state.value == PostSending.NoInternet) {
+                  _showDialog(
+                    context,
+                    title: "No Internet",
+                    text:
+                        "No connection to internet. Post will be submitted when online",
+                  );
+                }
+              }
+            },
+            child: ListView(
               children: [
-                Image(
-                  image: MemoryImage(imageLib.encodeJpg(this.widget.image)),
-                ),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildAlignedText(context, "Caption"),
-                SizedBox(height: 12.0),
-                //text box
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black,
-                        width: 1,
-                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Image(
+                      image: MemoryImage(imageLib.encodeJpg(this.widget.image)),
                     ),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Write a caption...',
-                      border: InputBorder.none,
+                    SizedBox(
+                      height: 12.0,
                     ),
-                    onSubmitted: (value) {
-                      setState(() {
-                        this.caption = value;
-                      });
-                    },
-                  ),
+                    _buildAlignedText(context, "Caption"),
+                    SizedBox(height: 12.0),
+                    //text box
+                    ExpansionPanelList(
+                      children: [
+                        ExpansionPanel(
+                          headerBuilder: (context, isExpanded) {
+                            return CheckboxListTile(
+                              value: isVisible,
+                              onChanged: (val) {
+                                setState(() {
+                                  isVisible = val;
+                                });
+                              },
+                            );
+                          },
+                          body: Column(),
+                        ),
+                        ExpansionPanel(
+                          headerBuilder: (context, isExpanded) {
+                            return CheckboxListTile(
+                              value: isCapture,
+                              onChanged: (val) {
+                                setState(() {
+                                  isVisible = val;
+                                });
+                              },
+                            );
+                          },
+                          body: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Write a caption...',
+                                    border: InputBorder.none,
+                                  ),
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      this.caption = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 12.0),
+                              _editPictureButton(context),
+                              SizedBox(height: 12.0),
+                              _buildLocation(context),
+                              SizedBox(
+                                height: 12.0,
+                              ),
+                              _buildAddLocationButton(context),
+                              SizedBox(
+                                height: 12.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    _buildButton("Post", () {
+                      onPressedPostHandler(context);
+                    }),
+                  ],
                 ),
-                SizedBox(height: 12.0),
-                _buildLocation(context),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildAddLocationButton(context),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildButton("Post", () {
-                  onPressedPostHandler(context);
-                }),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   void _showDialog(context, {String title, String text}) {
@@ -162,6 +255,15 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             ],
           );
         });
+  }
+
+  Widget _editPictureButton(BuildContext context) {
+    return _buildButton("Edit Picture", () {
+      Navigator.of(context).pushNamed('/post_preview', arguments: {
+        'isCamera': widget.isCamera,
+        'image': this.image,
+      });
+    });
   }
 
   Widget _buildAddLocationButton(BuildContext context) {
@@ -375,5 +477,60 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     setState(() {
       loaded = LoadLocation.NotLoading;
     });
+  }
+
+  void getInfo() async {
+    final data = await readExifFromBytes(imageLib.encodeJpg(this.image));
+    if (data.containsKey('Image DateTime')) {
+      this.date = Converter.exifToDate(data);
+    }
+    if (data.containsKey('GPS GPSLatitude')) {
+      this.location = Converter.exifToLocation(data);
+    }
+
+    setState(() {
+      gotInfo = true;
+    });
+  }
+
+  Widget _buildDialog(imageLib.Image image, BuildContext context) {
+    Uint8List imageBytes = imageLib.encodeJpg(image);
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AlertDialog(
+        contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+        title: Text("Found Person"),
+        content: Container(
+          height: 310,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.memory(
+                imageBytes,
+                height: 220,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                  "It is not allowed to post a picture of any person in this app. Please take another picture.")
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: Text(
+              "Ok",
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

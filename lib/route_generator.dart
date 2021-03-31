@@ -109,6 +109,7 @@ class RouteGenerator {
             return PostPreviewScreen(
               path: args['path'],
               isCamera: args['isCamera'],
+              image: args['image'],
             );
           }
           return null;
