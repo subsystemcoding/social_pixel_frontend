@@ -12,19 +12,22 @@ class Chatroom {
   @HiveField(0)
   final int id;
   @HiveField(1)
-  final String name;
+  String name;
   @HiveField(3)
   final List<Message> messages;
   @HiveField(4)
   String messageSeenTimestamp;
   @HiveField(5)
   int newMessages;
+  @HiveField(6)
+  String userImage;
   Chatroom({
     this.id,
     this.name,
     this.messages,
     this.messageSeenTimestamp,
     this.newMessages,
+    this.userImage,
   });
 
   Chatroom copyWith({
@@ -33,6 +36,7 @@ class Chatroom {
     List<Message> messages,
     String messageSeenTimestamp,
     int newMessages,
+    String userImage,
   }) {
     return Chatroom(
       id: id ?? this.id,
@@ -40,6 +44,7 @@ class Chatroom {
       messages: messages ?? this.messages,
       messageSeenTimestamp: messageSeenTimestamp ?? this.messageSeenTimestamp,
       newMessages: newMessages ?? this.newMessages,
+      userImage: userImage ?? this.userImage,
     );
   }
 
@@ -50,6 +55,7 @@ class Chatroom {
       'messages': messages?.map((x) => x?.toMap())?.toList(),
       'messageSeenTimestamp': messageSeenTimestamp,
       'newMessages': newMessages,
+      'userImage': userImage,
     };
   }
 
@@ -63,6 +69,7 @@ class Chatroom {
           List<Message>.from(map['messages']?.map((x) => Message.fromMap(x))),
       messageSeenTimestamp: map['messageSeenTimestamp'],
       newMessages: map['newMessages'],
+      userImage: map['userImage'],
     );
   }
 
@@ -73,7 +80,7 @@ class Chatroom {
 
   @override
   String toString() {
-    return 'Chatroom(id: $id, name: $name, messages: $messages, messageSeenTimestamp: $messageSeenTimestamp, newMessages: $newMessages)';
+    return 'Chatroom(id: $id, name: $name, messages: $messages, messageSeenTimestamp: $messageSeenTimestamp, newMessages: $newMessages, userImage: $userImage)';
   }
 
   @override
@@ -85,7 +92,8 @@ class Chatroom {
         o.name == name &&
         listEquals(o.messages, messages) &&
         o.messageSeenTimestamp == messageSeenTimestamp &&
-        o.newMessages == newMessages;
+        o.newMessages == newMessages &&
+        o.userImage == userImage;
   }
 
   @override
@@ -94,6 +102,7 @@ class Chatroom {
         name.hashCode ^
         messages.hashCode ^
         messageSeenTimestamp.hashCode ^
-        newMessages.hashCode;
+        newMessages.hashCode ^
+        userImage.hashCode;
   }
 }

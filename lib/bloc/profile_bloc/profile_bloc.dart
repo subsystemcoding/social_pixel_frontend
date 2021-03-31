@@ -42,9 +42,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if (event is StartProfileInitial) {
       yield ProfileInitial();
     } else if (event is FollowUser) {
-      await profileRepository.followUserProfile(event.profile);
-      yield UserFollowed();
-    } else if (event is MessageUser) {}
+      try {
+        await profileRepository.followUserProfile(event.profile);
+        yield UserFollowed();
+      } catch (e) {
+        print("UserFolowedError");
+        print(e);
+        yield UserFollowedError();
+      }
+    } else if (event is MessageUser) {
+      try {
+        int chatroomId = await profileRepository.createChatroom(event.profile);
+        yield MessageUserSuccess(chatroomId);
+      } catch (e) {
+        print("MessageUserError");
+        print(e);
+        yield MessageUserError();
+      }
+    }
     // TODO: implement mapEventToState
   }
 }

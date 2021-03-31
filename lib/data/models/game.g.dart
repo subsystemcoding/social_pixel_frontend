@@ -25,13 +25,13 @@ class GameAdapter extends TypeAdapter<Game> {
       mapPosts: (fields[5] as List)?.cast<MapPost>(),
       pinColorHex: fields[6] as String,
       channel: fields[7] as Channel,
-    );
+    )..isSubscribed = fields[8] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Game obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.gameId)
       ..writeByte(1)
@@ -47,7 +47,9 @@ class GameAdapter extends TypeAdapter<Game> {
       ..writeByte(6)
       ..write(obj.pinColorHex)
       ..writeByte(7)
-      ..write(obj.channel);
+      ..write(obj.channel)
+      ..writeByte(8)
+      ..write(obj.isSubscribed);
   }
 
   @override

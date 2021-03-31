@@ -29,6 +29,10 @@ class UserFollowed extends ProfileState {}
 
 class UserFollowedError extends ProfileState {}
 
-class MessageUserSuccess extends ProfileState {}
+class MessageUserSuccess extends ProfileState {
+  final int chatroomId;
+
+  MessageUserSuccess(this.chatroomId);
+}
 
 class MessageUserError extends ProfileState {}

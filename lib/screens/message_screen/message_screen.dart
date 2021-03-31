@@ -74,6 +74,10 @@ class _MessageScreenState extends State<MessageScreen> {
       builder: (context, state) {
         if (state is ChatroomLoaded) {
           chatroom = state.chatroom;
+        } else if (state is MessageLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
         return chatroom == null
             ? Container()
@@ -84,14 +88,11 @@ class _MessageScreenState extends State<MessageScreen> {
 
   Widget _buildScaffold(BuildContext context, Chatroom chatroom) {
     // TODO
-    var networkImage;
-    if (widget.chatroom.messages[0].userImage != '') {
-      networkImage = NetworkImage(widget.chatroom.messages[0].userImage);
-    }
     return Scaffold(
       backgroundColor: Color(0xffe5e5e5),
       appBar: MenuBar().messageAppBar(context,
-          image: networkImage, username: widget.chatroom.name),
+          image: NetworkImage(chatroom.userImage),
+          username: widget.chatroom.name),
       body: Column(
         children: [
           Expanded(

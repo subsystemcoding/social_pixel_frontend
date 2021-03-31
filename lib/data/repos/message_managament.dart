@@ -7,6 +7,7 @@ import 'package:socialpixel/data/graphql_client.dart';
 import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/data/models/post.dart';
+import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/data/test_data/test_data.dart';
 
 class MessageManagement {
@@ -21,12 +22,19 @@ class MessageManagement {
 
   Future<void> fetchMessages() async {
     var response = TestData.chatroomsData();
+    var authObject = await AuthRepository().getAuth();
     if (!DebugMode.debug) {
       response = await GraphqlClient().query(''' 
     query {
       chatrooms{
         id
         name
+        members{
+          user{
+            username
+          } 
+          image
+        }
         messageSet{
           id
           timestamp
@@ -52,28 +60,41 @@ class MessageManagement {
     if (jsonResponse.isNotEmpty) {
       List<Chatroom> chatrooms = List<Chatroom>.from(
         jsonResponse.map(
-          (item) => Chatroom(
-            id: int.parse(item['id']),
-            name: item['name'],
-            messages: List<Message>.from(
-              item['messageSet']?.map(
-                (message) => Message(
-                  id: int.parse(message['id']),
-                  createDate: message['timestamp'],
-                  post: message['post'] != null
-                      ? Post(
-                          postId: int.parse(message['post']['postId']),
-                          postImageLink: message['post']['image200x200'],
-                        )
-                      : null,
-                  imageLink: message['image'],
-                  text: message['text'],
-                  username: message['author']['user']['username'],
-                  userImage: message['author']['image'],
+          (item) {
+            Chatroom chatroom = Chatroom(
+              id: int.parse(item['id']),
+              name: item['name'],
+              messages: List<Message>.from(
+                item['messageSet']?.map(
+                  (message) => Message(
+                    id: int.parse(message['id']),
+                    createDate: message['timestamp'],
+                    post: message['post'] != null
+                        ? Post(
+                            postId: int.parse(message['post']['postId']),
+                            postImageLink: message['post']['image200x200'],
+                          )
+                        : null,
+                    imageLink: message['image'],
+                    text: message['text'],
+                    username: message['author']['user']['username'],
+                    userImage: message['author']['image'],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+            if (item['name'].contains(item['members'][0]['user']['username'])) {
+              if (item['members'][0]['user']['username'] ==
+                  authObject.username) {
+                chatroom.name = item['members'][1]['user']['username'];
+                chatroom.userImage = item['members'][1]['image'];
+              } else {
+                chatroom.name = item['members'][0]['user']['username'];
+                chatroom.userImage = item['members'][0]['image'];
+              }
+            }
+            return chatroom;
+          },
         ),
       );
       List<Chatroom> oldChatrooms = await getAllChatrooms();
@@ -99,9 +120,11 @@ class MessageManagement {
           }
         }
         if (!matched) {
-          chat.messageSeenTimestamp = chat.messages.last.createDate;
-          chat.newMessages = chat.messages.length;
-          newMessages += chat.newMessages;
+          if (chat.messages.isNotEmpty) {
+            chat.messageSeenTimestamp = chat.messages.last.createDate;
+            chat.newMessages = chat.messages.length;
+            newMessages += chat.newMessages;
+          }
         }
       }
       _saveMessagesToCache(chatrooms);

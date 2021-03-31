@@ -22,13 +22,14 @@ class ChatroomAdapter extends TypeAdapter<Chatroom> {
       messages: (fields[3] as List)?.cast<Message>(),
       messageSeenTimestamp: fields[4] as String,
       newMessages: fields[5] as int,
+      userImage: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Chatroom obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class ChatroomAdapter extends TypeAdapter<Chatroom> {
       ..writeByte(4)
       ..write(obj.messageSeenTimestamp)
       ..writeByte(5)
-      ..write(obj.newMessages);
+      ..write(obj.newMessages)
+      ..writeByte(6)
+      ..write(obj.userImage);
   }
 
   @override

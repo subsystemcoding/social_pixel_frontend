@@ -310,10 +310,14 @@ class ProfileRepository {
       var response = await GraphqlClient().query('''
     mutation{
       createChatroom(name: "${authObject.username}${profile.username}", members:["${authObject.username}", "${profile.username}"]){
-        success
+      	chatroom{
+          id
+        }
       }
     }
     ''');
+      chatroomId =
+          jsonDecode(response)['data']['createChatroom']['chatroom']['id'];
     }
     return chatroomId;
   }

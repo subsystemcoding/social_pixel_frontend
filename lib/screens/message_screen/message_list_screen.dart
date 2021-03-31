@@ -60,8 +60,11 @@ class _MessageListScreenState extends State<MessageListScreen> {
                   return ListView.builder(
                     itemCount: chatrooms.length * 2,
                     itemBuilder: (BuildContext context, int index) {
-                      int i = index ~/ 2;
+                      int i = (index / 2).floor();
                       if (index % 2 == 0) {
+                        if (chatrooms[i].messages.isEmpty) {
+                          return Container();
+                        }
                         String text;
                         Message message = chatrooms[i].messages[0];
                         if (message.text != null) {
@@ -75,12 +78,15 @@ class _MessageListScreenState extends State<MessageListScreen> {
                           context,
                           chatroom: chatrooms[i],
                           text: text,
-                          imageLink: message.userImage,
+                          imageLink: chatrooms[i].userImage,
                           time: Converter.dateTimeStringtoReadable(
                               message.createDate),
                           notification: chatrooms[i].newMessages,
                         );
                       } else {
+                        if (chatrooms[i].messages.isEmpty) {
+                          return Container();
+                        }
                         return Container(
                           margin: EdgeInsets.only(bottom: 12.0),
                           child: Divider(

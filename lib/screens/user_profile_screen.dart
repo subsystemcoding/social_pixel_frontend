@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
 import 'package:socialpixel/widgets/verified_widget.dart';
@@ -31,7 +32,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     BlocProvider.of<ProfileBloc>(context).add(GetProfile(widget.username));
     return Container(
       child: Scaffold(
-        body: BlocBuilder<ProfileBloc, ProfileState>(
+          body: BlocListener<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          // TODO: implement listener
+          if (state is MessageUserSuccess) {
+            Navigator.of(context).pushNamed(
+              '/message',
+              arguments: Chatroom(
+                  id: state.chatroomId,
+                  name: profile.username,
+                  userImage: profile.userAvatarImage),
+            );
+          }
+        },
+        child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoaded) {
               profile = state.profile;
@@ -87,7 +101,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             );
           },
         ),
-      ),
+      )),
     );
   }
 
