@@ -81,6 +81,33 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                         },
                       );
                     }
+                  } else if (state is ImageChecking) {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return WillPopScope(
+                          onWillPop: () async => false,
+                          child: Center(
+                            child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 12.0),
+                                  Text(
+                                    "Validating Image for humans",
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   }
                 },
                 child: Column(

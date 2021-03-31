@@ -3,17 +3,22 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:socialpixel/bloc/tflite_bloc/tflite_bloc.dart';
 import 'package:socialpixel/data/Converter.dart';
+import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:exif/exif.dart';
 import 'package:socialpixel/data/repos/post_management.dart';
+import 'package:socialpixel/widgets/custom_expansion_tile.dart';
+import 'package:socialpixel/widgets/search_bar.dart';
 
 enum LoadLocation {
   Found,
@@ -57,6 +62,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Location location;
   DateTime date;
   bool gotInfo = false;
+  ScrollController _scrollController = ScrollController();
+  Channel selectedChannel;
 
   @override
   void initState() {
@@ -82,10 +89,17 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("New Post"),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
-          centerTitle: true,
+          actions: [
+            TextButton(
+              child: Text("Post",
+                  style: Theme.of(context).primaryTextTheme.headline3),
+              onPressed: () {
+                onPressedPostHandler(context);
+              },
+            )
+          ],
         ),
         body: BlocListener<TfliteBloc, TfliteState>(
           listener: (context, state) {
@@ -94,17 +108,23 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 context: context,
                 barrierDismissible: false,
                 builder: (context) {
-                  return Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 12.0),
-                        Text(
-                          "Validating Image for humans",
-                          style: Theme.of(context).textTheme.headline6,
-                        )
-                      ],
+                  return WillPopScope(
+                    onWillPop: () async => false,
+                    child: Center(
+                      child: Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 12.0),
+                            Text(
+                              "Validating Image for humans",
+                              style: Theme.of(context).textTheme.headline6,
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -148,6 +168,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               }
             },
             child: ListView(
+              controller: _scrollController,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,78 +179,62 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     SizedBox(
                       height: 12.0,
                     ),
-                    _buildAlignedText(context, "Caption"),
-                    SizedBox(height: 12.0),
-                    //text box
-                    ExpansionPanelList(
+                    CheckboxExpansionTile(
+                      title: "Public Post",
+                      isExpandedInitially: true,
                       children: [
-                        ExpansionPanel(
-                          headerBuilder: (context, isExpanded) {
-                            return CheckboxListTile(
-                              value: isVisible,
-                              onChanged: (val) {
-                                setState(() {
-                                  isVisible = val;
-                                });
-                              },
-                            );
-                          },
-                          body: Column(),
-                        ),
-                        ExpansionPanel(
-                          headerBuilder: (context, isExpanded) {
-                            return CheckboxListTile(
-                              value: isCapture,
-                              onChanged: (val) {
-                                setState(() {
-                                  isVisible = val;
-                                });
-                              },
-                            );
-                          },
-                          body: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
+                        Column(
+                          children: [
+                            SizedBox(height: 12.0),
+                            _buildAlignedText(context, "Caption"),
+                            SizedBox(height: 4.0),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20.0),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 1,
                                   ),
                                 ),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Write a caption...',
-                                    border: InputBorder.none,
-                                  ),
-                                  onSubmitted: (value) {
-                                    setState(() {
-                                      this.caption = value;
-                                    });
-                                  },
+                              ),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Write a caption...',
+                                  border: InputBorder.none,
                                 ),
+                                onSubmitted: (value) {
+                                  setState(() {
+                                    this.caption = value;
+                                  });
+                                },
                               ),
-                              SizedBox(height: 12.0),
-                              _editPictureButton(context),
-                              SizedBox(height: 12.0),
-                              _buildLocation(context),
-                              SizedBox(
-                                height: 12.0,
-                              ),
-                              _buildAddLocationButton(context),
-                              SizedBox(
-                                height: 12.0,
-                              ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(height: 12.0),
+                            SearchChannelWidget(
+                              scrollController: _scrollController,
+                              onChannelSelected: (channel) {
+                                selectedChannel = channel;
+                              },
+                            ),
+                            SizedBox(height: 12.0),
+                            _buildLocation(context),
+                            SizedBox(
+                              height: 12.0,
+                            ),
+                            _buildAddLocationButton(context),
+                            SizedBox(
+                              height: 12.0,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    _buildButton("Post", () {
-                      onPressedPostHandler(context);
-                    }),
+                    //text box
+
+                    // _buildButton("Post", () {
+                    //   onPressedPostHandler(context);
+                    // }),
                   ],
                 ),
               ],
@@ -255,15 +260,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             ],
           );
         });
-  }
-
-  Widget _editPictureButton(BuildContext context) {
-    return _buildButton("Edit Picture", () {
-      Navigator.of(context).pushNamed('/post_preview', arguments: {
-        'isCamera': widget.isCamera,
-        'image': this.image,
-      });
-    });
   }
 
   Widget _buildAddLocationButton(BuildContext context) {
@@ -341,12 +337,18 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   }
 
   Widget _buildAlignedText(BuildContext context, String text) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Text(
-        text,
-        style: Theme.of(context).primaryTextTheme.headline4,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.headline6,
+            textAlign: TextAlign.start,
+          ),
+        ),
+      ],
     );
   }
 
@@ -531,6 +533,133 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class SearchChannelWidget extends StatefulWidget {
+  final ScrollController scrollController;
+  final Function onChannelSelected;
+  SearchChannelWidget({Key key, this.scrollController, this.onChannelSelected})
+      : super(key: key);
+
+  @override
+  _SearchChannelWidgetState createState() => _SearchChannelWidgetState();
+}
+
+class _SearchChannelWidgetState extends State<SearchChannelWidget> {
+  Channel selectedChannel;
+  TextEditingController _searchController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return _buildChannel();
+  }
+
+  Widget _buildChannel() {
+    widget.onChannelSelected(selectedChannel);
+    return selectedChannel == null
+        ? _buildSearchChannel()
+        : ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(selectedChannel.avatarImageLink),
+              radius: 18,
+            ),
+            title: Text(selectedChannel.name,
+                style: Theme.of(context).textTheme.headline6),
+            trailing: TextButton(
+              child: Icon(
+                Icons.cancel,
+                color: Theme.of(context).accentColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  selectedChannel = null;
+                });
+              },
+            ),
+          );
+  }
+
+  Widget _buildSearchChannel() {
+    List<Widget> children = [];
+    return BlocBuilder<ChannelBloc, ChannelState>(
+      builder: (context, state) {
+        if (state is ChannelListLoaded) {
+          if (state.channels.isEmpty) {
+            children = [
+              ListTile(
+                title: Text(
+                  "No channel found",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ),
+            ];
+          } else {
+            children = List<Widget>.from(
+              state.channels.map(
+                (channel) => Container(
+                  margin: EdgeInsets.all(1),
+                  child: ListTile(
+                    onTap: () {
+                      setState(() {
+                        selectedChannel = channel;
+                      });
+                    },
+                    tileColor: Colors.grey[100],
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(channel.avatarImageLink),
+                      radius: 18,
+                    ),
+                    title: Text(
+                      channel.name,
+                      style: Theme.of(context).textTheme.headline6,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+        } else if (state is ChannelError) {
+          children = [
+            ListTile(
+              tileColor: Colors.grey[100],
+              title: Text(
+                "No channel found",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+          ];
+        }
+        Future.delayed(Duration(milliseconds: 50), () {
+          widget.scrollController.animateTo(
+              widget.scrollController.position.maxScrollExtent + 30,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut);
+        });
+        return Column(
+          children: [
+            SearchBar(
+              hintString: "Post to a channel",
+              onChanged: () {
+                if (_searchController.text.isNotEmpty) {
+                  BlocProvider.of<ChannelBloc>(context)
+                      .add(SearchChannel(_searchController.text));
+                }
+              },
+              controller: _searchController,
+            ),
+            Container(
+              constraints: BoxConstraints(maxHeight: 180, minHeight: 0),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: ListView(
+                shrinkWrap: true,
+                children: _searchController.text.isNotEmpty ? children : [],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

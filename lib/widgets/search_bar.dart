@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
   final Function onSubmitted;
+  final Function onChanged;
   final TextEditingController controller;
+  final String hintString;
   SearchBar({
     Key key,
     this.onSubmitted,
     this.controller,
+    this.onChanged,
+    this.hintString = "Search",
   }) : super(key: key);
 
   @override
@@ -45,11 +49,14 @@ class _SearchBarState extends State<SearchBar> {
               controller: widget.controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Search",
+                hintText: widget.hintString,
                 hintStyle: TextStyle(color: Colors.grey),
               ),
               onSubmitted: (val) {
                 widget.onSubmitted();
+              },
+              onChanged: (val) {
+                widget.onChanged();
               },
             ),
           ),
