@@ -33,7 +33,7 @@ class MenuBar {
 
   Widget titleBar(BuildContext context, {String title = "Home"}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28.0),
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
         title,
         textAlign: TextAlign.left,

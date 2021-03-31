@@ -86,7 +86,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   Widget buildInfo(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -184,8 +184,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       );
                     }
                     return Divider(
-                      indent: 28.0,
-                      endIndent: 28.0,
+                      indent: 20.0,
+                      endIndent: 20.0,
                     );
                   },
                 );
@@ -200,7 +200,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   Widget buildListTile(BuildContext context,
       {String name, int points, ImageProvider<Object> image, int rank}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -249,7 +249,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       child: Container(
         width: 300,
         margin: EdgeInsets.symmetric(vertical: 16),
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 28),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
         decoration: BoxDecoration(
           color: Colors.grey[100],
           borderRadius: BorderRadius.circular(25),

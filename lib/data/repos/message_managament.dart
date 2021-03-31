@@ -83,14 +83,17 @@ class MessageManagement {
                 ),
               ),
             );
-            if (item['name'].contains(item['members'][0]['user']['username'])) {
-              if (item['members'][0]['user']['username'] ==
-                  authObject.username) {
-                chatroom.name = item['members'][1]['user']['username'];
-                chatroom.userImage = item['members'][1]['image'];
-              } else {
-                chatroom.name = item['members'][0]['user']['username'];
-                chatroom.userImage = item['members'][0]['image'];
+            if (!DebugMode.debug) {
+              if (item['name']
+                  .contains(item['members'][0]['user']['username'])) {
+                if (item['members'][0]['user']['username'] ==
+                    authObject.username) {
+                  chatroom.name = item['members'][1]['user']['username'];
+                  chatroom.userImage = item['members'][1]['image'];
+                } else {
+                  chatroom.name = item['members'][0]['user']['username'];
+                  chatroom.userImage = item['members'][0]['image'];
+                }
               }
             }
             return chatroom;

@@ -104,7 +104,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 SizedBox(height: 12.0),
                 //text box
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 28.0),
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -240,7 +240,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   Widget _buildAlignedText(BuildContext context, String text) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 28.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
         text,
         style: Theme.of(context).primaryTextTheme.headline4,
@@ -251,7 +251,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Widget _buildButton(String text, Function onPressed, {Color primaryColor}) {
     primaryColor = primaryColor ?? Theme.of(context).accentColor;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28.0),
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: primaryColor,

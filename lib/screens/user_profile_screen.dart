@@ -217,7 +217,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ];
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 28.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Wrap(
         alignment: WrapAlignment.center,
         //mainAxisSize: MainAxisSize.min,
@@ -252,7 +252,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget buildPosts(context) {
     List<Widget> posts = [];
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           "Pictures Posted",

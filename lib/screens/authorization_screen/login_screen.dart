@@ -69,11 +69,11 @@ class LoginScreen extends StatelessWidget {
                 _buildErrorMessage(context, errors['username']),
                 RaisedContainer(
                   color: Colors.white,
-                  margin: EdgeInsets.symmetric(horizontal: 28.0),
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Container(
                     child: TextField(
                       decoration: InputDecoration(
-                        //contentPadding: EdgeInsets.symmetric(horizontal: 28.0),
+                        //contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
                         hintText: "Enter username",
                         border: InputBorder.none,
                       ),
@@ -88,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 _buildErrorMessage(context, errors['password']),
                 RaisedContainer(
-                  margin: EdgeInsets.symmetric(horizontal: 28.0),
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
                   color: Colors.white,
                   child: TextField(
                     decoration: InputDecoration(

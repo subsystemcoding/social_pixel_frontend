@@ -23,7 +23,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      margin: EdgeInsets.symmetric(horizontal: 28.0),
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
         color: Color(0x199597a1),

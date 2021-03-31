@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -28,8 +29,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     PostEvent event,
   ) async* {
     yield PostLoading();
-    try {
-      if (event is FetchPosts) {
+
+    if (event is FetchPosts) {
+      try {
         if (event.channelId == -1) {
           var cachedPosts = await postManagement.fetchCachedPosts();
           if (cachedPosts.isNotEmpty) {
@@ -46,69 +48,80 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             channelId: event.channelId,
           ),
         );
-      } else if (event is FetchSearchedPost) {
-        /// Return searched posts with hashtags
-        yield PostLoaded(
-            await postManagement.fetchSearchedPosts(hashtags: event.hashtags));
-      } else if (event is SendPost) {
-        //await postManagement.sendPost(post, PostSending.Successful);
-        yield PostSent(PostSending.Successful);
-      } else if (event is UpvotePost) {
-        try {
-          var modifier = event.upvote ? "ADD" : "REMOVE";
-          bool success = await postManagement.upvotePost(
-            postId: event.postId,
-            modifier: modifier,
-          );
-          yield PostUpvoted();
-        } catch (e) {
-          yield PostUpvotedError();
+      } catch (e) {
+        yield PostError("Could not find posts");
+      }
+    } else if (event is FetchSearchedPost) {
+      List<String> hashtags = event.hashtags.trim().split(' ');
+      for (var hashtag in hashtags) {
+        if (hashtag.startsWith("#")) {
+          continue;
         }
-      } else if (event is CommentPost) {
-        try {
-          await postManagement.addComment(
-            postId: event.postId,
-            text: event.text,
-          );
-          print("Dis in postbloc CommentPost");
-          final profile = await ProfileRepository().fetchCurrentProfile();
-          yield PostCommented(
-            Comment(
-              commentContent: event.text,
-              dateCreated: DateTime.now().toString(),
-              user: profile,
-              replies: [],
-            ),
-          );
-        } catch (e) {
-          print(e);
-          yield PostCommentError();
-        }
-      } else if (event is FetchComments) {
-        try {
-          final post = await postManagement.fetchPostComments(event.post);
-          yield PostCommentsFetched(post);
-        } catch (e) {
-          print(e);
-          yield PostCommentsFetchedError();
-        }
-      } else if (event is ReplyComment) {
-        await postManagement.postReplyToComment(
+        hashtag = "#$hashtag";
+      }
+      log(hashtags.toString());
+
+      /// Return searched posts with hashtags
+      yield SearchedPostLoaded(
+        await postManagement.fetchSearchedPosts(hashtags: hashtags),
+      );
+    } else if (event is SendPost) {
+      //await postManagement.sendPost(post, PostSending.Successful);
+      yield PostSent(PostSending.Successful);
+    } else if (event is UpvotePost) {
+      try {
+        var modifier = event.upvote ? "ADD" : "REMOVE";
+        bool success = await postManagement.upvotePost(
           postId: event.postId,
-          commentId: event.commentId,
+          modifier: modifier,
+        );
+        yield PostUpvoted();
+      } catch (e) {
+        yield PostUpvotedError();
+      }
+    } else if (event is CommentPost) {
+      try {
+        await postManagement.addComment(
+          postId: event.postId,
           text: event.text,
         );
+        print("Dis in postbloc CommentPost");
         final profile = await ProfileRepository().fetchCurrentProfile();
-
-        yield PostReplied(Comment(
-          commentContent: event.text,
-          dateCreated: DateTime.now().toString(),
-          user: profile,
-        ));
+        yield PostCommented(
+          Comment(
+            commentContent: event.text,
+            dateCreated: DateTime.now().toString(),
+            user: profile,
+            replies: [],
+          ),
+        );
+      } catch (e) {
+        print(e);
+        yield PostCommentError();
       }
-    } catch (e) {
-      print(e);
-      yield PostError("Could not find posts");
+    } else if (event is FetchComments) {
+      try {
+        final post = await postManagement.fetchPostComments(event.post);
+        yield PostCommentsFetched(post);
+      } catch (e) {
+        print(e);
+        yield PostCommentsFetchedError();
+      }
+    } else if (event is ReplyComment) {
+      await postManagement.postReplyToComment(
+        postId: event.postId,
+        commentId: event.commentId,
+        text: event.text,
+      );
+      final profile = await ProfileRepository().fetchCurrentProfile();
+
+      yield PostReplied(Comment(
+        commentContent: event.text,
+        dateCreated: DateTime.now().toString(),
+        user: profile,
+      ));
+    } else if (event is StartPostInitial) {
+      yield PostInitial();
     }
     // TODO: implement mapEventToState
   }

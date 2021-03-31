@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
+import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/channel.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
@@ -31,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<PostBloc>(context).add(FetchSearchedPost());
+    BlocProvider.of<PostBloc>(context).add(StartPostInitial());
     BlocProvider.of<ChannelBloc>(context).add(StartChannelIniital());
     BlocProvider.of<ProfileBloc>(context).add(StartProfileInitial());
     _controller = TabController(
@@ -70,6 +71,10 @@ class _SearchScreenState extends State<SearchScreen>
               } else if (_controller.index == 0) {
                 BlocProvider.of<ProfileBloc>(context).add(
                   GetProfileList(textController.text),
+                );
+              } else if (_controller.index == 1) {
+                BlocProvider.of<PostBloc>(context).add(
+                  FetchSearchedPost(hashtags: textController.text),
                 );
               }
             },
@@ -142,23 +147,27 @@ class _SearchScreenState extends State<SearchScreen>
   Widget buildPostSection() {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
-        if (state is PostLoaded) {
+        if (state is SearchedPostLoaded) {
           posts = state.posts;
         } else if (state is PostLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state is PostInitial) {
+          return _buildWhenEmpty("Search Posts with tags");
         }
         return ListView.builder(
           itemCount: posts.length * 2,
           itemBuilder: (context, i) {
             if (i % 2 == 0) {
-              int index = i == 0 ? i : (i ~/ 2);
+              int index = (i ~/ 2);
+              print(i);
+              print(index);
+              print(posts.length);
+              print(posts[index]);
               return buildPost(
                 context,
-                username: posts[index].userName,
-                description: posts[index].caption,
-                image: NetworkImage(posts[index].postImageLink),
+                post: posts[index],
               );
             }
             return Divider();
@@ -221,7 +230,7 @@ class _SearchScreenState extends State<SearchScreen>
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
         child: Row(
           children: [
             CircleAvatar(
@@ -286,101 +295,100 @@ class _SearchScreenState extends State<SearchScreen>
     );
   }
 
-  Widget buildPost(
-    BuildContext context, {
-    String username,
-    String description,
-    ImageProvider<Object> image,
-    String datePosted,
-  }) {
-    return Container(
-      height: 125,
-      padding: const EdgeInsets.symmetric(horizontal: 28.0),
-      margin: EdgeInsets.symmetric(vertical: 12.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 90,
-            decoration: BoxDecoration(
+  Widget buildPost(BuildContext context, {Post post}) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/post_widget', arguments: post);
+      },
+      child: Container(
+        height: 125,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        margin: EdgeInsets.symmetric(vertical: 12.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 90,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: Theme.of(context).accentColor),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(25.0),
-                color: Theme.of(context).accentColor),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                image: image,
-                fit: BoxFit.cover,
+                child: Image(
+                  image: NetworkImage(post.postImageLink),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 12.0,
-          ),
-          Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      username,
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).primaryTextTheme.headline4,
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      description,
-                      maxLines: 3,
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).primaryTextTheme.bodyText2,
-                    ),
-                  ],
+            SizedBox(
+              width: 12.0,
+            ),
+            Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.userName,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).primaryTextTheme.headline4,
+                      ),
+                      SizedBox(height: 4.0),
+                      Text(
+                        post.caption,
+                        maxLines: 3,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).primaryTextTheme.bodyText2,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: Row(
-                  children: [
-                    Text("17.k",
-                        style: Theme.of(context).primaryTextTheme.subtitle2),
-                    SizedBox(
-                      width: 4.0,
-                    ),
-                    Icon(
-                      Icons.thumb_up_outlined,
-                      size: 16,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    SizedBox(
-                      width: 8.0,
-                    ),
-                    Text("999",
-                        style: Theme.of(context).primaryTextTheme.subtitle2),
-                    SizedBox(
-                      width: 4.0,
-                    ),
-                    Icon(
-                      Icons.comment_outlined,
-                      size: 16,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    SizedBox(
-                      width: 8.0,
-                    ),
-                    Text(
-                      "12 Feb 2021",
-                      style: Theme.of(context).primaryTextTheme.subtitle2,
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ],
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: Row(
+                    children: [
+                      Text(post.upvotes.toString(),
+                          style: Theme.of(context).primaryTextTheme.subtitle2),
+                      SizedBox(
+                        width: 4.0,
+                      ),
+                      Icon(
+                        Icons.thumb_up_outlined,
+                        size: 16,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      SizedBox(
+                        width: 8.0,
+                      ),
+                      Text(post.commentCount.toString(),
+                          style: Theme.of(context).primaryTextTheme.subtitle2),
+                      SizedBox(
+                        width: 4.0,
+                      ),
+                      Icon(
+                        Icons.comment_outlined,
+                        size: 16,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      SizedBox(
+                        width: 8.0,
+                      ),
+                      Text(
+                        Converter.dateTimeStringtoReadable(post.datePosted),
+                        style: Theme.of(context).primaryTextTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -397,7 +405,7 @@ class _SearchScreenState extends State<SearchScreen>
         Navigator.of(context).pushNamed('/channel', arguments: channelId);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 4.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
         child: Row(
           children: [
             CircleAvatar(

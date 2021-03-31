@@ -4,6 +4,8 @@ part of 'post_bloc.dart';
 abstract class PostEvent {}
 
 // This event is called when the app is started
+class StartPostInitial extends PostEvent {}
+
 class FetchPosts extends PostEvent {
   final int channelId;
   final bool includeComments;
@@ -12,7 +14,7 @@ class FetchPosts extends PostEvent {
 }
 
 class FetchSearchedPost extends PostEvent {
-  final List<String> hashtags;
+  final String hashtags;
 
   FetchSearchedPost({this.hashtags});
 }

@@ -22,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.home_outlined,
               color: Colors.white,
-              size: 28,
+              size: 20,
             ),
             onTap: () {
               if (currentRoute != '/home') {
@@ -34,7 +34,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.search_outlined,
               color: Colors.white,
-              size: 28,
+              size: 20,
             ),
             onTap: () {
               if (currentRoute != '/search') {
@@ -46,7 +46,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.add,
               color: Colors.white,
-              size: 28,
+              size: 20,
             ),
             onTap: () {
               Navigator.of(context).pushNamed('/camera', arguments: {
@@ -62,7 +62,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.map_outlined,
               color: Colors.white,
-              size: 28,
+              size: 20,
             ),
             onTap: () {
               // if (currentRoute != '/map') {
@@ -74,7 +74,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.message_outlined,
               color: Colors.white,
-              size: 28,
+              size: 20,
             ),
             onTap: () {
               if (currentRoute != '/message_list') {
@@ -86,7 +86,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.notifications_outlined,
               color: Colors.white,
-              size: 28,
+              size: 20,
             ),
             onTap: () {
               // if (currentRoute != '/notification') {

@@ -284,7 +284,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
     String time,
   }) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 28),
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
       title: Text(roomName),
       subtitle: Text(text),
       trailing: Column(

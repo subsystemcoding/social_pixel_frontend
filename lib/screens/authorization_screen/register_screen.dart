@@ -172,12 +172,12 @@ class RegisterScreen extends StatelessWidget {
       {String hintText, String valueToChange}) {
     return RaisedContainer(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8),
-      margin: EdgeInsets.symmetric(horizontal: 28.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: Container(
         child: TextField(
           decoration: InputDecoration(
-            //contentPadding: EdgeInsets.symmetric(horizontal: 28.0),
+            //contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
             hintText: hintText,
             border: InputBorder.none,
           ),

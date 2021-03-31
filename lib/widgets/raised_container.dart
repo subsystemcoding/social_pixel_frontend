@@ -10,7 +10,7 @@ class RaisedContainer extends StatelessWidget {
 
   const RaisedContainer({
     Key key,
-    this.padding = const EdgeInsets.symmetric(horizontal: 28.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 20.0),
     this.child,
     this.width,
     this.height,

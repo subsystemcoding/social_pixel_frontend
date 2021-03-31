@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:geocoder/geocoder.dart';
 import 'package:hive/hive.dart';
@@ -23,7 +23,6 @@ enum PostSending {
 }
 
 class PostManagement {
-  Random random = Random();
   int currentPostId = 0;
   static final PostManagement _singleton = PostManagement._internal();
 
@@ -54,10 +53,75 @@ class PostManagement {
 
   Future<List<Post>> fetchSearchedPosts({List<String> hashtags}) async {
     List<Post> posts;
+    String tags = '[';
+    for (int i = 0; i < hashtags.length; i++) {
+      tags += '"${hashtags[i]}"';
+      if (i != hashtags.length - 1) {
+        tags += ',';
+      }
+    }
+    tags += ']';
+    log("Printing tagsss");
+    log(tags);
+    var response = await GraphqlClient().query('''
+    query{
+      postsByTag(tags: $tags)
+      {
+        postId
+        author{ 
+          user{
+            username
+          }
+          image
+        }
+        dateCreated
+        caption
+        gpsLongitude
+        gpsLatitude
+        upvotes{
+          user {
+            username
+          }
+        }
+        comments {
+          commentId
+        }
+        image
+      }
+    }
+    ''');
 
-    //delete and add posts in the background
-    _addPostsToCache(posts);
-    return posts;
+    var jsonResponse = jsonDecode(response)['data']['postsByTag'];
+    if (jsonResponse.isNotEmpty) {
+      List<Post> posts = List<Post>.from(
+        jsonResponse.map(
+          (item) {
+            Post post = Post(
+              upvotes: item['upvotes'].length,
+              postId: int.parse(item['postId']),
+              userName: item['author']['user']['username'],
+              userAvatarLink: item['author']['image'],
+              postImageLink: item['image'],
+              caption: item['caption'],
+              datePosted: item['dateCreated'],
+              location: Location(
+                latitude: item['gpsLatitude'] != null
+                    ? double.parse(item['gpsLatitude'])
+                    : null,
+                longitude: item['gpsLongitude'] != null
+                    ? double.parse(item['gpsLongitude'])
+                    : null,
+              ),
+            );
+            post.commentCount =
+                item['comments'] == null ? 0 : item['comments'].length;
+            return post;
+          },
+        ),
+      );
+      return posts;
+    }
+    return [];
   }
 
   Future<List<Post>> fetchPosts({int channelId}) async {
