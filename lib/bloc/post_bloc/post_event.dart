@@ -13,6 +13,12 @@ class FetchPosts extends PostEvent {
   FetchPosts({this.includeComments = false, this.channelId = -1});
 }
 
+class FetchPost extends PostEvent {
+  final int postId;
+
+  FetchPost(this.postId);
+}
+
 class FetchSearchedPost extends PostEvent {
   final String hashtags;
 
@@ -20,10 +26,10 @@ class FetchSearchedPost extends PostEvent {
 }
 
 class UpvotePost extends PostEvent {
-  final int postId;
+  final Post post;
   final bool upvote;
 
-  UpvotePost({this.upvote, this.postId});
+  UpvotePost({this.upvote, this.post});
 }
 
 class CommentPost extends PostEvent {

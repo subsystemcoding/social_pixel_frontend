@@ -136,7 +136,7 @@ class PostWidget extends StatelessWidget {
           builder: (context, state) {
             {
               if (state is PostUpvoted) {
-                this.post.isUpvoted = !this.post.isUpvoted;
+                this.post.isUpvoted = this.post.isUpvoted;
               }
               return CustomButtons.standardButtonIcon(
                 context,
@@ -148,7 +148,7 @@ class PostWidget extends StatelessWidget {
                   BlocProvider.of<PostBloc>(context).add(
                     UpvotePost(
                       upvote: !this.post.isUpvoted,
-                      postId: this.post.postId,
+                      post: this.post,
                     ),
                   )
                 },
@@ -207,11 +207,7 @@ class PostWidget extends StatelessWidget {
   Widget information(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
-        if (state is PostUpvoted) {
-          this.post.upvotes = this.post.isUpvoted
-              ? this.post.upvotes + 1
-              : this.post.upvotes - 1;
-        }
+        if (state is PostUpvoted) {}
         return Row(
           children: [
             Text(

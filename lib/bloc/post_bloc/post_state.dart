@@ -21,6 +21,12 @@ class SearchedPostLoaded extends PostState {
   SearchedPostLoaded(this.posts);
 }
 
+class PostSingleLoaded extends PostState {
+  final Post post;
+
+  PostSingleLoaded(this.post);
+}
+
 class PostUpvoted extends PostState {}
 
 class PostUpvotedError extends PostState {}

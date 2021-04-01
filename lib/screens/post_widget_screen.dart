@@ -21,144 +21,162 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
   bool isReplyKeyboard = false;
   Comment replyComment;
   List<Comment> comments;
+  Post post;
 
   @override
   void initState() {
     super.initState();
     comments = [];
-    BlocProvider.of<PostBloc>(context).add(FetchComments(widget.post));
+    BlocProvider.of<PostBloc>(context).add(FetchPost(widget.post.postId));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: ListView(
-              children: [
-                PostWidget(
-                  post: widget.post,
-                  inPostScreen: true,
-                ),
-                _buildComments(),
-                SizedBox(
-                  height: 50,
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 4,
-            right: 4,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25.0),
-                color: Theme.of(context).primaryColor,
-              ),
-              child: Row(
+        appBar: AppBar(),
+        body: BlocBuilder<PostBloc, PostState>(
+          builder: (context, state) {
+            if (state is PostSingleLoaded) {
+              post = state.post;
+            }
+            if (post != null) {
+              return Stack(
                 children: [
-                  Expanded(
-                    child: TextField(
-                      focusNode: _focusNode,
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                        border: InputBorder.none,
-                        hintText: hintText,
-                        hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      onSubmitted: (val) {
-                        if (_controller.text.isNotEmpty) {
-                          if (!isReplyKeyboard) {
-                            BlocProvider.of<PostBloc>(context).add(
-                              CommentPost(
-                                text: _controller.text,
-                                postId: widget.post.postId,
-                              ),
-                            );
-                          } else {
-                            BlocProvider.of<PostBloc>(context).add(
-                              ReplyComment(
-                                widget.post.postId,
-                                replyComment.commentId,
-                                _controller.text,
-                              ),
-                            );
-                          }
-                          _controller.clear();
-                          FocusScope.of(context).unfocus();
-                          setState(() {
-                            hintText = "Type a comment..";
-                            isReplyKeyboard = false;
-                          });
-                        }
-                      },
+                  Positioned.fill(
+                    child: ListView(
+                      children: [
+                        PostWidget(
+                          post: widget.post,
+                          inPostScreen: true,
+                        ),
+                        _buildComments(),
+                        SizedBox(
+                          height: 50,
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    width: 47,
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                    child: TextButton(
-                      child: Icon(
-                        Icons.send,
+                  //TextField
+                  Positioned(
+                    bottom: 0,
+                    left: 4,
+                    right: 4,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25.0),
                         color: Theme.of(context).primaryColor,
-                        size: 20,
                       ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 0.0),
-                        elevation: 2,
-                        backgroundColor: Theme.of(context).accentColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_controller.text.isNotEmpty) {
-                          if (!isReplyKeyboard) {
-                            BlocProvider.of<PostBloc>(context).add(
-                              CommentPost(
-                                text: _controller.text,
-                                postId: widget.post.postId,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              focusNode: _focusNode,
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 16.0),
+                                border: InputBorder.none,
+                                hintText: hintText,
+                                hintStyle:
+                                    TextStyle(fontSize: 14, color: Colors.grey),
                               ),
-                            );
-                          } else {
-                            BlocProvider.of<PostBloc>(context).add(
-                              ReplyComment(
-                                widget.post.postId,
-                                replyComment.commentId,
-                                _controller.text,
-                              ),
-                            );
-                          }
-                          _controller.clear();
-                          FocusScope.of(context).unfocus();
-                          setState(() {
-                            hintText = "Type a comment..";
-                            isReplyKeyboard = false;
-                          });
-                        } else {
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Cannot post empty comment"),
+                              onSubmitted: (val) {
+                                if (_controller.text.isNotEmpty) {
+                                  if (!isReplyKeyboard) {
+                                    BlocProvider.of<PostBloc>(context).add(
+                                      CommentPost(
+                                        text: _controller.text,
+                                        postId: widget.post.postId,
+                                      ),
+                                    );
+                                  } else {
+                                    BlocProvider.of<PostBloc>(context).add(
+                                      ReplyComment(
+                                        widget.post.postId,
+                                        replyComment.commentId,
+                                        _controller.text,
+                                      ),
+                                    );
+                                  }
+                                  _controller.clear();
+                                  FocusScope.of(context).unfocus();
+                                  setState(() {
+                                    hintText = "Type a comment..";
+                                    isReplyKeyboard = false;
+                                  });
+                                }
+                              },
                             ),
-                          );
-                        }
-                      },
+                          ),
+                          Container(
+                            width: 47,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 2.0),
+                            child: TextButton(
+                              child: Icon(
+                                Icons.send,
+                                color: Theme.of(context).primaryColor,
+                                size: 20,
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(horizontal: 0.0),
+                                elevation: 2,
+                                backgroundColor: Theme.of(context).accentColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25.0),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (_controller.text.isNotEmpty) {
+                                  if (!isReplyKeyboard) {
+                                    BlocProvider.of<PostBloc>(context).add(
+                                      CommentPost(
+                                        text: _controller.text,
+                                        postId: widget.post.postId,
+                                      ),
+                                    );
+                                  } else {
+                                    BlocProvider.of<PostBloc>(context).add(
+                                      ReplyComment(
+                                        widget.post.postId,
+                                        replyComment.commentId,
+                                        _controller.text,
+                                      ),
+                                    );
+                                  }
+                                  _controller.clear();
+                                  FocusScope.of(context).unfocus();
+                                  setState(() {
+                                    hintText = "Type a comment..";
+                                    isReplyKeyboard = false;
+                                  });
+                                } else {
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      content:
+                                          Text("Cannot post empty comment"),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+              );
+            } else if (post == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Container();
+          },
+        ));
   }
 
   Widget _buildComments() {

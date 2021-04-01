@@ -231,6 +231,111 @@ class PostManagement {
     return [];
   }
 
+  Future<Post> fetchSinglePost(int postId) async {
+    var authObject = await AuthRepository().getAuth();
+    var username = authObject.username;
+    var response = await GraphqlClient().query(''' 
+    query {
+      post(id: $postId){
+        postId
+        author{ 
+          user{
+            username
+          }
+          image
+        }
+        dateCreated
+        caption
+        gpsLongitude
+        gpsLatitude
+        upvotes{
+          user {
+            username
+          }
+        }
+        comments{
+          commentId
+          commentContent
+          author{
+            user{
+              username
+            }
+            image
+          }
+          dateCreated
+          replies{
+            commentId
+            author{
+              user{
+                username
+              }
+              image
+            }
+            commentContent
+            dateCreated
+          }
+        }
+        image
+      } 
+    }
+    ''');
+
+    var item = jsonDecode(response)['data']['post'];
+
+    Post post = Post(
+      upvotes: item['upvotes'].length,
+      postId: int.parse(item['postId']),
+      userName: item['author']['user']['username'],
+      userAvatarLink: item['author']['image'],
+      postImageLink: item['image'],
+      caption: item['caption'],
+      datePosted: item['dateCreated'],
+      location: Location(
+        latitude: item['gpsLatitude'] != null
+            ? double.parse(item['gpsLatitude'])
+            : null,
+        longitude: item['gpsLongitude'] != null
+            ? double.parse(item['gpsLongitude'])
+            : null,
+      ),
+      comments: List<Comment>.from(
+        item['comments'].map((comment) {
+          return Comment(
+            commentId: int.parse(comment['commentId']),
+            commentContent: comment['commentContent'],
+            user: Profile(
+                username: comment['author']['user']['username'],
+                userAvatarImage: comment['author']['image']),
+            dateCreated: comment['dateCreated'],
+            replies: List<Comment>.from(
+              comment['replies'].map(
+                (reply) {
+                  return Comment(
+                    commentId: int.parse(reply['commentId']),
+                    commentContent: reply['commentContent'],
+                    user: Profile(
+                        username: reply['author']['user']['username'],
+                        userAvatarImage: reply['author']['image']),
+                    dateCreated: reply['dateCreated'],
+                  );
+                },
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+    post.isUpvoted = false;
+    for (var upvote in item['upvotes']) {
+      if (upvote['user']['username'] == username) {
+        post.isUpvoted = true;
+        break;
+      }
+    }
+    post.commentCount = item['comments'] == null ? 0 : item['comments'].length;
+    return post;
+  }
+
   Future<bool> postReplyToComment(
       {int postId, int commentId, String text}) async {
     var response = await GraphqlClient().query('''

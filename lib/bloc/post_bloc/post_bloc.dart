@@ -77,9 +77,15 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       try {
         var modifier = event.upvote ? "ADD" : "REMOVE";
         bool success = await postManagement.upvotePost(
-          postId: event.postId,
+          postId: event.post.postId,
           modifier: modifier,
         );
+        event.post.isUpvoted = !event.post.isUpvoted;
+        if (event.post.isUpvoted) {
+          event.post.upvotes++;
+        } else {
+          event.post.upvotes--;
+        }
         yield PostUpvoted();
       } catch (e) {
         yield PostUpvotedError();
@@ -127,6 +133,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       ));
     } else if (event is StartPostInitial) {
       yield PostInitial();
+    } else if (event is FetchPost) {
+      Post post = await postManagement.fetchSinglePost(event.postId);
+      yield PostSingleLoaded(post);
     }
     // TODO: implement mapEventToState
   }

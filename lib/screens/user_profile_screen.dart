@@ -279,10 +279,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget buildPostImage(Post post) {
-    return GridTile(
-      child: Image(
-        fit: BoxFit.cover,
-        image: NetworkImage(post.postImageLink),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/post_widget', arguments: post);
+      },
+      child: GridTile(
+        child: Image(
+          fit: BoxFit.cover,
+          image: NetworkImage(post.postImageLink),
+        ),
       ),
     );
   }
