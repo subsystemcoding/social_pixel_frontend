@@ -25,10 +25,7 @@ class CustomDrawer extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamed(
-                          '/profile',
-                          arguments: profile.username,
-                        );
+                        Navigator.of(context).pushNamed('/profile');
                       },
                       child: DrawerHeader(
                         decoration: BoxDecoration(

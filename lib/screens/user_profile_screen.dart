@@ -119,7 +119,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               height: coverImageHeight,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
-              image: NetworkImage(coverImage),
+              image: coverImage != null
+                  ? NetworkImage(coverImage)
+                  : AssetImage("assets/images/grey.jpg"),
               color: Color(0x66000000),
               colorBlendMode: BlendMode.darken,
             ),
@@ -128,7 +130,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             top: coverImageHeight - radius,
             left: MediaQuery.of(context).size.width / 2 - radius,
             child: CircleAvatar(
-              backgroundImage: NetworkImage(avatarImage),
+              backgroundImage: avatarImage != null && avatarImage.isNotEmpty
+                  ? NetworkImage(avatarImage)
+                  : AssetImage("assets/images/default_profile.jpg"),
               radius: radius,
             ),
           ),
