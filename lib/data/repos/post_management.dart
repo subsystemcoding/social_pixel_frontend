@@ -154,7 +154,7 @@ class PostManagement {
     return [];
   }
 
-  Future<List<Post>> fetchPosts({int channelId}) async {
+  Future<List<Post>> fetchPosts({int channelId = -1}) async {
     //allow for comments
     var auth = await AuthRepository().getAuth();
     var username = auth.username;
@@ -217,6 +217,7 @@ class PostManagement {
             }
             post.commentCount =
                 item['comments'] == null ? 0 : item['comments'].length;
+
             return post;
           },
         ),

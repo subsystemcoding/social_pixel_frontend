@@ -83,6 +83,9 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ),
                     ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/map');
+                      },
                       title: Text(
                         "Switch to Map",
                         style: Theme.of(context).primaryTextTheme.bodyText2,

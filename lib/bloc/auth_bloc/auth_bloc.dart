@@ -31,6 +31,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             Timer.periodic(Duration(seconds: 1),
                 (timer) => MessageManagement().fetchMessages());
             yield LoginSuccessful();
+          } else {
+            yield AuthError();
           }
         } catch (e) {
           yield AuthInitial();

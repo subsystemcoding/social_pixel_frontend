@@ -26,6 +26,12 @@ class FirstScreen extends StatelessWidget {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
+              } else if (state is AuthError) {
+                return _buildBody(context);
+              } else if (state is LoginUnsuccessful) {
+                return _buildBody(context);
+              } else if (state is AuthInitial) {
+                return _buildBody(context);
               }
               return _buildBody(context);
             },

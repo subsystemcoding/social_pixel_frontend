@@ -8,16 +8,28 @@ import 'package:socialpixel/widgets/custom_buttons.dart';
 import 'package:socialpixel/widgets/custom_drawer.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Post> posts = [];
+  var postBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    postBloc = BlocProvider.of<PostBloc>(context);
+    postBloc.add(FetchPosts());
+  }
+
   @override
   Widget build(BuildContext context) {
     //initialize a list post
     // this is a temporary caching method
     // posts will not disapper if we navigate back to home screen
-    List<Post> posts = [];
-    final postBloc = BlocProvider.of<PostBloc>(context);
     // Emitting the fetch event
-    postBloc.add(FetchPosts());
     return Scaffold(
       appBar: MenuBar().appbar,
       bottomNavigationBar: BottomNavBar(
@@ -97,8 +109,11 @@ class HomeScreen extends StatelessWidget {
                           );
                         }
                       }
+                      if (posts.isNotEmpty) {
+                        return buildPosts(context, posts);
+                      }
+                      return Center(child: CircularProgressIndicator());
                       //build the posts
-                      return buildPosts(context, posts);
                     },
                   ),
                 ),

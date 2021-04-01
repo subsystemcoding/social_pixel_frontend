@@ -86,17 +86,17 @@ class _MapScreenState extends State<MapScreen> {
         child: Stack(
           children: [
             _buildLocationWidget(context, currentPosition),
-            Positioned(
-              left: 18,
-              top: 112,
-              child: Column(
-                children: [
-                  _buildIcon(Icons.ac_unit),
-                  _buildIcon(Icons.access_alarm_sharp),
-                  _buildIcon(Icons.access_alarm_sharp),
-                ],
-              ),
-            ),
+            // Positioned(
+            //   left: 18,
+            //   top: 112,
+            //   child: Column(
+            //     children: [
+            //       _buildIcon(Icons.ac_unit),
+            //       _buildIcon(Icons.access_alarm_sharp),
+            //       _buildIcon(Icons.access_alarm_sharp),
+            //     ],
+            //   ),
+            // ),
             Positioned(
               bottom: 0,
               left: 0,

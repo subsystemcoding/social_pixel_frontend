@@ -38,6 +38,7 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
           builder: (context, state) {
             if (state is PostSingleLoaded) {
               post = state.post;
+              comments = post.comments;
             }
             if (post != null) {
               return Stack(
@@ -46,7 +47,7 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
                     child: ListView(
                       children: [
                         PostWidget(
-                          post: widget.post,
+                          post: post,
                           inPostScreen: true,
                         ),
                         _buildComments(),
@@ -86,13 +87,13 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
                                     BlocProvider.of<PostBloc>(context).add(
                                       CommentPost(
                                         text: _controller.text,
-                                        postId: widget.post.postId,
+                                        postId: post.postId,
                                       ),
                                     );
                                   } else {
                                     BlocProvider.of<PostBloc>(context).add(
                                       ReplyComment(
-                                        widget.post.postId,
+                                        post.postId,
                                         replyComment.commentId,
                                         _controller.text,
                                       ),
@@ -134,13 +135,13 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
                                     BlocProvider.of<PostBloc>(context).add(
                                       CommentPost(
                                         text: _controller.text,
-                                        postId: widget.post.postId,
+                                        postId: post.postId,
                                       ),
                                     );
                                   } else {
                                     BlocProvider.of<PostBloc>(context).add(
                                       ReplyComment(
-                                        widget.post.postId,
+                                        post.postId,
                                         replyComment.commentId,
                                         _controller.text,
                                       ),

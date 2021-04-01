@@ -154,14 +154,25 @@ class Profile {
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
       subscribedGames:
-          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
-      subscribedChannels: List<Channel>.from(
-          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
-      postsMade: List<Post>.from(map['postsMade']?.map((x) => Post.fromMap(x))),
-      upvotedPosts:
-          List<Post>.from(map['upvotedPosts']?.map((x) => Post.fromMap(x))),
+          map['subscribedGames'] == null || map['subscribedGames'].isEmpty
+              ? []
+              : List<Game>.from(
+                  map['subscribedGames']?.map((x) => Game.fromMap(x))),
+      subscribedChannels:
+          map['subscribedChannels'] == null || map['subscribedChannels'].isEmpty
+              ? []
+              : List<Channel>.from(
+                  map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
+      postsMade: map['postsMade'] == null || map['postsMade'].isEmpty
+          ? []
+          : List<Post>.from(map['postsMade']?.map((x) => Post.fromMap(x))),
+      upvotedPosts: map['upvotedPosts'] == null || map['upvotedPosts'].isEmpty
+          ? []
+          : List<Post>.from(map['upvotedPosts']?.map((x) => Post.fromMap(x))),
       isFollowing: map['isFollowing'],
-      chatrooms: List<Chatroom>.from(
+      chatrooms: map['chatrooms'] == null || map['chatrooms'].isEmpty
+          ? []
+          :List<Chatroom>.from(
           map['chatrooms']?.map((x) => Chatroom.fromMap(x))),
     );
   }
