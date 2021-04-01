@@ -18,59 +18,71 @@ class CustomDrawer extends StatelessWidget {
             profile = state.profile;
           }
           return profile == null
-              ? Container()
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
               : ListView(
                   children: [
-                    DrawerHeader(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            height: 60,
-                            child: CircleAvatar(
-                              backgroundImage: (profile.userImageBytes != null)
-                                  ? MemoryImage(profile.userImageBytes)
-                                  : NetworkImage(profile.userAvatarImage),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          '/profile',
+                          arguments: profile.username,
+                        );
+                      },
+                      child: DrawerHeader(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).accentColor,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              height: 60,
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    (profile.userImageBytes != null)
+                                        ? MemoryImage(profile.userImageBytes)
+                                        : NetworkImage(profile.userAvatarImage),
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          profile.isVerified
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
+                            SizedBox(
+                              height: 8.0,
+                            ),
+                            profile.isVerified
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        profile.username,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      SizedBox(
+                                        height: 8.0,
+                                      ),
+                                      VerifiedWidget(),
+                                    ],
+                                  )
+                                : Center(
+                                    child: Text(
                                       profile.username,
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
                                     ),
-                                    SizedBox(
-                                      height: 8.0,
-                                    ),
-                                    VerifiedWidget(),
-                                  ],
-                                )
-                              : Center(
-                                  child: Text(
-                                    profile.username,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
                                   ),
-                                ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          Center(
-                            child: Text(
-                              '${profile.points} points • ${profile.followers} followers',
-                              style: Theme.of(context).textTheme.bodyText1,
+                            SizedBox(
+                              height: 8.0,
                             ),
-                          ),
-                        ],
+                            Center(
+                              child: Text(
+                                '${profile.points} points • ${profile.followers} followers',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     ListTile(

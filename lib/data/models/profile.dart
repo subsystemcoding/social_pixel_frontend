@@ -60,7 +60,7 @@ class Profile {
     this.points,
     this.followers,
     this.createDate,
-    this.isVerified,
+    this.isVerified = false,
     this.userImageBytes,
     this.userCoverImageBytes,
     this.subscribedGames,

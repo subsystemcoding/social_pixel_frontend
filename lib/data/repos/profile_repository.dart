@@ -46,6 +46,7 @@ class ProfileRepository {
         bio
         visibility
         image
+        points
         postedBy {
           postId
           image150x150
@@ -84,6 +85,7 @@ class ProfileRepository {
       createDate: jsonResponse['user']['dateJoined'],
       description: jsonResponse['bio'],
       userAvatarImage: jsonResponse['image'],
+      points: jsonResponse['points'],
       postsMade: List<Post>.from(
         jsonResponse['postedBy'].map(
           (item) {
@@ -125,6 +127,8 @@ class ProfileRepository {
         ),
       )),
     );
+
+    profile.followers = await _getNumOfFollowersOfUser(profile.username);
     return profile;
   }
 
