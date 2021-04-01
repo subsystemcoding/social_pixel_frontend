@@ -214,7 +214,8 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
       'image': image,
       'location': location,
       'date': date,
-      'isCamera': this.widget.isCamera
+      'isCamera': this.widget.isCamera,
+      'imagePathFromPostPreview': this.widget.path,
     };
     // PostDetailScreen(
     //           image: args['image'],

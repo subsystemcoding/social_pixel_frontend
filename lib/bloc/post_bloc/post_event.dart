@@ -49,15 +49,8 @@ class FetchComments extends PostEvent {
 
 // Fetch posts in profile
 class SendPost extends PostEvent {
-  final imageLib.Image image;
-  final Location location;
-  final DateTime photoDate;
-  final String caption;
+  final Post post;
+  final String imageLink;
 
-  SendPost({
-    this.image,
-    this.location,
-    this.photoDate,
-    this.caption,
-  });
+  SendPost(this.post, this.imageLink);
 }

@@ -16,12 +16,6 @@ import 'package:socialpixel/data/repos/connectivity.dart';
 import 'package:socialpixel/data/repos/hive_repository.dart';
 import 'package:socialpixel/data/test_data/test_data.dart';
 
-enum PostSending {
-  Successful,
-  Unsuccessful,
-  NoInternet,
-}
-
 class PostManagement {
   int currentPostId = 0;
   static final PostManagement _singleton = PostManagement._internal();
@@ -32,10 +26,46 @@ class PostManagement {
 
   PostManagement._internal();
 
-  Future<PostSending> sendPost(Post post, PostSending value) {
-    return Future.delayed(Duration(milliseconds: 500), () {
-      return value;
-    });
+  Future<bool> sendPost(Post post, String imagePath) async {
+    String gpsString = '';
+    String channelString = '';
+    if (post.location.latitude != null) {
+      gpsString =
+          'gpsLatitude: "${post.location.latitude}", gpsLongitude: "${post.location.longitude}",';
+    } else if (post.channel != null) {
+      channelString = 'channel: "${post.channel.name}",';
+    }
+    var hashtagRegex = new RegExp(r"#[a-zA-Z0-9]+");
+    var res = hashtagRegex
+        .allMatches(post.caption)
+        .map((hashtag) => hashtag.group(0))
+        .toList();
+    var hashtags = "";
+    if (res.isNotEmpty) {
+      hashtags = "tags: [";
+      for (int i = 0; i < res.length; i++) {
+        hashtags += '"${res[i]}"';
+        if (i != res.length) {
+          hashtags += ",";
+        }
+      }
+      hashtags += "],";
+    }
+
+    var response = await GraphqlClient().muiltiPartRequest(
+      fields: {
+        'query': '''
+          mutation{
+            createPost(caption: "${post.caption}", $channelString $gpsString  $hashtags image: "imageLink"){
+              success
+            }
+          }
+          '''
+      },
+      files: {'imageLink': '$imagePath'},
+    );
+
+    return jsonDecode(response)['data']['createPost']['success'];
   }
 
   Future<List<Game>> fetchGamePosts({int channelId}) {

@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:socialpixel/data/models/comment.dart';
 import 'package:socialpixel/data/models/profile.dart';
 
+import 'channel.dart';
 import 'location.dart';
 
 part 'post.g.dart';
@@ -41,6 +42,8 @@ class Post {
   Uint8List postImageBytes;
   @HiveField(13)
   bool isUpvoted;
+  @HiveField(14)
+  Channel channel;
 
   Post({
     this.postId,
@@ -57,6 +60,7 @@ class Post {
     this.userImageBytes,
     this.postImageBytes,
     this.isUpvoted,
+    this.channel,
   });
 
   Post copyWith({
@@ -74,6 +78,7 @@ class Post {
     Uint8List userImageBytes,
     Uint8List postImageBytes,
     bool isUpvoted,
+    Channel channel,
   }) {
     return Post(
       postId: postId ?? this.postId,
@@ -90,6 +95,7 @@ class Post {
       userImageBytes: userImageBytes ?? this.userImageBytes,
       postImageBytes: postImageBytes ?? this.postImageBytes,
       isUpvoted: isUpvoted ?? this.isUpvoted,
+      channel: channel ?? this.channel,
     );
   }
 
@@ -109,6 +115,7 @@ class Post {
       // 'userImageBytes': userImageBytes?.toMap(),
       // 'postImageBytes': postImageBytes?.toMap(),
       'isUpvoted': isUpvoted,
+      'channel': channel?.toMap(),
     };
   }
 
@@ -132,6 +139,7 @@ class Post {
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // postImageBytes: Uint8List.fromMap(map['postImageBytes']),
       isUpvoted: map['isUpvoted'],
+      channel: Channel.fromMap(map['channel']),
     );
   }
 
@@ -141,7 +149,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location, userImageBytes: $userImageBytes, postImageBytes: $postImageBytes, isUpvoted: $isUpvoted)';
+    return 'Post(postId: $postId, userName: $userName, userAvatarLink: $userAvatarLink, datePosted: $datePosted, postImageLink: $postImageLink, caption: $caption, otherUsers: $otherUsers, upvotes: $upvotes, commentCount: $commentCount, comments: $comments, location: $location, userImageBytes: $userImageBytes, postImageBytes: $postImageBytes, isUpvoted: $isUpvoted, channel: $channel)';
   }
 
   @override
@@ -162,7 +170,8 @@ class Post {
         o.location == location &&
         o.userImageBytes == userImageBytes &&
         o.postImageBytes == postImageBytes &&
-        o.isUpvoted == isUpvoted;
+        o.isUpvoted == isUpvoted &&
+        o.channel == channel;
   }
 
   @override
@@ -180,6 +189,7 @@ class Post {
         location.hashCode ^
         userImageBytes.hashCode ^
         postImageBytes.hashCode ^
-        isUpvoted.hashCode;
+        isUpvoted.hashCode ^
+        channel.hashCode;
   }
 }

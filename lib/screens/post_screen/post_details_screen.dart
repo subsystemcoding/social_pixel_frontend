@@ -32,6 +32,7 @@ class PostDetailScreen extends StatefulWidget {
   final String path;
   //location of the picture
   final Location location;
+  final String imagePathFromPostPreview;
   //date time when the photo was taken
   final DateTime photoDate;
   final bool isCamera;
@@ -43,6 +44,7 @@ class PostDetailScreen extends StatefulWidget {
     this.photoDate,
     this.isCamera,
     this.path,
+    this.imagePathFromPostPreview,
   }) : super(key: key);
 
   @override
@@ -51,7 +53,6 @@ class PostDetailScreen extends StatefulWidget {
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
   Completer<GoogleMapController> _controller = Completer();
-  String caption;
   Location foundLocation;
   DateTime foundTime;
   File imageFile;
@@ -63,6 +64,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   DateTime date;
   bool gotInfo = false;
   ScrollController _scrollController = ScrollController();
+  TextEditingController _captionController = TextEditingController();
   Channel selectedChannel;
 
   @override
@@ -82,7 +84,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           .add(CheckImageForPerson(this.imageFile));
     }
     loaded = LoadLocation.NotLoading;
-    caption = '';
   }
 
   @override
@@ -143,28 +144,24 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           },
           child: BlocListener<PostBloc, PostState>(
             listener: (context, state) {
-              // TODO: implement listener
               if (state is PostSent) {
-                if (state.value == PostSending.Successful) {
-                  _showDialog(
-                    context,
+                _showDialog(context,
                     title: "Successful",
-                    text: "Post Successfully Submitted",
+                    text: "Post Successfully Submitted", onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    "/home",
+                    (Route<dynamic> route) => false,
                   );
-                } else if (state.value == PostSending.Unsuccessful) {
-                  _showDialog(
-                    context,
-                    title: "Unsuccessful",
-                    text: "Post was not submitted. Please try again",
-                  );
-                } else if (state.value == PostSending.NoInternet) {
-                  _showDialog(
-                    context,
-                    title: "No Internet",
-                    text:
-                        "No connection to internet. Post will be submitted when online",
-                  );
-                }
+                });
+              } else if (state is PostSentError) {
+                _showDialog(
+                  context,
+                  title: "UnSuccessfull",
+                  text: "Please make sure you are connected to internet",
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                );
               }
             },
             child: ListView(
@@ -199,15 +196,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 ),
                               ),
                               child: TextField(
+                                controller: _captionController,
                                 decoration: InputDecoration(
                                   hintText: 'Write a caption...',
                                   border: InputBorder.none,
                                 ),
-                                onSubmitted: (value) {
-                                  setState(() {
-                                    this.caption = value;
-                                  });
-                                },
                               ),
                             ),
                             SizedBox(height: 12.0),
@@ -243,21 +236,25 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         ));
   }
 
-  void _showDialog(context, {String title, String text}) {
+  void _showDialog(context, {String title, String text, Function onTap}) {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(text),
-            actions: [
-              GestureDetector(
-                child: Text("Okay"),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/home');
-                },
-              ),
-            ],
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: Text(title),
+              content: Text(text),
+              actions: [
+                GestureDetector(
+                  child: Text("Okay"),
+                  onTap: () {
+                    onTap();
+                  },
+                ),
+              ],
+            ),
           );
         });
   }
@@ -467,10 +464,12 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   void onPressedPostHandler(context) {
     BlocProvider.of<PostBloc>(context).add(
       SendPost(
-        image: this.widget.image,
-        location: this.foundLocation,
-        photoDate: this.foundTime,
-        caption: caption,
+        Post(
+          caption: _captionController.text,
+          channel: selectedChannel,
+          location: foundLocation,
+        ),
+        widget.imagePathFromPostPreview,
       ),
     );
   }

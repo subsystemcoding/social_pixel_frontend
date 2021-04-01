@@ -67,7 +67,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       );
     } else if (event is SendPost) {
       //await postManagement.sendPost(post, PostSending.Successful);
-      yield PostSent(PostSending.Successful);
+      try {
+        bool res = await postManagement.sendPost(event.post, event.imageLink);
+        yield PostSent();
+      } catch (e) {
+        yield PostSentError();
+      }
     } else if (event is UpvotePost) {
       try {
         var modifier = event.upvote ? "ADD" : "REMOVE";

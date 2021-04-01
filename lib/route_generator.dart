@@ -118,6 +118,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) {
           if (args is Map) {
             return PostDetailScreen(
+              imagePathFromPostPreview: args['imagePathFromPostPreview'],
               image: args['image'],
               location: args['location'],
               photoDate: args['date'],

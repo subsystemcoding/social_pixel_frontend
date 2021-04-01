@@ -54,7 +54,6 @@ class PostError extends PostState {
   PostError(this.message);
 }
 
-class PostSent extends PostState {
-  final PostSending value;
-  PostSent(this.value);
-}
+class PostSent extends PostState {}
+
+class PostSentError extends PostState {}
