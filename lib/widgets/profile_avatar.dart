@@ -13,20 +13,20 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var backgroundImage;
-    if (imageLink != null || imageLink.isNotEmpty) {
-      backgroundImage = Image.network(
+    if (!(imageLink == null || imageLink.isEmpty)) {
+      print("image link found and printing");
+      print(imageLink);
+      backgroundImage = NetworkImage(
         imageLink,
-        fit: BoxFit.cover,
       );
-    } else if (imageBytes != null || imageBytes.isNotEmpty) {
-      backgroundImage = Image.memory(
+    } else if (!(imageBytes == null || imageBytes.isEmpty)) {
+      backgroundImage = MemoryImage(
         imageBytes,
-        fit: BoxFit.cover,
       );
     } else {
-      backgroundImage = Image.asset(
+      print("using default Image");
+      backgroundImage = AssetImage(
         "assets/images/default_profile.jpg",
-        fit: BoxFit.cover,
       );
     }
     return CircleAvatar(

@@ -222,11 +222,22 @@ class PostManagement {
           },
         ),
       );
-      print("//////////////////////Priniting posts////////////////////");
+      for (var post in posts) {
+        final address = post.location.latitude != null
+            ? await Geocoder.local.findAddressesFromCoordinates(
+                Coordinates(
+                  post.location.latitude,
+                  post.location.longitude,
+                ),
+              )
+            : null;
+        final addressString = address != null
+            ? '${address.first.adminArea}, ${address.first.countryName}'
+            : '';
+        post.location.address = addressString;
+      }
       print(posts);
       //delete and add posts in the background
-      await _deleteAllPostInCache();
-      await _addPostsToCache(posts);
       return posts;
     }
     return [];
@@ -429,26 +440,15 @@ class PostManagement {
     for (int i = 0; i < posts.length; i++) {
       //convert userAvatarLink to base64
       final post = posts[i];
-      final userAvatar =
-          await Connectivity.networkImageToBytes(post.userAvatarLink);
+      final userAvatar = post.userAvatarLink == null
+          ? null
+          : await Connectivity.networkImageToBytes(post.userAvatarLink);
       //convert postImageLink to base64
-      final postImage =
-          await Connectivity.networkImageToBytes(post.postImageLink);
+      final postImage = post.postImageLink == null
+          ? null
+          : await Connectivity.networkImageToBytes(post.postImageLink);
 
       //convert otherUsers avatar to base64
-      final address = post.location.latitude != null
-          ? await Geocoder.local.findAddressesFromCoordinates(
-              Coordinates(
-                post.location.latitude,
-                post.location.longitude,
-              ),
-            )
-          : null;
-      final addressString = address != null
-          ? '${address.first.adminArea}, ${address.first.countryName}'
-          : '';
-      post.location.address = addressString;
-
       // add the new post to the box
       final newPost = post.copyWith(
         userImageBytes: userAvatar,
