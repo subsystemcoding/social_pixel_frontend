@@ -57,7 +57,7 @@ class TfLiteRepository {
     final object = await _recognizeObject(file);
     for (var item in object) {
       if (item['detectedClass'] == "person" &&
-          item['confidenceInClass'] > 0.5) {
+          item['confidenceInClass'] > 0.2) {
         return getBoxesInImage(object, file);
       }
     }
