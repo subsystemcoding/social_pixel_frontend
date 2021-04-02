@@ -111,8 +111,8 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                     );
                   }
                 },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: ListView(
+                  //crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
                       height: MediaQuery.of(context).size.width,
@@ -121,8 +121,8 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
+                    Container(
+                      //flex: 1,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
