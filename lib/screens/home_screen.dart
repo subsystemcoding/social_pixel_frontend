@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
+import 'package:socialpixel/data/debug_mode.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
@@ -54,9 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: BlocListener<PostBloc, PostState>(
                   listener: (context, state) {
                     if (state is PostError) {
-                      return Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              "Posts are not loaded, please check your internet connection")));
+                      if (DebugMode.debug) {
+                        return Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message)));
+                      }
+                      return Scaffold.of(context).showSnackBar(
+                          SnackBar(content: Text("Post not loaded")));
                     } else if (state is PostUpvotedError) {
                       return Scaffold.of(context).showSnackBar(
                         SnackBar(

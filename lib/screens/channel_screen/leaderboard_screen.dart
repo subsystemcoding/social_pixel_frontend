@@ -7,6 +7,7 @@ import 'package:socialpixel/data/repos/leaderboard_repository.dart';
 import 'package:socialpixel/data/models/leaderboard.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   final int id;
@@ -178,8 +179,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         context,
                         name: leaderboard.rows[index].user.username,
                         points: leaderboard.rows[index].points,
-                        image: NetworkImage(
-                            leaderboard.rows[index].user.userAvatarImage),
+                        imageLink: leaderboard.rows[index].user.userAvatarImage,
                         rank: index + 1,
                       );
                     }
@@ -198,7 +198,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   }
 
   Widget buildListTile(BuildContext context,
-      {String name, int points, ImageProvider<Object> image, int rank}) {
+      {String name, int points, String imageLink, int rank}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -213,10 +213,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             width: 200,
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundImage: image,
+                ProfileAvatar(
                   radius: 15,
+                  imageLink: imageLink,
                 ),
+                // CircleAvatar(
+                //   backgroundImage: image,
+                //   radius: 15,
+                // ),
                 SizedBox(
                   width: 12.0,
                 ),

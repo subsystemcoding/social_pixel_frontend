@@ -8,6 +8,7 @@ import 'package:socialpixel/data/Converter.dart';
 import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/custom_buttons.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
@@ -68,13 +69,18 @@ class PostWidget extends StatelessWidget {
   Widget profile(BuildContext context) {
     var dateTime = Converter.dateTimeStringtoReadable(this.post.datePosted);
     return Row(children: [
-      CircleAvatar(
-        backgroundImage: this.post.userImageBytes != null &&
-                this.post.userImageBytes.isNotEmpty
-            ? MemoryImage(this.post.userImageBytes)
-            : NetworkImage(this.post.userAvatarLink),
-        radius: 30,
+      ProfileAvatar(
+        radius: 25,
+        imageBytes: this.post.userImageBytes,
+        imageLink: this.post.userAvatarLink,
       ),
+      // CircleAvatar(
+      //   backgroundImage: this.post.userImageBytes != null &&
+      //           this.post.userImageBytes.isNotEmpty
+      //       ? MemoryImage(this.post.userImageBytes)
+      //       : NetworkImage(this.post.userAvatarLink),
+      //   radius: 30,
+      // ),
       SizedBox(
         width: 12.0,
       ),
@@ -220,27 +226,6 @@ class PostWidget extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  Widget getavatars(BuildContext context,
-      {List<ImageProvider<Object>> images, double radius}) {
-    List<Widget> children = List<Widget>();
-    for (var i = 0; i < images.length; i++) {
-      children.add(Positioned(
-        left: i * radius,
-        child: CircleAvatar(
-          backgroundColor: Theme.of(context).accentColor,
-          child: CircleAvatar(
-            backgroundImage: images[i],
-            radius: radius - 3,
-          ),
-        ),
-      ));
-    }
-    return Stack(
-      clipBehavior: Clip.none,
-      children: children,
     );
   }
 

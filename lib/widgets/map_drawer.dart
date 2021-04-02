@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 import 'package:socialpixel/widgets/verified_widget.dart';
 
 class MapDrawer extends StatelessWidget {
@@ -38,11 +39,16 @@ class MapDrawer extends StatelessWidget {
           children: [
             Container(
               height: 60,
-              child: CircleAvatar(
-                backgroundImage: (profile.userImageBytes != null)
-                    ? MemoryImage(profile.userImageBytes)
-                    : NetworkImage(profile.userAvatarImage),
+              child: ProfileAvatar(
+                radius: 30,
+                imageLink: profile.userAvatarImage,
+                imageBytes: profile.userImageBytes,
               ),
+              // child: CircleAvatar(
+              //   backgroundImage: (profile.userImageBytes != null)
+              //       ? MemoryImage(profile.userImageBytes)
+              //       : NetworkImage(profile.userAvatarImage),
+              // ),
             ),
             SizedBox(
               height: 8.0,

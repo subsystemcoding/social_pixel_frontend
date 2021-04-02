@@ -10,6 +10,7 @@ import 'package:socialpixel/data/models/profile.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/custom_drawer.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 import 'package:socialpixel/widgets/tabbar.dart';
 import 'package:tinycolor/tinycolor.dart';
@@ -134,7 +135,7 @@ class _SearchScreenState extends State<SearchScreen>
                 context,
                 username: profiles[index].username,
                 description: profiles[index].description,
-                image: NetworkImage(profiles[index].userAvatarImage),
+                userImageLink: profiles[index].userAvatarImage,
               );
             }
             return Divider();
@@ -219,7 +220,7 @@ class _SearchScreenState extends State<SearchScreen>
     BuildContext context, {
     String username,
     String description,
-    ImageProvider<Object> image,
+    String userImageLink,
     bool isVerified = false,
   }) {
     return GestureDetector(
@@ -233,10 +234,14 @@ class _SearchScreenState extends State<SearchScreen>
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: image,
+            ProfileAvatar(
               radius: 25,
+              imageLink: userImageLink,
             ),
+            // CircleAvatar(
+            //   backgroundImage: image,
+            //   radius: 25,
+            // ),
             SizedBox(
               width: 12.0,
             ),

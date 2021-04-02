@@ -5,6 +5,7 @@ import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/chatroom.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 import 'package:socialpixel/widgets/verified_widget.dart';
 import 'package:tinycolor/tinycolor.dart';
 
@@ -129,10 +130,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           Positioned(
             top: coverImageHeight - radius,
             left: MediaQuery.of(context).size.width / 2 - radius,
-            child: CircleAvatar(
-              backgroundImage: avatarImage != null && avatarImage.isNotEmpty
-                  ? NetworkImage(avatarImage)
-                  : AssetImage("assets/images/default_profile.jpg"),
+            child: ProfileAvatar(
+              imageLink: profile.userAvatarImage,
               radius: radius,
             ),
           ),

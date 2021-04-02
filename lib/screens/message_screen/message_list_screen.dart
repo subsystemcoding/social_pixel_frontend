@@ -10,6 +10,7 @@ import 'package:socialpixel/data/models/message.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/bottom_nav_bar.dart';
 import 'package:socialpixel/widgets/custom_drawer.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 import 'package:socialpixel/widgets/search_bar.dart';
 
 class MessageListScreen extends StatefulWidget {
@@ -117,14 +118,9 @@ class _MessageListScreenState extends State<MessageListScreen> {
     String time,
     int notification,
   }) {
-    var backgroundImage;
-    if (imageLink != '' && imageLink != null) {
-      backgroundImage = NetworkImage(imageLink);
-    }
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: backgroundImage,
-        backgroundColor: Theme.of(context).accentColor.withAlpha(60),
+      leading: ProfileAvatar(
+        imageLink: imageLink,
         radius: 30,
       ),
       title: Text(chatroom.name),

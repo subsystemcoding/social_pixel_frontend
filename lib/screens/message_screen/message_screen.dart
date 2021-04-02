@@ -13,6 +13,7 @@ import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/data/repos/message_managament.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/message_box.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 
 class MessageScreen extends StatefulWidget {
   final Chatroom chatroom;
@@ -90,9 +91,39 @@ class _MessageScreenState extends State<MessageScreen> {
     // TODO
     return Scaffold(
       backgroundColor: Color(0xffe5e5e5),
-      appBar: MenuBar().messageAppBar(context,
-          image: NetworkImage(chatroom.userImage),
-          username: widget.chatroom.name),
+      appBar: AppBar(
+        toolbarHeight: 75.0,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 4.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 25,
+                backgroundColor: Theme.of(context).accentColor,
+                child: ProfileAvatar(
+                  radius: 23,
+                  imageLink: chatroom.userImage,
+                ),
+                // child: CircleAvatar(
+                //   backgroundColor:
+                //       TinyColor(Theme.of(context).accentColor).lighten().color,
+                //   backgroundImage: image,
+                //   radius: 23,
+                // ),
+              ),
+              SizedBox(
+                width: 24.0,
+              ),
+              Text(
+                chatroom.name,
+                style: Theme.of(context).primaryTextTheme.headline4,
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Expanded(

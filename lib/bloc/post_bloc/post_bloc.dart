@@ -49,7 +49,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           ),
         );
       } catch (e) {
-        yield PostError("Could not find posts");
+        yield PostError(e.toString());
       }
     } else if (event is FetchSearchedPost) {
       List<String> hashtags = event.hashtags.trim().split(' ');
@@ -66,6 +66,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         await postManagement.fetchSearchedPosts(hashtags: hashtags),
       );
     } else if (event is SendPost) {
+      yield PostSending();
       //await postManagement.sendPost(post, PostSending.Successful);
       try {
         bool res = await postManagement.sendPost(event.post, event.imageLink);

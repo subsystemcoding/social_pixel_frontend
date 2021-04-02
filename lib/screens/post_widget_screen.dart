@@ -5,6 +5,7 @@ import 'package:socialpixel/bloc/post_bloc/post_bloc.dart';
 import 'package:socialpixel/data/models/comment.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/widgets/post_widget.dart';
+import 'package:socialpixel/widgets/profile_avatar.dart';
 
 class PostWidgetScreen extends StatefulWidget {
   final Post post;
@@ -216,9 +217,9 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: CircleAvatar(
+                child: ProfileAvatar(
+                  imageLink: comment.user.userAvatarImage,
                   radius: 20,
-                  backgroundImage: NetworkImage(comment.user.userAvatarImage),
                 ),
               ),
               SizedBox(

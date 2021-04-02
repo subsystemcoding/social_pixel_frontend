@@ -41,37 +41,4 @@ class MenuBar {
       ),
     );
   }
-
-  AppBar messageAppBar(BuildContext context,
-      {ImageProvider<Object> image, String username}) {
-    return AppBar(
-      toolbarHeight: 75.0,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      title: Padding(
-        padding: const EdgeInsets.only(left: 4.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundColor: Theme.of(context).accentColor,
-              child: CircleAvatar(
-                backgroundColor:
-                    TinyColor(Theme.of(context).accentColor).lighten().color,
-                backgroundImage: image,
-                radius: 23,
-              ),
-            ),
-            SizedBox(
-              width: 24.0,
-            ),
-            Text(
-              username,
-              style: Theme.of(context).primaryTextTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

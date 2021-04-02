@@ -66,6 +66,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   ScrollController _scrollController = ScrollController();
   TextEditingController _captionController = TextEditingController();
   Channel selectedChannel;
+  bool isPostSent = false;
 
   @override
   void initState() {
@@ -147,20 +148,40 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               if (state is PostSent) {
                 _showDialog(context,
                     title: "Successful",
-                    text: "Post Successfully Submitted", onTap: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    "/home",
-                    (Route<dynamic> route) => false,
-                  );
-                });
+                    content: Text("Post Successfully Submitted"),
+                    action: TextButton(
+                      child: Text("Okay"),
+                      onPressed: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          "/home",
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                    ));
               } else if (state is PostSentError) {
+                isPostSent = false;
+                _showDialog(context,
+                    title: "UnSuccessfull",
+                    content: Text("Post was not submitted. Please try again"),
+                    action: TextButton(
+                      child: Text("Okay"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ));
+              } else if (state is PostSending) {
                 _showDialog(
                   context,
-                  title: "UnSuccessfull",
-                  text: "Please make sure you are connected to internet",
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
+                  title: "Submitting",
+                  content: Center(
+                    child: Row(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text("Submitting Post"),
+                      ],
+                    ),
+                  ),
+                  action: Container(),
                 );
               }
             },
@@ -236,7 +257,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         ));
   }
 
-  void _showDialog(context, {String title, String text, Function onTap}) {
+  void _showDialog(context, {String title, Widget content, Widget action}) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -245,14 +266,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             onWillPop: () async => false,
             child: AlertDialog(
               title: Text(title),
-              content: Text(text),
+              content: content,
               actions: [
-                GestureDetector(
-                  child: Text("Okay"),
-                  onTap: () {
-                    onTap();
-                  },
-                ),
+                action,
               ],
             ),
           );
@@ -462,16 +478,20 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   }
 
   void onPressedPostHandler(context) {
-    BlocProvider.of<PostBloc>(context).add(
-      SendPost(
-        Post(
-          caption: _captionController.text,
-          channel: selectedChannel,
-          location: foundLocation,
+    //Sending a post
+    if (!isPostSent) {
+      isPostSent = true;
+      BlocProvider.of<PostBloc>(context).add(
+        SendPost(
+          Post(
+            caption: _captionController.text,
+            channel: selectedChannel,
+            location: foundLocation,
+          ),
+          widget.imagePathFromPostPreview,
         ),
-        widget.imagePathFromPostPreview,
-      ),
-    );
+      );
+    }
   }
 
   void onPressedCancelLocationHandler(BuildContext context) {

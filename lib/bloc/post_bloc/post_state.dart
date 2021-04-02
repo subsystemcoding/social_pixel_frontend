@@ -63,3 +63,5 @@ class PostError extends PostState {
 class PostSent extends PostState {}
 
 class PostSentError extends PostState {}
+
+class PostSending extends PostState {}
