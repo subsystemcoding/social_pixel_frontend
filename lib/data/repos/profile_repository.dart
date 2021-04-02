@@ -126,6 +126,8 @@ class ProfileRepository {
           leaderboardId: int.parse(item['leaderboard']['id']),
         ),
       )),
+      isUser: true,
+      isVerified: false,
     );
 
     profile.followers = await _getNumOfFollowersOfUser(profile.username);
@@ -194,6 +196,8 @@ class ProfileRepository {
               ),
             )
           : [],
+      isUser: false,
+      isVerified: false,
     );
 
     profile.isFollowing = await _isUserFollowing(profile.username);

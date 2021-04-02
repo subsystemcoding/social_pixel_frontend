@@ -31,13 +31,14 @@ class PostAdapter extends TypeAdapter<Post> {
       userImageBytes: fields[11] as Uint8List,
       postImageBytes: fields[12] as Uint8List,
       isUpvoted: fields[13] as bool,
+      channel: fields[14] as Channel,
     );
   }
 
   @override
   void write(BinaryWriter writer, Post obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.postId)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class PostAdapter extends TypeAdapter<Post> {
       ..writeByte(12)
       ..write(obj.postImageBytes)
       ..writeByte(13)
-      ..write(obj.isUpvoted);
+      ..write(obj.isUpvoted)
+      ..writeByte(14)
+      ..write(obj.channel);
   }
 
   @override

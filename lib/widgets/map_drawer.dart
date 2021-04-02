@@ -40,6 +40,7 @@ class MapDrawer extends StatelessWidget {
             Container(
               height: 60,
               child: ProfileAvatar(
+                username: profile.username,
                 radius: 30,
                 imageLink: profile.userAvatarImage,
                 imageBytes: profile.userImageBytes,

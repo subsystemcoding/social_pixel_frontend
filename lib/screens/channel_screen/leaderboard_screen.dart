@@ -214,6 +214,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             child: Row(
               children: [
                 ProfileAvatar(
+                  username: name,
                   radius: 15,
                   imageLink: imageLink,
                 ),

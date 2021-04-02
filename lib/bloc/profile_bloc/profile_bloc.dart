@@ -23,10 +23,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         print("Going to be yeeted");
         yield ProfileLoaded(profile);
       }
-      if (event is GetCurrentProfile) {
-        final profile = await profileRepository.fetchCurrentProfile();
-        yield ProfileLoaded(profile);
-      }
     } catch (e) {
       yield ProfileError("The profile does not exist");
     }

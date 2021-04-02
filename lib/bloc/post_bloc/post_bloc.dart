@@ -49,6 +49,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           ),
         );
       } catch (e) {
+        print(e);
         yield PostError(e.toString());
       }
     } else if (event is FetchSearchedPost) {
@@ -72,6 +73,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         bool res = await postManagement.sendPost(event.post, event.imageLink);
         yield PostSent();
       } catch (e) {
+        print(e);
         yield PostSentError();
       }
     } else if (event is UpvotePost) {

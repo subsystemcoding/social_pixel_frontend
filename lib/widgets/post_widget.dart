@@ -46,9 +46,10 @@ class PostWidget extends StatelessWidget {
           SizedBox(
             height: 12.0,
           ),
-          this.post.location.latitude != null
-              ? getGpsTag(text: this.post.location.address)
-              : Container(),
+          this.post.location.address == null ||
+                  this.post.location.address.isEmpty
+              ? Container()
+              : getGpsTag(text: this.post.location.address),
           getCaption(context),
           SizedBox(
             height: 12.0,
@@ -70,6 +71,7 @@ class PostWidget extends StatelessWidget {
     var dateTime = Converter.dateTimeStringtoReadable(this.post.datePosted);
     return Row(children: [
       ProfileAvatar(
+        username: this.post.userName,
         radius: 25,
         imageBytes: this.post.userImageBytes,
         imageLink: this.post.userAvatarLink,
@@ -234,14 +236,17 @@ class PostWidget extends StatelessWidget {
       height: 50,
       alignment: Alignment.centerRight,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.location_pin, color: Colors.blue),
           SizedBox(
             width: 4,
           ),
-          Text(
-            text,
-            style: TextStyle(fontSize: 14.0, color: Colors.blue),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 14.0, color: Colors.blue),
+            ),
           )
         ],
       ),

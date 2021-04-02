@@ -146,6 +146,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           child: BlocListener<PostBloc, PostState>(
             listener: (context, state) {
               if (state is PostSent) {
+                Navigator.of(context).pop();
                 _showDialog(context,
                     title: "Successful",
                     content: Text("Post Successfully Submitted"),
@@ -160,8 +161,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ));
               } else if (state is PostSentError) {
                 isPostSent = false;
+                Navigator.of(context).pop();
                 _showDialog(context,
-                    title: "UnSuccessfull",
+                    title: "Unsuccessful",
                     content: Text("Post was not submitted. Please try again"),
                     action: TextButton(
                       child: Text("Okay"),
@@ -172,16 +174,17 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               } else if (state is PostSending) {
                 _showDialog(
                   context,
-                  title: "Submitting",
-                  content: Center(
-                    child: Row(
-                      children: [
-                        CircularProgressIndicator(),
-                        Text("Submitting Post"),
-                      ],
+                  title: "Sending Post",
+                  content: Container(
+                    height: 130,
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
                   ),
-                  action: Container(),
+                  action: Container(
+                    height: 0,
+                    width: 0,
+                  ),
                 );
               }
             },

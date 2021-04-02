@@ -35,13 +35,14 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       upvotedPosts: (fields[15] as List)?.cast<Post>(),
       isFollowing: fields[16] as bool,
       chatrooms: (fields[17] as List)?.cast<Chatroom>(),
+      isUser: fields[18] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Profile obj) {
     writer
-      ..writeByte(18)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -77,7 +78,9 @@ class ProfileAdapter extends TypeAdapter<Profile> {
       ..writeByte(16)
       ..write(obj.isFollowing)
       ..writeByte(17)
-      ..write(obj.chatrooms);
+      ..write(obj.chatrooms)
+      ..writeByte(18)
+      ..write(obj.isUser);
   }
 
   @override

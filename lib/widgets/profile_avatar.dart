@@ -6,9 +6,14 @@ class ProfileAvatar extends StatelessWidget {
   final double radius;
   final String imageLink;
   final Uint8List imageBytes;
-  const ProfileAvatar(
-      {Key key, this.radius = 20, this.imageLink, this.imageBytes})
-      : super(key: key);
+  final String username;
+  const ProfileAvatar({
+    Key key,
+    this.radius = 20,
+    this.imageLink,
+    this.imageBytes,
+    this.username,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +34,15 @@ class ProfileAvatar extends StatelessWidget {
         "assets/images/default_profile.jpg",
       );
     }
-    return CircleAvatar(
-      backgroundImage: backgroundImage,
-      radius: this.radius,
+    return GestureDetector(
+      child: CircleAvatar(
+        backgroundImage: backgroundImage,
+        radius: this.radius,
+      ),
+      onTap: () {
+        if (this.username != null)
+          Navigator.of(context).pushNamed('/profile', arguments: this.username);
+      },
     );
   }
 }

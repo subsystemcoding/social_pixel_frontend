@@ -11,9 +11,9 @@ import 'package:tinycolor/tinycolor.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String username;
-  const UserProfileScreen({
+  const UserProfileScreen(
+    this.username, {
     Key key,
-    this.username,
   }) : super(key: key);
 
   @override
@@ -26,10 +26,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.username == null) {
-      BlocProvider.of<ProfileBloc>(context).add(GetCurrentProfile());
-      isUser = true;
-    }
     BlocProvider.of<ProfileBloc>(context).add(GetProfile(widget.username));
     return Container(
       child: Scaffold(
@@ -50,6 +46,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           builder: (context, state) {
             if (state is ProfileLoaded) {
               profile = state.profile;
+              isUser = profile.isUser;
             } else if (state is ProfileLoading) {
               if (profile == null) {
                 return Center(

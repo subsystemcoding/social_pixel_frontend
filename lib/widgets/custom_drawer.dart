@@ -38,6 +38,7 @@ class CustomDrawer extends StatelessWidget {
                             Container(
                               height: 60,
                               child: ProfileAvatar(
+                                username: profile.username,
                                 radius: 25,
                                 imageBytes: profile.userImageBytes,
                                 imageLink: profile.userAvatarImage,

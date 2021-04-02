@@ -103,6 +103,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 radius: 25,
                 backgroundColor: Theme.of(context).accentColor,
                 child: ProfileAvatar(
+                  username: chatroom.name,
                   radius: 23,
                   imageLink: chatroom.userImage,
                 ),

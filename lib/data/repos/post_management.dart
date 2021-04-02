@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:geocoder/geocoder.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:socialpixel/data/debug_mode.dart';
@@ -29,11 +29,11 @@ class PostManagement {
   Future<bool> sendPost(Post post, String imagePath) async {
     String gpsString = '';
     String channelString = '';
-    if (post.location.latitude != null) {
+    if (post.location != null) {
       gpsString =
-          'gpsLatitude: "${post.location.latitude}", gpsLongitude: "${post.location.longitude}",';
+          'gpsLatitude: "${post.location.latitude}", gpsLongitude: "${post.location.longitude}", ';
     } else if (post.channel != null) {
-      channelString = 'channel: "${post.channel.name}",';
+      channelString = 'channel: "${post.channel.name}", ';
     }
     var hashtagRegex = new RegExp(r"#[a-zA-Z0-9]+");
     var res = hashtagRegex
@@ -49,14 +49,14 @@ class PostManagement {
           hashtags += ",";
         }
       }
-      hashtags += "],";
+      hashtags += "], ";
     }
 
     var response = await GraphqlClient().muiltiPartRequest(
       fields: {
         'query': '''
           mutation{
-            createPost(caption: "${post.caption}", $channelString $gpsString  $hashtags image: "imageLink"){
+            createPost(caption: "${post.caption}", $channelString$gpsString${hashtags}image: "imageLink"){
               success
             }
           }
@@ -223,21 +223,20 @@ class PostManagement {
         ),
       );
       for (var post in posts) {
-        final address = post.location.latitude != null
-            ? await Geocoder.local.findAddressesFromCoordinates(
-                Coordinates(
-                  post.location.latitude,
-                  post.location.longitude,
-                ),
-              )
-            : null;
+        final address =
+            post.location.latitude == null || post.location.latitude == 0.000000
+                ? null
+                : await geocoding.placemarkFromCoordinates(
+                    post.location.latitude,
+                    post.location.longitude,
+                  );
+
         final addressString = address != null
-            ? '${address.first.adminArea}, ${address.first.countryName}'
+            ? '${address.first.locality}, ${address.first.country}'
             : '';
         post.location.address = addressString;
       }
-      print(posts);
-      //delete and add posts in the background
+
       return posts;
     }
     return [];

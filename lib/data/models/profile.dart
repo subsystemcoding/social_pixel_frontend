@@ -50,6 +50,8 @@ class Profile {
   bool isFollowing;
   @HiveField(17)
   List<Chatroom> chatrooms;
+  @HiveField(18)
+  bool isUser;
   Profile({
     this.userId,
     this.username,
@@ -69,6 +71,7 @@ class Profile {
     this.upvotedPosts,
     this.isFollowing,
     this.chatrooms,
+    this.isUser,
   });
 
   Profile copyWith({
@@ -90,6 +93,7 @@ class Profile {
     List<Post> upvotedPosts,
     bool isFollowing,
     List<Chatroom> chatrooms,
+    bool isUser,
   }) {
     return Profile(
       userId: userId ?? this.userId,
@@ -110,6 +114,7 @@ class Profile {
       upvotedPosts: upvotedPosts ?? this.upvotedPosts,
       isFollowing: isFollowing ?? this.isFollowing,
       chatrooms: chatrooms ?? this.chatrooms,
+      isUser: isUser ?? this.isUser,
     );
   }
 
@@ -134,6 +139,7 @@ class Profile {
       'upvotedPosts': upvotedPosts?.map((x) => x?.toMap())?.toList(),
       'isFollowing': isFollowing,
       'chatrooms': chatrooms?.map((x) => x?.toMap())?.toList(),
+      'isUser': isUser,
     };
   }
 
@@ -154,26 +160,16 @@ class Profile {
       // userImageBytes: Uint8List.fromMap(map['userImageBytes']),
       // userCoverImageBytes: Uint8List.fromMap(map['userCoverImageBytes']),
       subscribedGames:
-          map['subscribedGames'] == null || map['subscribedGames'].isEmpty
-              ? []
-              : List<Game>.from(
-                  map['subscribedGames']?.map((x) => Game.fromMap(x))),
-      subscribedChannels:
-          map['subscribedChannels'] == null || map['subscribedChannels'].isEmpty
-              ? []
-              : List<Channel>.from(
-                  map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
-      postsMade: map['postsMade'] == null || map['postsMade'].isEmpty
-          ? []
-          : List<Post>.from(map['postsMade']?.map((x) => Post.fromMap(x))),
-      upvotedPosts: map['upvotedPosts'] == null || map['upvotedPosts'].isEmpty
-          ? []
-          : List<Post>.from(map['upvotedPosts']?.map((x) => Post.fromMap(x))),
+          List<Game>.from(map['subscribedGames']?.map((x) => Game.fromMap(x))),
+      subscribedChannels: List<Channel>.from(
+          map['subscribedChannels']?.map((x) => Channel.fromMap(x))),
+      postsMade: List<Post>.from(map['postsMade']?.map((x) => Post.fromMap(x))),
+      upvotedPosts:
+          List<Post>.from(map['upvotedPosts']?.map((x) => Post.fromMap(x))),
       isFollowing: map['isFollowing'],
-      chatrooms: map['chatrooms'] == null || map['chatrooms'].isEmpty
-          ? []
-          :List<Chatroom>.from(
+      chatrooms: List<Chatroom>.from(
           map['chatrooms']?.map((x) => Chatroom.fromMap(x))),
+      isUser: map['isUser'],
     );
   }
 
@@ -184,7 +180,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels, postsMade: $postsMade, upvotedPosts: $upvotedPosts, isFollowing: $isFollowing, chatrooms: $chatrooms)';
+    return 'Profile(userId: $userId, username: $username, userAvatarImage: $userAvatarImage, userCoverImage: $userCoverImage, email: $email, description: $description, points: $points, followers: $followers, createDate: $createDate, isVerified: $isVerified, userImageBytes: $userImageBytes, userCoverImageBytes: $userCoverImageBytes, subscribedGames: $subscribedGames, subscribedChannels: $subscribedChannels, postsMade: $postsMade, upvotedPosts: $upvotedPosts, isFollowing: $isFollowing, chatrooms: $chatrooms, isUser: $isUser)';
   }
 
   @override
@@ -209,7 +205,8 @@ class Profile {
         listEquals(o.postsMade, postsMade) &&
         listEquals(o.upvotedPosts, upvotedPosts) &&
         o.isFollowing == isFollowing &&
-        listEquals(o.chatrooms, chatrooms);
+        listEquals(o.chatrooms, chatrooms) &&
+        o.isUser == isUser;
   }
 
   @override
@@ -231,6 +228,7 @@ class Profile {
         postsMade.hashCode ^
         upvotedPosts.hashCode ^
         isFollowing.hashCode ^
-        chatrooms.hashCode;
+        chatrooms.hashCode ^
+        isUser.hashCode;
   }
 }

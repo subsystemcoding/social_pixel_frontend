@@ -218,6 +218,7 @@ class _PostWidgetScreenState extends State<PostWidgetScreen> {
             children: [
               Container(
                 child: ProfileAvatar(
+                  username: comment.user.username,
                   imageLink: comment.user.userAvatarImage,
                   radius: 20,
                 ),
