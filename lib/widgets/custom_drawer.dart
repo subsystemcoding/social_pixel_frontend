@@ -16,8 +16,10 @@ class CustomDrawer extends StatelessWidget {
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           if (state is ProfileLoaded) {
+            print("Profile Loaded");
             profile = state.profile;
           }
+          print(state);
           return profile == null
               ? Center(
                   child: CircularProgressIndicator(),
@@ -37,11 +39,13 @@ class CustomDrawer extends StatelessWidget {
                           children: [
                             Container(
                               height: 60,
-                              child: ProfileAvatar(
-                                username: profile.username,
-                                radius: 25,
-                                imageBytes: profile.userImageBytes,
-                                imageLink: profile.userAvatarImage,
+                              child: Center(
+                                child: ProfileAvatar(
+                                  username: profile.username,
+                                  radius: 25,
+                                  imageBytes: profile.userImageBytes,
+                                  imageLink: profile.userAvatarImage,
+                                ),
                               ),
                               // child: CircleAvatar(
                               //   backgroundImage:

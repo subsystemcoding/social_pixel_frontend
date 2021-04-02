@@ -19,26 +19,41 @@ class ProfileAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     var backgroundImage;
     if (!(imageLink == null || imageLink.isEmpty)) {
-      print("image link found and printing");
-      print(imageLink);
-      backgroundImage = NetworkImage(
+      // backgroundImage = NetworkImage(
+      //   imageLink,
+      // );
+      backgroundImage = Image.network(
         imageLink,
+        width: this.radius * 2,
+        height: this.radius * 2,
+        fit: BoxFit.cover,
       );
     } else if (!(imageBytes == null || imageBytes.isEmpty)) {
-      backgroundImage = MemoryImage(
+      backgroundImage = Image.memory(
         imageBytes,
+        width: this.radius * 2,
+        height: this.radius * 2,
+        fit: BoxFit.cover,
       );
     } else {
-      print("using default Image");
-      backgroundImage = AssetImage(
+      // backgroundImage = AssetImage(
+      //   "assets/images/default_profile.jpg",
+      // );
+      backgroundImage = Image.asset(
         "assets/images/default_profile.jpg",
+        width: this.radius * 2,
+        height: this.radius * 2,
+        fit: BoxFit.cover,
       );
     }
     return GestureDetector(
-      child: CircleAvatar(
-        backgroundImage: backgroundImage,
-        radius: this.radius,
+      child: ClipOval(
+        child: backgroundImage,
       ),
+      // child: CircleAvatar(
+      //   backgroundImage: backgroundImage,
+      //   radius: this.radius,
+      // ),
       onTap: () {
         if (this.username != null)
           Navigator.of(context).pushNamed('/profile', arguments: this.username);

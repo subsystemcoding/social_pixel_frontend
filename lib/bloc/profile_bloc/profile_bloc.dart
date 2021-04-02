@@ -17,25 +17,35 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ProfileEvent event,
   ) async* {
     yield ProfileLoading();
-    try {
-      if (event is GetProfile) {
+    if (event is GetProfile) {
+      try {
         final profile = await profileRepository.fetchProfile(event.username);
         print("Going to be yeeted");
         yield ProfileLoaded(profile);
+      } catch (e) {
+        print("Error from GetProfile");
+        print(e.toString());
+        yield ProfileError("The profile does not exist");
       }
-    } catch (e) {
-      yield ProfileError("The profile does not exist");
-    }
-    try {
-      if (event is GetProfileList) {
+    } else if (event is GetCurrentProfile) {
+      try {
+        final profile = await profileRepository.fetchCurrentProfile();
+        print("Going to be yeeted");
+        yield ProfileLoaded(profile);
+      } catch (e) {
+        print("Error from GetProfile");
+        print(e.toString());
+        yield ProfileError("The profile does not exist");
+      }
+    } else if (event is GetProfileList) {
+      try {
         final profiles = await profileRepository.fetchProfile(event.name);
         yield ProfileListLoaded([profiles]);
+      } catch (e) {
+        print(e);
+        yield ProfileError("No users found");
       }
-    } catch (e) {
-      print(e);
-      yield ProfileError("No users found");
-    }
-    if (event is StartProfileInitial) {
+    } else if (event is StartProfileInitial) {
       yield ProfileInitial();
     } else if (event is FollowUser) {
       try {

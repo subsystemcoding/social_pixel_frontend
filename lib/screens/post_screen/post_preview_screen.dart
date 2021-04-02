@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photofilters/photofilters.dart';
 import 'package:path/path.dart';
 import 'package:image/image.dart' as imageLib;
@@ -209,13 +210,16 @@ class _PostPreviewScreenState extends State<PostPreviewScreen> {
       print("height < width");
       image = imageLib.copyResizeCropSquare(image, image.height);
     }
+    Directory dir = await getTemporaryDirectory();
 
+    File file = File("${dir.path}/temp.jpg");
+    file.writeAsBytesSync(imageLib.encodeJpg(image, quality: 80));
     Map<String, dynamic> args = {
       'image': image,
       'location': location,
       'date': date,
       'isCamera': this.widget.isCamera,
-      'imagePathFromPostPreview': this.widget.path,
+      'imagePathFromPostPreview': "${dir.path}/temp.jpg",
     };
     // PostDetailScreen(
     //           image: args['image'],
