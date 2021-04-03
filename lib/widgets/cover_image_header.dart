@@ -13,7 +13,7 @@ class CoverImageHeader extends StatelessWidget {
     this.coverImage,
     this.avatarImage,
     this.coverImageHeight,
-    this.avatarImageRadius,
+    this.avatarImageRadius = 0,
     this.editCoverImage = false,
     this.editAvatarImage = false,
   }) : super(key: key);
@@ -38,7 +38,7 @@ class CoverImageHeader extends StatelessWidget {
             ),
           ),
           !editCoverImage
-              ? null
+              ? Container()
               : Positioned(
                   top: 0,
                   left: 0,
@@ -64,20 +64,22 @@ class CoverImageHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-          Positioned(
-            top: coverImageHeight - avatarImageRadius,
-            left: 0,
-            right: 0,
-            height: avatarImageRadius * 2,
-            child: Center(
-              child: CircleAvatar(
-                backgroundImage: avatarImage,
-                radius: avatarImageRadius,
-              ),
-            ),
-          ),
-          !editCoverImage
-              ? null
+          avatarImage == null
+              ? Container()
+              : Positioned(
+                  top: coverImageHeight - avatarImageRadius,
+                  left: 0,
+                  right: 0,
+                  height: avatarImageRadius * 2,
+                  child: Center(
+                    child: CircleAvatar(
+                      backgroundImage: avatarImage,
+                      radius: avatarImageRadius,
+                    ),
+                  ),
+                ),
+          !editAvatarImage
+              ? Container()
               : Positioned(
                   top: coverImageHeight - avatarImageRadius,
                   left: 0,

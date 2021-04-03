@@ -11,6 +11,8 @@ class CreateChannelScreen extends StatefulWidget {
 class _CreateChannelScreenState extends State<CreateChannelScreen> {
   var coverImage;
   var avatarImage;
+  TextEditingController _roomTextController = TextEditingController();
+  List<Widget> roomChildren = [];
 
   @override
   void initState() {
@@ -105,19 +107,38 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
   List<Widget> _buildGames() {
     return [
       ListTile(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushNamed('/create_game');
+        },
         title: Text("+ Add Game"),
       ),
     ];
   }
 
   List<Widget> _buildRooms() {
-    return [
+    List<Widget> list = [
       ListTile(
-        onTap: () {},
+        onTap: () {
+          //remove set state
+          setState(() {
+            roomChildren.add(ListTile(
+              title: TextField(
+                controller: _roomTextController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Room name",
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
+                onSubmitted: (val) {},
+              ),
+            ));
+          });
+        },
         title: Text("+ Add Room"),
       ),
     ];
+    list.addAll(roomChildren);
+    return list;
   }
 
   List<Widget> _buildMods() {
