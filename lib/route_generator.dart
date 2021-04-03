@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialpixel/screens/channel_screen/create_channel_screen.dart';
 import 'package:socialpixel/screens/home_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/login_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/first_screen.dart';
@@ -72,6 +73,10 @@ class RouteGenerator {
           builder: (_) => ChannelScreen(
             channelId: args,
           ),
+        );
+      case '/create_channel':
+        return MaterialPageRoute(
+          builder: (_) => CreateChannelScreen(),
         );
       case '/leaderboard':
         if (args is Map) {

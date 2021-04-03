@@ -115,7 +115,7 @@ class CustomDrawer extends StatelessWidget {
                         "Channel Mods",
                         style: Theme.of(context).primaryTextTheme.bodyText2,
                       ),
-                      children: _getSubscribedChannels(context, profile),
+                      children: _getChannelMods(context, profile),
                     ),
                   ],
                 );
@@ -128,8 +128,11 @@ class CustomDrawer extends StatelessWidget {
     List<Widget> children = [];
     return [
       ListTile(
-        onTap: () {},
-        title: Text("+ Create Channel"),
+        onTap: () {
+          Navigator.of(context).pushNamed("/create_channel");
+        },
+        title: Text("+ Create Channel",
+            style: Theme.of(context).textTheme.headline6),
       )
     ];
   }
