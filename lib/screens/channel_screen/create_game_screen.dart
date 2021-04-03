@@ -26,6 +26,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
         backgroundColor: Colors.transparent,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CoverImageHeader(
             coverImage: coverImage,
@@ -74,9 +75,17 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
           SizedBox(
             height: 12,
           ),
-          ExpansionTile(
-            title: Text("Posts"),
-            children: [],
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(0.0),
+              children: [
+                ExpansionTile(
+                  title: Text("Posts"),
+                  children: [],
+                ),
+              ],
+            ),
           ),
         ],
       ),

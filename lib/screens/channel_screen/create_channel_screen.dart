@@ -81,23 +81,33 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
           SizedBox(
             height: 12,
           ),
-          ExpansionTile(
-            title: Text("Rooms"),
-            children: _buildRooms(),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          ExpansionTile(
-            title: Text("Moderators"),
-            children: _buildMods(),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          ExpansionTile(
-            title: Text("Games"),
-            children: _buildGames(),
+          Expanded(
+            child: Container(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.all(0.0),
+                children: [
+                  ExpansionTile(
+                    title: Text("Rooms"),
+                    children: _buildRooms(),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  ExpansionTile(
+                    title: Text("Moderators"),
+                    children: _buildMods(),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  ExpansionTile(
+                    title: Text("Games"),
+                    children: _buildGames(),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
