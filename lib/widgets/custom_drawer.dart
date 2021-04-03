@@ -103,16 +103,61 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ),
                     Divider(),
-                    ListTile(
+                    ExpansionTile(
                       title: Text(
                         "Subscribed Channels",
                         style: Theme.of(context).primaryTextTheme.bodyText2,
                       ),
+                      children: _getSubscribedChannels(context, profile),
+                    ),
+                    ExpansionTile(
+                      title: Text(
+                        "Channel Mods",
+                        style: Theme.of(context).primaryTextTheme.bodyText2,
+                      ),
+                      children: _getSubscribedChannels(context, profile),
                     ),
                   ],
                 );
         },
       ),
     );
+  }
+
+  List<Widget> _getChannelMods(BuildContext context, Profile profile) {
+    List<Widget> children = [];
+    return [
+      ListTile(
+        onTap: () {},
+        title: Text("+ Create Channel"),
+      )
+    ];
+  }
+
+  List<Widget> _getSubscribedChannels(BuildContext context, Profile profile) {
+    List<Widget> children = [];
+    if (!(profile.subscribedChannels == null ||
+        profile.subscribedChannels.isEmpty)) {
+      for (int i = 0; i < profile.subscribedChannels.length; i++) {
+        children.add(ListTile(
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              "/channel",
+              arguments: profile.subscribedChannels[i].id,
+            );
+          },
+          title: Text(profile.subscribedChannels[i].name),
+          leading: ProfileAvatar(
+            radius: 20,
+            imageLink: profile.subscribedChannels[i].avatarImageLink,
+          ),
+        ));
+      }
+    } else {
+      children.add(ListTile(
+        title: Text("No channels"),
+      ));
+    }
+    return children;
   }
 }

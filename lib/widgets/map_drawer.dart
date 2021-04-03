@@ -39,11 +39,13 @@ class MapDrawer extends StatelessWidget {
           children: [
             Container(
               height: 60,
-              child: ProfileAvatar(
-                username: profile.username,
-                radius: 30,
-                imageLink: profile.userAvatarImage,
-                imageBytes: profile.userImageBytes,
+              child: Center(
+                child: ProfileAvatar(
+                  username: profile.username,
+                  radius: 30,
+                  imageLink: profile.userAvatarImage,
+                  imageBytes: profile.userImageBytes,
+                ),
               ),
               // child: CircleAvatar(
               //   backgroundImage: (profile.userImageBytes != null)
