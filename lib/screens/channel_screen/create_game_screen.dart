@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialpixel/widgets/cover_image_header.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 
 class CreateGameScreen extends StatefulWidget {
   CreateGameScreen({Key key}) : super(key: key);
@@ -83,6 +84,21 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                 ExpansionTile(
                   title: Text("Posts"),
                   children: [],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  width: 150,
+                  alignment: Alignment.center,
+                  child: CustomButtons.standardButton(
+                    context,
+                    text: "Add Game",
+                    margin: EdgeInsets.all(0.0),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               ],
             ),

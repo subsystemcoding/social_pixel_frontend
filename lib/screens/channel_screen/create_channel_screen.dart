@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
+import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/widgets/cover_image_header.dart';
+import 'package:socialpixel/widgets/custom_buttons.dart';
 
 class CreateChannelScreen extends StatefulWidget {
   CreateChannelScreen({Key key}) : super(key: key);
@@ -11,6 +15,9 @@ class CreateChannelScreen extends StatefulWidget {
 class _CreateChannelScreenState extends State<CreateChannelScreen> {
   var coverImage;
   var avatarImage;
+  Channel channel;
+  List<Game> games;
+  List<Chatroom> rooms;
   TextEditingController _roomTextController = TextEditingController();
   List<Widget> roomChildren = [];
 
@@ -104,6 +111,26 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                   ExpansionTile(
                     title: Text("Games"),
                     children: _buildGames(),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    width: 150,
+                    alignment: Alignment.center,
+                    child: CustomButtons.standardButton(
+                      context,
+                      text: "Create Channel",
+                      margin: EdgeInsets.all(0.0),
+                      onPressed: () {
+                        if (channel.id != null) {
+                          Navigator.of(context).pushNamed(
+                            "/channel",
+                            arguments: channel.id,
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
