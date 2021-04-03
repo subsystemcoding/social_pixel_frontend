@@ -2,8 +2,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:socialpixel/data/models/chatroom.dart';
+import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/mapPost.dart';
 import 'package:socialpixel/data/repos/channel_repository.dart';
 import 'package:socialpixel/data/models/channel.dart';
+import 'package:socialpixel/data/repos/game_repository.dart';
+import 'package:socialpixel/data/repos/message_managament.dart';
+import 'package:socialpixel/data/repos/post_management.dart';
 
 part 'channel_event.dart';
 part 'channel_state.dart';
@@ -55,7 +61,49 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       } catch (e) {
         yield ChannelSubscribedError();
       }
+    } else if (event is CreateChannel) {
+      bool roomCreated = true;
+      bool gameCreated = true;
+
+      try {
+        //create channel
+        int channelId = int.parse(
+            await channelRepository.createChannel(channel: event.channel));
+
+        //create chatrooms
+        for (var name in event.chatrooms) {
+          try {
+            await channelRepository.createChatroom(
+              event.channel,
+              name,
+            );
+          } catch (e) {
+            roomCreated = false;
+          }
+        }
+        try {
+          for (var game in event.games) {
+            for (int i = 0; i < game.mapPosts.length; i++) {
+              await PostManagement().sendPost(
+                game.mapPosts[i].post,
+                game.mapPosts[i].post.postImageLink,
+              );
+            }
+            await GameRepository().createGame(
+              event.channel.name,
+              game.description,
+              game.image,
+              game.mapPosts.map((mapPost) => mapPost.post.postId).toList(),
+            );
+          }
+        } catch (e) {
+          print(e);
+        }
+        yield ChannelCreated(channelId, roomCreated, gameCreated);
+      } catch (e) {
+        print(e);
+        yield ChannelError("Create Channel");
+      }
     }
-    // TODO: implement mapEventToState
   }
 }

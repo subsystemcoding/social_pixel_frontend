@@ -24,3 +24,11 @@ class SubscribeChannel extends ChannelEvent {
 
   SubscribeChannel(this.channel);
 }
+
+class CreateChannel extends ChannelEvent {
+  final Channel channel;
+  final List<String> chatrooms;
+  final List<Game> games;
+
+  CreateChannel(this.channel, this.chatrooms, this.games);
+}

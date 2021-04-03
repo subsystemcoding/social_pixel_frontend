@@ -19,6 +19,14 @@ class ChannelListLoaded extends ChannelState {
   ChannelListLoaded(this.channels);
 }
 
+class ChannelCreated extends ChannelState {
+  final int channelId;
+  final bool roomCreated;
+  final bool gameCreated;
+
+  ChannelCreated(this.channelId, this.roomCreated, this.gameCreated);
+}
+
 class ChannelSubscribed extends ChannelState {}
 
 class ChannelSubscribedError extends ChannelState {}

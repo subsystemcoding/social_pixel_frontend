@@ -186,20 +186,25 @@ class ChannelRepository {
     return jsonDecode(response)['data']['success'];
   }
 
-  Future<bool> createChannel(
-    String channelName,
-    String avatarImagePath,
-    String coverImagePath,
-    String description,
-  ) async {
-    var response = await GraphqlClient().query('''
+  Future<String> createChannel({
+    Channel channel
+  }) async {
+    var response = await GraphqlClient().muiltiPartRequest(fields: {
+      'query': '''
       mutation{
-        createChannel(name: "$channelName", avatarImage: "$avatarImagePath" ,coverImage: "$coverImagePath", description: "$description"){
-          success
+        createChannel(name: "${channel.name}", avatarImage: "avatarImagePath" ,coverImage: "coverImagePath", description: "${channel.description}"){
+           channel{
+              id
+            }
         }
       }
-      ''');
-    return jsonDecode(response)['data']['success'];
+      '''
+    }, files: {
+      "avatarImagePath": channel.avatarImageLink,
+      "coverImagePath": channel.coverImageLink,
+    });
+
+    return jsonDecode(response)['data']['createChannel']['channel']['id'];
   }
 
   Future<bool> deleteChannel(
@@ -216,6 +221,23 @@ class ChannelRepository {
       }
       ''');
     return jsonDecode(response)['data']['success'];
+  }
+
+  Future<int> createChatroom(Channel channel, String roomName) async {
+    var chatroomId;
+    var response = await GraphqlClient().query('''
+    mutation{
+      createChatroom(name: "channel${channel.name}$roomName"){
+      	chatroom{
+          id
+        }
+      }
+    }
+    ''');
+    chatroomId =
+        jsonDecode(response)['data']['createChatroom']['chatroom']['id'];
+
+    return chatroomId;
   }
 
   Future<Channel> fetchChannelsByName(String name) async {
