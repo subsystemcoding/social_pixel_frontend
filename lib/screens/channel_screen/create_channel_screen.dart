@@ -250,6 +250,9 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
     list.addAll(games.asMap().entries.map((entry) {
       var game = entry.value;
       return ListTile(
+        leading: CircleAvatar(
+          backgroundImage: FileImage(File(game.image)),
+        ),
         title: Text(game.name),
         trailing: TextButton(
           child: Icon(Icons.cancel),

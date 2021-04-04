@@ -9,11 +9,9 @@ import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
 import 'package:socialpixel/data/repos/state_repository.dart';
 
 class CropImageScreen extends StatefulWidget {
-  final String route;
   final String path;
 
-  CropImageScreen({Key key, this.route = '/create_channel', this.path})
-      : super(key: key);
+  CropImageScreen({Key key, this.path}) : super(key: key);
 
   @override
   _CropImageScreenState createState() => _CropImageScreenState();
@@ -57,6 +55,6 @@ class _CropImageScreenState extends State<CropImageScreen> {
       imageFile = croppedFile;
     }
     StateRepo.addImageFromCrop(imageFile);
-    Navigator.of(context).pushNamed(widget.route);
+    Navigator.of(context).pushNamed(StateRepo.cropRoute);
   }
 }

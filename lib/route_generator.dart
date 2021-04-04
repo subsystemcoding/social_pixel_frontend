@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:socialpixel/screens/channel_screen/check_human_screen.dart';
+import 'package:socialpixel/screens/channel_screen/check_location_screen.dart';
 import 'package:socialpixel/screens/channel_screen/create_channel_screen.dart';
 import 'package:socialpixel/screens/channel_screen/create_game_screen.dart';
 import 'package:socialpixel/screens/channel_screen/crop_image_screen.dart';
@@ -83,6 +85,22 @@ class RouteGenerator {
       case '/create_game':
         return MaterialPageRoute(
           builder: (_) => CreateGameScreen(),
+        );
+      case '/check_human':
+        return MaterialPageRoute(
+          builder: (_) => CheckHumanScreen(),
+        );
+      case '/check_location':
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => CheckLocationScreen(
+              isCamera: args['isCamera'],
+              path: args['path'],
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Container(),
         );
       case '/crop_image':
         if (args is Map) {
