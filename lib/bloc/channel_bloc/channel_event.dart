@@ -32,3 +32,19 @@ class CreateChannel extends ChannelEvent {
 
   CreateChannel(this.channel, this.chatrooms, this.games);
 }
+
+class AddGameToTemp extends ChannelEvent {
+  final Game game;
+
+  AddGameToTemp(this.game);
+}
+
+class AddChatroomToTemp extends ChannelEvent {
+  final Chatroom chat;
+
+  AddChatroomToTemp(this.chat);
+}
+
+class GetTemp extends ChannelEvent {}
+
+class ClearTemp extends ChannelEvent {}

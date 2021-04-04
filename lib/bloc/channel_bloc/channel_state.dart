@@ -36,3 +36,10 @@ class ChannelError extends ChannelState {
 
   ChannelError(this.message);
 }
+
+class ChannelGamesAndRooms extends ChannelState {
+  final List<Game> games;
+  final List<Chatroom> rooms;
+
+  ChannelGamesAndRooms({this.games = const [], this.rooms = const []});
+}
