@@ -160,6 +160,11 @@ class AuthRepository {
     );
   }
 
+  Future<void> clearAuth() async {
+    final box = await Hive.openBox(hiveBox);
+    box.clear();
+  }
+
   Future<AuthObject> _fetchAuthDetails() async {
     final box = await Hive.openBox(hiveBox);
     AuthObject map = box.get(hiveBox);

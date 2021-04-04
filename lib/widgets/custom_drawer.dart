@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socialpixel/bloc/profile_bloc/profile_bloc.dart';
 import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/data/repos/auth_repository.dart';
 import 'package:socialpixel/widgets/profile_avatar.dart';
 import 'package:socialpixel/widgets/verified_widget.dart';
 
@@ -116,6 +117,17 @@ class CustomDrawer extends StatelessWidget {
                         style: Theme.of(context).primaryTextTheme.bodyText2,
                       ),
                       children: _getChannelMods(context, profile),
+                    ),
+                    ListTile(
+                      title: Text(
+                        "Sign Out",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      onTap: () {
+                        AuthRepository().clearAuth();
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil("/", (route) => false);
+                      },
                     ),
                   ],
                 );
