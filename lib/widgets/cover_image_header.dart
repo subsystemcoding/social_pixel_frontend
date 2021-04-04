@@ -33,12 +33,15 @@ class CoverImageHeader extends StatelessWidget {
             left: 0,
             right: 0,
             height: coverImageHeight,
-            child: Image(
-              height: coverImageHeight,
-              image: coverImage,
-              fit: BoxFit.cover,
-              color: Color(0x66000000),
-              colorBlendMode: BlendMode.darken,
+            child: GestureDetector(
+              onTap: onTapCoverImage,
+              child: Image(
+                height: coverImageHeight,
+                image: coverImage,
+                fit: BoxFit.cover,
+                color: Color(0x66000000),
+                colorBlendMode: BlendMode.darken,
+              ),
             ),
           ),
           !editCoverImage
@@ -48,9 +51,9 @@ class CoverImageHeader extends StatelessWidget {
                   left: 0,
                   right: 0,
                   height: coverImageHeight,
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: onTapCoverImage,
+                  child: GestureDetector(
+                    onTap: onTapCoverImage,
+                    child: Center(
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
@@ -75,10 +78,13 @@ class CoverImageHeader extends StatelessWidget {
                   left: 0,
                   right: 0,
                   height: avatarImageRadius * 2,
-                  child: Center(
-                    child: CircleAvatar(
-                      backgroundImage: avatarImage,
-                      radius: avatarImageRadius,
+                  child: GestureDetector(
+                    onTap: onTapAvatarImage,
+                    child: Center(
+                      child: CircleAvatar(
+                        backgroundImage: avatarImage,
+                        radius: avatarImageRadius,
+                      ),
                     ),
                   ),
                 ),
@@ -89,9 +95,9 @@ class CoverImageHeader extends StatelessWidget {
                   left: 0,
                   right: 0,
                   height: avatarImageRadius * 2,
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: onTapAvatarImage,
+                  child: GestureDetector(
+                    onTap: onTapAvatarImage,
+                    child: Center(
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),

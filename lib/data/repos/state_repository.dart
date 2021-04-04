@@ -41,4 +41,14 @@ class StateRepo {
       default:
     }
   }
+
+  static void channelStateClear() {
+    createGameState = {
+      'edit': false,
+      'imageFile': null,
+      'name': '',
+      'desc': '',
+      'posts': '',
+    };
+  }
 }

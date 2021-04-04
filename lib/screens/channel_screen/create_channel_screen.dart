@@ -29,6 +29,8 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
   TextEditingController _channelDescController = TextEditingController();
   bool isRoomOpen = false;
   bool isAddRoomAdded = false;
+  String errorMessage = '';
+  bool isCreatingChannel = false;
 
   @override
   void initState() {
@@ -59,141 +61,181 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          leading: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(Icons.chevron_left, color: Colors.white),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
-        body: Column(
-          children: [
-            CoverImageHeader(
-              coverImage: coverImage,
-              avatarImage: avatarImage,
-              onTapAvatarImage: () {
-                StateRepo.cropState = CropState.ChannelAvatar;
-                StateRepo.cropRoute = '/create_channel';
-                Navigator.of(context).pushNamed('/camera', arguments: {
-                  'route': '/crop_image',
-                  'isSquare': false,
-                });
-              },
-              onTapCoverImage: () {
-                StateRepo.cropState = CropState.ChannelCover;
-                StateRepo.cropRoute = '/create_channel';
-                Navigator.of(context).pushNamed('/camera', arguments: {
-                  'route': '/crop_image',
-                  'isSquare': false,
-                });
-              },
-              editCoverImage: true,
-              editAvatarImage: true,
-              coverImageHeight: 150,
-              avatarImageRadius: 40,
+    return BlocListener<ChannelBloc, ChannelState>(listener: (context, state) {
+      if (state is ChannelCreated) {
+        Navigator.of(context).pushNamed('/channel', arguments: state.channelId);
+      }
+    }, child: BlocBuilder<ChannelBloc, ChannelState>(
+      builder: (context, state) {
+        print(state);
+        if (state is ChannelLoading) {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-            SizedBox(
-              height: 16,
-            ),
-            TextField(
-              textAlign: TextAlign.center,
-              controller: _channelNameController,
-              style: Theme.of(context).primaryTextTheme.headline3,
-              decoration: InputDecoration(
-                border: InputBorder.none,
+          );
+        } else if (state is ChannelError) {
+          errorMessage = "A channel with the same name exists";
+        }
+        return WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              leading: TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/home', (route) => false);
+                },
+                child: Icon(Icons.chevron_left, color: Colors.white),
               ),
-              onChanged: (val) {
-                StateRepo.createChannelState['name'] =
-                    _channelNameController.text;
-              },
+              elevation: 0,
+              backgroundColor: Colors.transparent,
             ),
-            SizedBox(
-              height: 12,
-            ),
-            TextField(
-              textAlign: TextAlign.center,
-              controller: _channelDescController,
-              style: Theme.of(context).primaryTextTheme.subtitle1,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-              ),
-              onChanged: (val) {
-                StateRepo.createChannelState['desc'] =
-                    _channelDescController.text;
-              },
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Expanded(
-              child: Container(
-                child: ListView(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(0.0),
-                  children: [
-                    StatefulBuilder(
-                      builder: (BuildContext context, innerSetState) {
-                        return ExpansionTile(
-                          title: Text("Rooms"),
-                          children: _buildRooms(innerSetState),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    ExpansionTile(
-                      title: Text("Moderators"),
-                      children: _buildMods(),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    StatefulBuilder(
-                      builder: (BuildContext context, innerSetState) {
-                        return ExpansionTile(
-                          title: Text("Games"),
-                          children: _buildGames(innerSetState),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Container(
-                      width: 150,
-                      alignment: Alignment.center,
-                      child: CustomButtons.standardButton(
-                        context,
-                        text: "Create Channel",
-                        margin: EdgeInsets.all(0.0),
-                        onPressed: () {
-                          if (channel.id != null) {
-                            Navigator.of(context).pushNamed(
-                              "/channel",
-                              arguments: channel.id,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+            body: Column(
+              children: [
+                CoverImageHeader(
+                  coverImage: coverImage,
+                  avatarImage: avatarImage,
+                  onTapAvatarImage: () {
+                    StateRepo.cropState = CropState.ChannelAvatar;
+                    StateRepo.cropRoute = '/create_channel';
+                    Navigator.of(context).pushNamed('/camera', arguments: {
+                      'route': '/crop_image',
+                      'isSquare': false,
+                    });
+                  },
+                  onTapCoverImage: () {
+                    StateRepo.cropState = CropState.ChannelCover;
+                    StateRepo.cropRoute = '/create_channel';
+                    Navigator.of(context).pushNamed('/camera', arguments: {
+                      'route': '/crop_image',
+                      'isSquare': false,
+                    });
+                  },
+                  editCoverImage: true,
+                  editAvatarImage: true,
+                  coverImageHeight: 150,
+                  avatarImageRadius: 40,
                 ),
-              ),
+                SizedBox(
+                  height: 16,
+                ),
+                TextField(
+                  textAlign: TextAlign.center,
+                  controller: _channelNameController,
+                  style: Theme.of(context).primaryTextTheme.headline3,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (val) {
+                    StateRepo.createChannelState['name'] =
+                        _channelNameController.text;
+                  },
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  textAlign: TextAlign.center,
+                  controller: _channelDescController,
+                  style: Theme.of(context).primaryTextTheme.subtitle1,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (val) {
+                    StateRepo.createChannelState['desc'] =
+                        _channelDescController.text;
+                  },
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Expanded(
+                  child: Container(
+                    child: ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(0.0),
+                      children: [
+                        StatefulBuilder(
+                          builder: (BuildContext context, innerSetState) {
+                            return ExpansionTile(
+                              title: Text("Rooms"),
+                              children: _buildRooms(innerSetState),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        ExpansionTile(
+                          title: Text("Moderators"),
+                          children: _buildMods(),
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        StatefulBuilder(
+                          builder: (BuildContext context, innerSetState) {
+                            return ExpansionTile(
+                              title: Text("Games"),
+                              children: _buildGames(innerSetState),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        StatefulBuilder(
+                          builder: (BuildContext context, innerSetState) {
+                            return Column(
+                              children: [
+                                errorMessage.isEmpty
+                                    ? Container()
+                                    : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 40.0),
+                                        child: Text(
+                                          '• $errorMessage',
+                                          style: Theme.of(context)
+                                              .primaryTextTheme
+                                              .overline,
+                                        )),
+                                Container(
+                                  width: 150,
+                                  alignment: Alignment.center,
+                                  child: CustomButtons.standardButton(
+                                    context,
+                                    text: "Create Channel",
+                                    margin: EdgeInsets.all(0.0),
+                                    onPressed: () {
+                                      _createChannel(innerSetState);
+                                      if (channel != null &&
+                                          channel.id != null) {
+                                        Navigator.of(context).pushNamed(
+                                          "/channel",
+                                          arguments: channel.id,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
+      },
+    ));
   }
 
   List<Widget> _buildGames(void Function(void Function()) innerSetState) {
@@ -302,5 +344,53 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
         title: Text("+ Add Moderators"),
       ),
     ];
+  }
+
+  //after if statements and assigning error message
+  // display the error message above the create channel button
+  // if there are no error message proceed to call the event create channel
+  // check the bloc and  the repo
+  // test run
+  bool _createChannel(void Function(void Function()) innserSetState) {
+    if (!isCreatingChannel) {
+      var state = StateRepo.createChannelState;
+      if (state['name'].isEmpty) {
+        innserSetState(() {
+          errorMessage = "Please add a channel name";
+        });
+        return false;
+      }
+      if (state['desc'].isEmpty) {
+        innserSetState(() {
+          errorMessage = "Please add a channel description";
+        });
+        return false;
+      }
+      if (state['coverImageFile'] == null) {
+        innserSetState(() {
+          errorMessage = "Please add a cover image";
+        });
+        return false;
+      }
+      if (state['avatarImageFile'] == null) {
+        innserSetState(() {
+          errorMessage = "Please add a profile image";
+        });
+        return false;
+      }
+      BlocProvider.of<ChannelBloc>(context).add(CreateChannel(
+        Channel(
+          name: state['name'],
+          description: state['desc'],
+          coverImageLink: state['coverImageFile'].path,
+          avatarImageLink: state['avatarImageFile'].path,
+        ),
+        rooms,
+        games,
+      ));
+
+      return true;
+    }
+    return false;
   }
 }

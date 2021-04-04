@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -71,11 +72,11 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
             await channelRepository.createChannel(channel: event.channel));
 
         //create chatrooms
-        for (var name in event.chatrooms) {
+        for (var chatroom in event.chatrooms) {
           try {
             await channelRepository.createChatroom(
               event.channel,
-              name,
+              chatroom.name,
             );
           } catch (e) {
             roomCreated = false;
@@ -102,7 +103,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
         yield ChannelCreated(channelId, roomCreated, gameCreated);
       } catch (e) {
         print(e);
-        yield ChannelError("Create Channel");
+        yield ChannelError("");
       }
     }
   }
