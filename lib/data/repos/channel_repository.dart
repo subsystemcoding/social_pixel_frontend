@@ -187,13 +187,14 @@ class ChannelRepository {
     return jsonDecode(response)['data']['success'];
   }
 
-  Future<String> createChannel({Channel channel}) async {
+  Future<Channel> createChannel({Channel channel}) async {
     var response = await GraphqlClient().muiltiPartRequest(fields: {
       'query': '''
       mutation{
         createChannel(name: "${channel.name}", avatarImage: "avatarImagePath" ,coverImage: "coverImagePath", description: "${channel.description}"){
            channel{
               id
+              name
             }
         }
       }
@@ -202,8 +203,11 @@ class ChannelRepository {
       "avatarImagePath": channel.avatarImageLink,
       "coverImagePath": channel.coverImageLink,
     });
-
-    return jsonDecode(response)['data']['createChannel']['channel']['id'];
+    var c = jsonDecode(response)['data']['createChannel']['channel'];
+    return Channel(
+      name: c['name'],
+      id: int.parse(c['id']),
+    );
   }
 
   Future<bool> deleteChannel(

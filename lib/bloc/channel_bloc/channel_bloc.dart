@@ -68,14 +68,14 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
 
       try {
         //create channel
-        int channelId = int.parse(
-            await channelRepository.createChannel(channel: event.channel));
+        Channel channel =
+            await channelRepository.createChannel(channel: event.channel);
 
         //create chatrooms
         for (var chatroom in event.chatrooms) {
           try {
             await channelRepository.createChatroom(
-              event.channel,
+              channel,
               chatroom.name,
             );
           } catch (e) {
@@ -91,16 +91,19 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
               );
             }
             await GameRepository().createGame(
-              event.channel.name,
+              channel.name,
+              game.name,
               game.description,
               game.image,
-              game.mapPosts.map((mapPost) => mapPost.post.postId).toList(),
+              List<int>.from(
+                game.mapPosts.map((mapPost) => mapPost.post.postId),
+              ),
             );
           }
         } catch (e) {
           print(e);
         }
-        yield ChannelCreated(channelId, roomCreated, gameCreated);
+        yield ChannelCreated(channel.id, roomCreated, gameCreated);
       } catch (e) {
         print(e);
         yield ChannelError("");

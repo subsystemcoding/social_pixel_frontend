@@ -13,13 +13,14 @@ class GameRepository {
 
   Future<bool> createGame(
     String channelName,
+    String gameName,
     String description,
     String gameImagePath,
     List<int> postIds,
   ) async {
     var response = await GraphqlClient().muiltiPartRequest(fields: {
       'query': '''
-          createGame(channel:"", description: "", gameImage: "gameImagePath", name: "", posts:[]){
+          createGame(channel:"$channelName", description: "$description", gameImage: "gameImagePath", name: "$gameName", posts: ${postIds.toString()}){
             success
           }'''
     }, files: {
