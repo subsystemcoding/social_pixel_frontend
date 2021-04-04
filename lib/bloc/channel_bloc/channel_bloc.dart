@@ -104,19 +104,6 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
         print(e);
         yield ChannelError("Create Channel");
       }
-    } else if (event is GetTemp) {
-      var games = channelRepository.getGamesFromTemp();
-      var rooms = channelRepository.getRoomsFromTemp();
-      yield ChannelGamesAndRooms(
-        games: games,
-        rooms: rooms,
-      );
-    } else if (event is AddGameToTemp) {
-      channelRepository.addGameToTemp(event.game);
-    } else if (event is AddChatroomToTemp) {
-      channelRepository.addRoomToTemp(event.chat);
-    } else if (event is ClearTemp) {
-      channelRepository.clearTemp();
     }
   }
 }

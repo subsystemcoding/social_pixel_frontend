@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socialpixel/screens/channel_screen/create_channel_screen.dart';
 import 'package:socialpixel/screens/channel_screen/create_game_screen.dart';
+import 'package:socialpixel/screens/channel_screen/crop_image_screen.dart';
 import 'package:socialpixel/screens/home_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/login_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/first_screen.dart';
@@ -83,6 +84,18 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => CreateGameScreen(),
         );
+      case '/crop_image':
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => CropImageScreen(
+              path: args['path'],
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Container(),
+        );
+
       case '/leaderboard':
         if (args is Map) {
           return MaterialPageRoute(

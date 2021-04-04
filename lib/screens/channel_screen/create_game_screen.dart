@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socialpixel/bloc/channel_bloc/channel_bloc.dart';
+import 'package:socialpixel/data/models/game.dart';
+import 'package:socialpixel/data/models/mapPost.dart';
+import 'package:socialpixel/data/repos/state_repository.dart';
 import 'package:socialpixel/widgets/cover_image_header.dart';
 import 'package:socialpixel/widgets/custom_buttons.dart';
 
@@ -11,6 +16,9 @@ class CreateGameScreen extends StatefulWidget {
 
 class _CreateGameScreenState extends State<CreateGameScreen> {
   var coverImage;
+  var gameName = TextEditingController();
+  var gameDescription = TextEditingController();
+  var posts = List<MapPost>();
 
   @override
   void initState() {
@@ -96,6 +104,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                     text: "Add Game",
                     margin: EdgeInsets.all(0.0),
                     onPressed: () {
+                      StateRepo.createChannelState['games'].add(Game());
                       Navigator.of(context).pop();
                     },
                   ),

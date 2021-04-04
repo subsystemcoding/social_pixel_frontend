@@ -12,10 +12,7 @@ import 'package:socialpixel/data/test_data/test_data.dart';
 
 class ChannelRepository {
   static final ChannelRepository _singleton = ChannelRepository._internal();
-  var _temp = {
-    'games': [],
-    'rooms': [],
-  };
+
   factory ChannelRepository() {
     return _singleton;
   }
@@ -282,28 +279,5 @@ class ChannelRepository {
         return profiles;
       },
     );
-  }
-
-  Future<void> addGameToTemp(Game game) {
-    _temp['games'].add(game);
-  }
-
-  Future<void> addRoomToTemp(Chatroom chatroom) {
-    _temp['rooms'].add(chatroom);
-  }
-
-  List<Game> getGamesFromTemp() {
-    List<Game> games = _temp['games'];
-    return games;
-  }
-
-  List<Chatroom> getRoomsFromTemp() {
-    List<Chatroom> rooms = _temp['rooms'];
-    return rooms;
-  }
-
-  void clearTemp() {
-    _temp['games'] = [];
-    _temp['rooms'] = [];
   }
 }

@@ -5,6 +5,8 @@ class CoverImageHeader extends StatelessWidget {
   final ImageProvider<Object> avatarImage;
   final bool editCoverImage;
   final bool editAvatarImage;
+  final Function onTapCoverImage;
+  final Function onTapAvatarImage;
   final double coverImageHeight;
   final double avatarImageRadius;
 
@@ -16,6 +18,8 @@ class CoverImageHeader extends StatelessWidget {
     this.avatarImageRadius = 0,
     this.editCoverImage = false,
     this.editAvatarImage = false,
+    this.onTapCoverImage,
+    this.onTapAvatarImage,
   }) : super(key: key);
 
   @override
@@ -46,7 +50,7 @@ class CoverImageHeader extends StatelessWidget {
                   height: coverImageHeight,
                   child: Center(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: onTapCoverImage,
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
@@ -87,7 +91,7 @@ class CoverImageHeader extends StatelessWidget {
                   height: avatarImageRadius * 2,
                   child: Center(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: onTapAvatarImage,
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
