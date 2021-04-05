@@ -39,6 +39,8 @@ class CommentPost extends PostEvent {
   CommentPost({this.text, this.postId});
 }
 
+class FetchExplorePosts extends PostEvent {}
+
 class ReplyComment extends PostEvent {
   final int postId;
   final int commentId;

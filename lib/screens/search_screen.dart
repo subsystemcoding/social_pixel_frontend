@@ -33,7 +33,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<PostBloc>(context).add(StartPostInitial());
+    BlocProvider.of<PostBloc>(context).add(FetchExplorePosts());
     BlocProvider.of<ChannelBloc>(context).add(StartChannelIniital());
     BlocProvider.of<ProfileBloc>(context).add(StartProfileInitial());
     _controller = TabController(
@@ -156,6 +156,8 @@ class _SearchScreenState extends State<SearchScreen>
           );
         } else if (state is PostInitial) {
           return _buildWhenEmpty("Search Posts with tags");
+        } else if (state is PostLoaded) {
+          posts = state.posts;
         }
         return ListView.builder(
           itemCount: posts.length * 2,

@@ -39,8 +39,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     } else if (event is GetProfileList) {
       try {
-        final profiles = await profileRepository.fetchProfile(event.name);
-        yield ProfileListLoaded([profiles]);
+        final profiles = await profileRepository.searchProfiles(event.name);
+        yield ProfileListLoaded(profiles);
       } catch (e) {
         print(e);
         yield ProfileError("No users found");

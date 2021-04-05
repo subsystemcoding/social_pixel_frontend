@@ -161,7 +161,10 @@ class CustomDrawer extends StatelessWidget {
               arguments: profile.subscribedChannels[i].id,
             );
           },
-          title: Text(profile.subscribedChannels[i].name),
+          title: Text(
+            profile.subscribedChannels[i].name,
+            style: Theme.of(context).textTheme.headline6,
+          ),
           leading: ProfileAvatar(
             radius: 20,
             imageLink: profile.subscribedChannels[i].avatarImageLink,

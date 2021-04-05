@@ -246,6 +246,94 @@ class PostManagement {
     return [];
   }
 
+  Future<List<Post>> fetchExplorePosts() async {
+    //allow for comments
+    var auth = await AuthRepository().getAuth();
+    var username = auth.username;
+
+    var response = await GraphqlClient().query(''' 
+    query {
+      posts{
+        postId
+        author{ 
+          user{
+            username
+          }
+          image
+        }
+        dateCreated
+        caption
+        gpsLongitude
+        gpsLatitude
+        upvotes{
+          user {
+            username
+          }
+        }
+        comments {
+          commentId
+        }
+        image
+      } 
+    }
+    ''');
+
+    var jsonResponse = jsonDecode(response)['data']['posts'];
+    if (jsonResponse.isNotEmpty) {
+      List<Post> posts = List<Post>.from(
+        jsonResponse.map(
+          (item) {
+            Post post = Post(
+              upvotes: item['upvotes'].length,
+              postId: int.parse(item['postId']),
+              userName: item['author']['user']['username'],
+              userAvatarLink: item['author']['image'],
+              postImageLink: item['image'],
+              caption: item['caption'],
+              datePosted: item['dateCreated'],
+              location: Location(
+                latitude: item['gpsLatitude'] != null
+                    ? double.parse(item['gpsLatitude'])
+                    : null,
+                longitude: item['gpsLongitude'] != null
+                    ? double.parse(item['gpsLongitude'])
+                    : null,
+              ),
+            );
+            post.isUpvoted = false;
+            for (var upvote in item['upvotes']) {
+              if (upvote['user']['username'] == username) {
+                post.isUpvoted = true;
+                break;
+              }
+            }
+            post.commentCount =
+                item['comments'] == null ? 0 : item['comments'].length;
+
+            return post;
+          },
+        ),
+      );
+      for (var post in posts) {
+        final address =
+            post.location.latitude == null || post.location.latitude == 0.000000
+                ? null
+                : await geocoding.placemarkFromCoordinates(
+                    post.location.latitude,
+                    post.location.longitude,
+                  );
+
+        final addressString = address != null
+            ? '${address.first.locality}, ${address.first.country}'
+            : '';
+        post.location.address = addressString;
+      }
+
+      return posts;
+    }
+    return [];
+  }
+
   Future<Post> fetchSinglePost(int postId) async {
     var authObject = await AuthRepository().getAuth();
     var username = authObject.username;

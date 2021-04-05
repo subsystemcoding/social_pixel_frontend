@@ -243,10 +243,10 @@ class ChannelRepository {
     return chatroomId;
   }
 
-  Future<Channel> fetchChannelsByName(String name) async {
+  Future<List<Channel>> fetchChannelsByName(String name) async {
     var response = await GraphqlClient().query(''' 
       query{
-        channelname(name:"$name"){
+        channelSearch(query:"$name"){
           id
           subscribers{
             user{
@@ -259,14 +259,18 @@ class ChannelRepository {
       }
     ''');
 
-    var jsonResponse = jsonDecode(response)['data']['channelname'];
-    var subscribers = List.from(jsonResponse['subscribers']).length;
-    return Channel(
-      id: int.parse(jsonResponse['id']),
-      subscribers: subscribers,
-      avatarImageLink: jsonResponse['avatar'],
-      name: jsonResponse['name'],
-    );
+    var jsonResponse = jsonDecode(response)['data']['channelSearch'];
+    List<Channel> channels = List<Channel>.from(jsonResponse.map((channel) {
+      var subscribers = List.from(channel['subscribers']).length;
+      return Channel(
+        id: int.parse(channel['id']),
+        subscribers: subscribers,
+        avatarImageLink: channel['avatar'],
+        name: channel['name'],
+      );
+    }));
+
+    return channels;
   }
 
   Future<List<Channel>> fetchChannelList() {

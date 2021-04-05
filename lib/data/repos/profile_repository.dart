@@ -245,8 +245,78 @@ class ProfileRepository {
     return false;
   }
 
-  Future<List<Profile>> searchProfiles() {
-    return null;
+  Future<List<Profile>> searchProfiles(String username) async {
+    var response = await GraphqlClient().query('''
+      query{
+        userprofileSearch(query: "$username"){
+          user{
+            username
+            dateJoined
+            email
+          }
+          bio
+          image
+          points
+          coverImage 
+          postedBy{
+            postId
+            image200x200
+          }
+          memberIn{
+            id
+            name
+          }
+        }
+      }
+      ''');
+
+    var jsonResponse = jsonDecode(response)['data']['userprofileSearch'];
+    List<Profile> profiles = List<Profile>.from(
+      jsonResponse.map(
+        (profile) {
+          return Profile(
+            username: profile['user']['username'],
+            email: profile['user']['email'],
+            createDate: profile['user']['dateJoined'],
+            description: profile['bio'],
+            points: profile['points'],
+            followers: 0,
+            userAvatarImage: profile['image'],
+            userCoverImage: profile['coverImage'],
+            postsMade: profile['postedBy'] != null
+                ? List<Post>.from(
+                    profile['postedBy'].map(
+                      (item) {
+                        return Post(
+                          postId: int.parse(item['postId']),
+                          postImageLink: item['image200x200'],
+                        );
+                      },
+                    ),
+                  )
+                : [],
+            chatrooms: profile['memberIn'] != null
+                ? List<Chatroom>.from(
+                    profile['memberIn'].map(
+                      (item) => Chatroom(
+                        id: int.parse(item['id']),
+                        name: item['name'],
+                      ),
+                    ),
+                  )
+                : [],
+            isUser: false,
+            isVerified: false,
+          );
+        },
+      ),
+    );
+
+    for (Profile profile in profiles) {
+      profile.isFollowing = await _isUserFollowing(profile.username);
+      profile.followers = await _getNumOfFollowersOfUser(profile.username);
+    }
+    return profiles;
   }
 
   Future<List<Game>> updateSubscribedGames() {

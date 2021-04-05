@@ -139,6 +139,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     } else if (event is FetchPost) {
       Post post = await postManagement.fetchSinglePost(event.postId);
       yield PostSingleLoaded(post);
+    } else if (event is FetchExplorePosts) {
+      List<Post> posts = await postManagement.fetchExplorePosts();
+      yield PostLoaded(posts);
     }
     // TODO: implement mapEventToState
   }

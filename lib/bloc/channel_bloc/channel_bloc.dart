@@ -41,8 +41,9 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       }
     } else if (event is SearchChannel) {
       try {
-        final channel = await channelRepository.fetchChannelsByName(event.name);
-        yield ChannelListLoaded([channel]);
+        final channels =
+            await channelRepository.fetchChannelsByName(event.name);
+        yield ChannelListLoaded(channels);
       } catch (e) {
         yield ChannelError("No channel found");
       }
