@@ -31,69 +31,88 @@ class RouteGenerator {
 
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => FirstScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => FirstScreen());
       case '/login':
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => LoginScreen());
       case '/register':
-        return MaterialPageRoute(builder: (_) => RegisterScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => RegisterScreen());
       case '/forget':
-        return MaterialPageRoute(builder: (_) => ForgetScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => ForgetScreen());
       case '/home':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => HomeScreen(),
         );
       case '/post_widget':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => PostWidgetScreen(
             post: args,
           ),
         );
       case '/settings':
-        return MaterialPageRoute(builder: (_) => SettingsScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => SettingsScreen());
       case '/search':
-        return MaterialPageRoute(builder: (_) => SearchScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => SearchScreen());
       case '/message_list':
-        return MaterialPageRoute(builder: (_) => MessageListScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => MessageListScreen());
       case '/message':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => MessageScreen(
             chatroom: args,
           ),
         );
 
-        return MaterialPageRoute(builder: (_) => MessageScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => MessageScreen());
       case '/preview_screen':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => PreviewMessageScreen(
               imageFilePath: args['path'],
             ),
           );
         }
-        return MaterialPageRoute(builder: (_) => Container());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => Container());
       case '/map':
-        return MaterialPageRoute(builder: (_) => MapScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => MapScreen());
       case '/channel':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => ChannelScreen(
             channelId: args,
           ),
         );
       case '/create_channel':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => CreateChannelScreen(),
         );
       case '/create_game':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => CreateGameScreen(),
         );
       case '/check_human':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => CheckHumanScreen(),
         );
       case '/check_location':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => CheckLocationScreen(
               isCamera: args['isCamera'],
               path: args['path'],
@@ -101,22 +120,26 @@ class RouteGenerator {
           );
         }
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => Container(),
         );
       case '/crop_image':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => CropImageScreen(
               path: args['path'],
             ),
           );
         }
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => Container(),
         );
       case '/check_location':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => CheckLocationScreen(
               isCamera: args['isCamera'],
               path: args['path'],
@@ -124,21 +147,25 @@ class RouteGenerator {
           );
         }
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => Container(),
         );
       case '/capture':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => CapturePreview(),
           );
         }
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => CapturePreview(),
         );
 
       case '/leaderboard':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => LeaderboardScreen(
               id: args['id'],
               title: args['title'],
@@ -147,9 +174,11 @@ class RouteGenerator {
             ),
           );
         }
-        return MaterialPageRoute(builder: (_) => Container());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => Container());
       case '/profile':
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => UserProfileScreen(
             args,
           ),
@@ -157,6 +186,7 @@ class RouteGenerator {
       case '/camera':
         if (args is Map) {
           return MaterialPageRoute(
+            settings: settings,
             builder: (_) => CameraScreen(
               route: args['route'],
               isSquare: args['isSquare'],
@@ -164,32 +194,38 @@ class RouteGenerator {
           );
         }
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => Container(),
         );
       case '/post_preview':
-        return MaterialPageRoute(builder: (_) {
-          if (args is Map) {
-            return PostPreviewScreen(
-              path: args['path'],
-              isCamera: args['isCamera'],
-              image: args['image'],
-            );
-          }
-          return null;
-        });
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (_) {
+              if (args is Map) {
+                return PostPreviewScreen(
+                  path: args['path'],
+                  isCamera: args['isCamera'],
+                  image: args['image'],
+                );
+              }
+              return null;
+            });
       case '/post_details':
-        return MaterialPageRoute(builder: (_) {
-          if (args is Map) {
-            return PostDetailScreen(
-              imagePathFromPostPreview: args['imagePathFromPostPreview'],
-              image: args['image'],
-              location: args['location'],
-              photoDate: args['date'],
-              isCamera: args['isCamera'],
-            );
-          }
-          return null;
-        });
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (_) {
+              if (args is Map) {
+                return PostDetailScreen(
+                  imagePathFromPostPreview: args['imagePathFromPostPreview'],
+                  image: args['image'],
+                  location: args['location'],
+                  photoDate: args['date'],
+                  isCamera: args['isCamera'],
+                );
+              }
+              return null;
+            });
     }
+    return null;
   }
 }

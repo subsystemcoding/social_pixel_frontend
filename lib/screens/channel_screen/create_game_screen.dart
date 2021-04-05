@@ -179,7 +179,9 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                             margin: EdgeInsets.all(0.0),
                             onPressed: () {
                               if (_createGame(innerSetState))
-                                Navigator.of(context).pop();
+                                Navigator.of(context).popUntil(
+                                  ModalRoute.withName('/create_channel'),
+                                );
                             },
                           ),
                         ),

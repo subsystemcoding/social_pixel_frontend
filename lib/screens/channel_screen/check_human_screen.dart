@@ -78,7 +78,10 @@ class _CheckHumanScreenState extends State<CheckHumanScreen> {
           child: CustomButtons.standardButton(context, text: "Okay",
               onPressed: () {
             var route = StateRepo.goBackRoute;
-            Navigator.of(context).popUntil(ModalRoute.withName(route));
+            print(route);
+            print(Navigator.of(context).toString());
+            print(ModalRoute.of(context).settings.name);
+            Navigator.popUntil(context, ModalRoute.withName(route));
           }),
         ),
         Expanded(

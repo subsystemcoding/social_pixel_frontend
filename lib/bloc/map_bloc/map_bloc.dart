@@ -54,6 +54,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       List<Game> games = await _mapRepository.fetchSubscribedGames();
       yield SubscribedGamesLoaded(games);
     } else if (event is AddPostForValidation) {
+      yield MapPostLoading();
       try {
         int postId = await PostManagement()
             .sendPost(event.post, event.post.postImageLink);
