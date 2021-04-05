@@ -38,7 +38,7 @@ class PostManagement {
     }
     var hashtagRegex = new RegExp(r"#[a-zA-Z0-9]+");
     var res = hashtagRegex
-        .allMatches(post.caption)
+        .allMatches(caption)
         .map((hashtag) => hashtag.group(0))
         .toList();
     var hashtags = "";

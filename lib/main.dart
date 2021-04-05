@@ -100,6 +100,10 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
+            accentIconTheme: IconThemeData(
+              color: Color(0xff7041ee),
+            ),
+            //primaryIconTheme: IconThemeData(color: Colors.white),
             fontFamily: "Circular",
             primarySwatch: Colors.blue,
             primaryColor: Colors.white,

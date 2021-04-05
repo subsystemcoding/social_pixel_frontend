@@ -45,7 +45,8 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
     } else {
       gameDescription.text = StateRepo.createGameState['desc'];
     }
-    if (StateRepo.createGameState['eligible']) {
+    if (StateRepo.createGameState['eligible'] &&
+        StateRepo.createGameState['postImage'] != null) {
       StateRepo.createGameState['posts'].add(
         MapPost(
           post:

@@ -138,7 +138,7 @@ class _MapScreenState extends State<MapScreen> {
         height: 50,
         width: 50,
         decoration: BoxDecoration(
-            color: Colors.grey[500],
+            color: Colors.grey[300],
             border: Border.all(color: Theme.of(context).accentColor),
             borderRadius: BorderRadius.circular(25.0)),
         child: Icon(Icons.camera_alt_outlined),

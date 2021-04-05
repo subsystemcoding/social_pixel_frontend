@@ -83,6 +83,7 @@ class StateRepo {
         return capturePost['imageFile'];
         break;
       default:
+        return null;
     }
   }
 

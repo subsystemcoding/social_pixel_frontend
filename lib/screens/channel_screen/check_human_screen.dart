@@ -17,6 +17,8 @@ class _CheckHumanScreenState extends State<CheckHumanScreen> {
   void initState() {
     super.initState();
     imageFile = StateRepo.getImageFromState();
+    print("Printing Image file from check humna");
+    print(imageFile);
     BlocProvider.of<TfliteBloc>(this.context)
         .add(CheckImageForPerson(this.imageFile));
   }
@@ -29,8 +31,11 @@ class _CheckHumanScreenState extends State<CheckHumanScreen> {
           body:
               BlocListener<TfliteBloc, TfliteState>(listener: (context, state) {
         // TODO: implement listener
+        //
+        print(state);
         if (state is ImageChecked) {
           if (state.image == null) {
+            print("Found no humans");
             StateRepo.createGameState['eligible'] = true;
             Navigator.of(context).pushNamed(StateRepo.checkHumanRoute);
           }

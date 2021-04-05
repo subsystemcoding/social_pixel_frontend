@@ -133,7 +133,7 @@ class RouteGenerator {
           );
         }
         return MaterialPageRoute(
-          builder: (_) => Container(),
+          builder: (_) => CapturePreview(),
         );
 
       case '/leaderboard':
