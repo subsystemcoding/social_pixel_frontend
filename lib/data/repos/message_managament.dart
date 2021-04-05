@@ -110,21 +110,23 @@ class MessageManagement {
         for (int j = 0; j < oldChatrooms.length; j++) {
           Chatroom oldChat = oldChatrooms[j];
           if (chat.id == oldChat.id) {
-            matched = true;
-            for (int k = 0; k < chatrooms[i].messages.length; k++) {
-              if (DateTime.parse(chat.messages[i].createDate)
-                  .isAfter(DateTime.parse(oldChat.messageSeenTimestamp))) {
-                chat.newMessages++;
-                newMessages++;
+            if (oldChat.messageSeenTimestamp != null) {
+              matched = true;
+              for (int k = 0; k < chatrooms[i].messages.length; k++) {
+                if (DateTime.parse(chat.messages[i].createDate)
+                    .isAfter(DateTime.parse(oldChat.messageSeenTimestamp))) {
+                  chat.newMessages++;
+                  newMessages++;
+                }
               }
+              chat.messageSeenTimestamp = oldChat.messageSeenTimestamp;
+              break;
             }
-            chat.messageSeenTimestamp = oldChat.messageSeenTimestamp;
-            break;
           }
         }
         if (!matched) {
           if (chat.messages.isNotEmpty) {
-            chat.messageSeenTimestamp = chat.messages.last.createDate;
+            chat.messageSeenTimestamp = chat.messages.first.createDate;
             chat.newMessages = chat.messages.length;
             newMessages += chat.newMessages;
           }

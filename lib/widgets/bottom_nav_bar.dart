@@ -22,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.home_outlined,
               color: Colors.white,
-              size: 20,
+              size: 30,
             ),
             onTap: () {
               if (currentRoute != '/home') {
@@ -34,7 +34,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.search_outlined,
               color: Colors.white,
-              size: 20,
+              size: 30,
             ),
             onTap: () {
               if (currentRoute != '/search') {
@@ -46,7 +46,7 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.add,
               color: Colors.white,
-              size: 20,
+              size: 30,
             ),
             onTap: () {
               Navigator.of(context).pushNamed('/camera', arguments: {
@@ -62,19 +62,19 @@ class BottomNavBar extends StatelessWidget {
             child: Icon(
               Icons.map_outlined,
               color: Colors.white,
-              size: 20,
+              size: 30,
             ),
             onTap: () {
-              // if (currentRoute != '/map') {
-              //   Navigator.of(context).pushNamed('/map');
-              // }
+              if (currentRoute != '/map') {
+                Navigator.of(context).pushNamed('/map');
+              }
             },
           ),
           GestureDetector(
             child: Icon(
               Icons.message_outlined,
               color: Colors.white,
-              size: 20,
+              size: 30,
             ),
             onTap: () {
               if (currentRoute != '/message_list') {
@@ -82,18 +82,18 @@ class BottomNavBar extends StatelessWidget {
               }
             },
           ),
-          GestureDetector(
-            child: Icon(
-              Icons.notifications_outlined,
-              color: Colors.white,
-              size: 20,
-            ),
-            onTap: () {
-              // if (currentRoute != '/notification') {
-              //   Navigator.of(context).pushNamed('/notification');
-              // }
-            },
-          ),
+          // GestureDetector(
+          //   child: Icon(
+          //     Icons.notifications_outlined,
+          //     color: Colors.white,
+          //     size: 30,
+          //   ),
+          //   onTap: () {
+          //     // if (currentRoute != '/notification') {
+          //     //   Navigator.of(context).pushNamed('/notification');
+          //     // }
+          //   },
+          // ),
         ],
       ),
     );

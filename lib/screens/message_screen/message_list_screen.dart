@@ -126,7 +126,7 @@ class _MessageListScreenState extends State<MessageListScreen> {
       title: Text(chatroom.name),
       subtitle: Text(text),
       trailing: SizedBox(
-        height: 50,
+        height: 60,
         width: 50,
         child: Column(
           children: [

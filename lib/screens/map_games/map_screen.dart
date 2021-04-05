@@ -62,71 +62,74 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: MenuBar().appbar,
-      drawer: _buildDrawer(),
-      body: BlocListener<GeoBloc, GeoState>(
-        listener: (context, state) {
-          if (state is GeoPositionLoaded) {
-            currentPosition =
-                LatLng(state.position.latitude, state.position.longitude);
-            BlocProvider.of<MapBloc>(context).add(GetPosts(Location(
-              latitude: currentPosition.latitude,
-              longitude: currentPosition.longitude,
-            )));
-            _controller.future.then((controller) {
-              controller.moveCamera(CameraUpdate.newLatLng(currentPosition));
-            });
-          } else if (state is GeoPositionError) {
-            return Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    Text("Location Error, please allow the location access."),
-              ),
-            );
-          }
-        },
-        child: Stack(
-          children: [
-            _buildLocationWidget(context, currentPosition),
-
-            // Positioned(
-            //   left: 18,
-            //   top: 112,
-            //   child: Column(
-            //     children: [
-            //       _buildIcon(Icons.ac_unit),
-            //       _buildIcon(Icons.access_alarm_sharp),
-            //       _buildIcon(Icons.access_alarm_sharp),
-            //     ],
-            //   ),
-            // ),
-            Positioned(
-              bottom: 50,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: _buildCameraButton(),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: AnimatedContainer(
-                curve: Curves.easeIn,
-                duration: Duration(milliseconds: 500),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: MenuBar().appbar,
+        drawer: _buildDrawer(),
+        body: BlocListener<GeoBloc, GeoState>(
+          listener: (context, state) {
+            if (state is GeoPositionLoaded) {
+              currentPosition =
+                  LatLng(state.position.latitude, state.position.longitude);
+              BlocProvider.of<MapBloc>(context).add(GetPosts(Location(
+                latitude: currentPosition.latitude,
+                longitude: currentPosition.longitude,
+              )));
+              _controller.future.then((controller) {
+                controller.moveCamera(CameraUpdate.newLatLng(currentPosition));
+              });
+            } else if (state is GeoPositionError) {
+              return Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content:
+                      Text("Location Error, please allow the location access."),
                 ),
-                child: bottomWidget,
+              );
+            }
+          },
+          child: Stack(
+            children: [
+              _buildLocationWidget(context, currentPosition),
+
+              // Positioned(
+              //   left: 18,
+              //   top: 112,
+              //   child: Column(
+              //     children: [
+              //       _buildIcon(Icons.ac_unit),
+              //       _buildIcon(Icons.access_alarm_sharp),
+              //       _buildIcon(Icons.access_alarm_sharp),
+              //     ],
+              //   ),
+              // ),
+              Positioned(
+                bottom: 50,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: _buildCameraButton(),
+                ),
               ),
-            ),
-          ],
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: AnimatedContainer(
+                  curve: Curves.easeIn,
+                  duration: Duration(milliseconds: 500),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
+                  ),
+                  child: bottomWidget,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
