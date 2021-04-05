@@ -66,6 +66,22 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         yield MapPostError();
       }
     } else if (event is GetValidatePost) {
-    } else if (event is ValidatePost) {}
+      try {
+        var posts = await _mapRepository.getValidatePost();
+        yield PostValidateLoaded(posts[0], posts[1], posts[2].postId);
+      } catch (e) {
+        print(e);
+        yield PostValidationError();
+      }
+    } else if (event is ValidatePost) {
+      yield ValidatingPost();
+      try {
+        await _mapRepository.validatePost(event.postId, event.correct);
+        yield PostValidated();
+      } catch (e) {
+        print(e);
+        yield PostValidationError();
+      }
+    }
   }
 }

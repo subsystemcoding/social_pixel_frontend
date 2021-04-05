@@ -1,3 +1,3 @@
 class DebugMode {
-  static bool debug = true;
+  static bool debug = false;
 }

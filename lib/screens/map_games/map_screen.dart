@@ -343,6 +343,18 @@ class _MapScreenState extends State<MapScreen> {
             "Back to Home",
             style: Theme.of(context).primaryTextTheme.bodyText2,
           ),
+          onTap: () {
+            Navigator.of(context).popUntil(ModalRoute.withName("/home"));
+          },
+        ),
+        ListTile(
+          title: Text(
+            "Validate Posts",
+            style: Theme.of(context).primaryTextTheme.bodyText2,
+          ),
+          onTap: () {
+            Navigator.of(context).pushNamed("/validate");
+          },
         ),
         BlocBuilder<MapBloc, MapState>(
           builder: (context, state) {

@@ -37,9 +37,16 @@ class MapPostError extends MapState {}
 
 class PostValidated extends MapState {}
 
+class PostValidationError extends MapState {}
+
 class PostValidateLoaded extends MapState {
   final Post originalPost;
   final Post comparedPost;
+  final int validateId;
 
-  PostValidateLoaded(this.originalPost, this.comparedPost);
+  PostValidateLoaded(this.originalPost, this.comparedPost, this.validateId);
 }
+
+class GettingValidatePost extends MapState {}
+
+class ValidatingPost extends MapState {}

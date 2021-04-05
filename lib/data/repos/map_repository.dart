@@ -107,10 +107,50 @@ class MapRepository {
     return jsonDecode(response)['data']['addPostForValidation']['success'];
   }
 
+  Future<bool> validatePost(int postId, bool accept) async {
+    var modifier = accept ? "ACCEPT" : "REJECT";
+    var response = await GraphqlClient().query(''' 
+    mutation{
+      validatePostWithoutGame(id: $postId, modifier: $modifier ){
+        success
+      }
+    }
+    ''');
+
+    return jsonDecode(response)['data']['validatePostWithoutGame']['success'];
+  }
+
   Future<List<Post>> getValidatePost() async {
     var response = await GraphqlClient().query('''
-    
+    query{
+      validatePosts{
+        id
+        post{
+          postId
+          image
+        }
+        creatorPost{
+          postId
+          image
+        }
+      }
+    }
     ''');
+
+    var jsonResponse = jsonDecode(response)['data']['validatePosts'][0];
+    return [
+      Post(
+        postId: int.parse(jsonResponse['creatorPost']['postId']),
+        postImageLink: jsonResponse['creatorPost']['image'],
+      ),
+      Post(
+        postId: int.parse(jsonResponse['post']['postId']),
+        postImageLink: jsonResponse['post']['image'],
+      ),
+      Post(
+        postId: int.parse(jsonResponse['id']),
+      ),
+    ];
   }
 
   Future<List<MapPost>> fetchCachedPosts() async {

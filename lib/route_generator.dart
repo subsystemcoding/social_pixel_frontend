@@ -13,6 +13,7 @@ import 'package:socialpixel/screens/channel_screen/channel_screen.dart';
 import 'package:socialpixel/screens/channel_screen/leaderboard_screen.dart';
 import 'package:socialpixel/screens/map_games/capture_preview.dart';
 import 'package:socialpixel/screens/map_games/map_screen.dart';
+import 'package:socialpixel/screens/map_games/validation_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_list_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_screen.dart';
 import 'package:socialpixel/screens/message_screen/preview_message_screen.dart';
@@ -160,6 +161,11 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => CapturePreview(),
+        );
+      case '/validate':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => ValidationScreen(),
         );
 
       case '/leaderboard':
