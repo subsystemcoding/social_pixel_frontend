@@ -9,6 +9,15 @@ class GetPosts extends MapEvent {
   GetPosts(this.location);
 }
 
+class ValidatePost extends MapEvent {
+  final int postId;
+  final bool correct;
+
+  ValidatePost(this.postId, this.correct);
+}
+
+class GetValidatePost extends MapEvent {}
+
 class AddPostForValidation extends MapEvent {
   final int originalPostId;
   final Post post;

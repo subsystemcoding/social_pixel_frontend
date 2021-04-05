@@ -34,3 +34,12 @@ class SubscribedGamesLoaded extends MapState {
 class MapPostAddedForValidation extends MapState {}
 
 class MapPostError extends MapState {}
+
+class PostValidated extends MapState {}
+
+class PostValidateLoaded extends MapState {
+  final Post originalPost;
+  final Post comparedPost;
+
+  PostValidateLoaded(this.originalPost, this.comparedPost);
+}

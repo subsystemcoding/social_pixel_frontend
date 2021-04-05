@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -64,6 +65,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         print(e);
         yield MapPostError();
       }
-    }
+    } else if (event is GetValidatePost) {
+    } else if (event is ValidatePost) {}
   }
 }
