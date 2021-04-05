@@ -16,7 +16,7 @@ class _CheckHumanScreenState extends State<CheckHumanScreen> {
   @override
   void initState() {
     super.initState();
-    imageFile = StateRepo.createGameState['postImage'];
+    imageFile = StateRepo.getImageFromState();
     BlocProvider.of<TfliteBloc>(this.context)
         .add(CheckImageForPerson(this.imageFile));
   }
@@ -72,8 +72,8 @@ class _CheckHumanScreenState extends State<CheckHumanScreen> {
         Center(
           child: CustomButtons.standardButton(context, text: "Okay",
               onPressed: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/create_game', ModalRoute.withName('/create_game'));
+            var route = StateRepo.goBackRoute;
+            Navigator.of(context).popUntil(ModalRoute.withName(route));
           }),
         ),
         Expanded(

@@ -10,12 +10,14 @@ enum CropState {
   ChannelAvatar,
   GameImage,
   PostImage,
+  Capture,
 }
 
 class StateRepo {
   static String cropRoute = '';
   static String checkHumanRoute = '';
   static String checkLocationRoute = '';
+  static String goBackRoute = '';
   static CropState cropState;
 
   static Map createGameState = {
@@ -37,6 +39,11 @@ class StateRepo {
     'games': List<Game>(),
   };
 
+  static Map capturePost = {
+    'location': null,
+    'imageFile': null,
+  };
+
   static void addImageFromCrop(File imageFile) {
     switch (cropState) {
       case CropState.ChannelCover:
@@ -50,6 +57,30 @@ class StateRepo {
         break;
       case CropState.PostImage:
         createGameState['postImage'] = imageFile;
+        break;
+      case CropState.Capture:
+        capturePost['imageFile'] = imageFile;
+        break;
+      default:
+    }
+  }
+
+  static File getImageFromState() {
+    switch (cropState) {
+      case CropState.ChannelCover:
+        return createChannelState['coverImageFile'];
+        break;
+      case CropState.ChannelAvatar:
+        return createChannelState['avatarImageFile'];
+        break;
+      case CropState.GameImage:
+        return createGameState['imageFile'];
+        break;
+      case CropState.PostImage:
+        return createGameState['postImage'];
+        break;
+      case CropState.Capture:
+        return capturePost['imageFile'];
         break;
       default:
     }

@@ -14,6 +14,7 @@ import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/mapPost.dart';
 import 'package:socialpixel/data/models/post.dart';
 import 'package:socialpixel/data/models/profile.dart';
+import 'package:socialpixel/data/repos/state_repository.dart';
 import 'package:socialpixel/widgets/app_bar.dart';
 import 'package:socialpixel/widgets/map_drawer.dart';
 import 'package:socialpixel/widgets/verified_widget.dart';
@@ -55,7 +56,6 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<GeoBloc>(context).add(GetPosition());
-    BlocProvider.of<MapBloc>(context).add(GetPosts());
     BlocProvider.of<MapBloc>(context).add(GetSubscribedGames());
     BlocProvider.of<ProfileBloc>(context).add(GetCurrentProfile());
   }
@@ -71,6 +71,10 @@ class _MapScreenState extends State<MapScreen> {
           if (state is GeoPositionLoaded) {
             currentPosition =
                 LatLng(state.position.latitude, state.position.longitude);
+            BlocProvider.of<MapBloc>(context).add(GetPosts(Location(
+              latitude: currentPosition.latitude,
+              longitude: currentPosition.longitude,
+            )));
             _controller.future.then((controller) {
               controller.moveCamera(CameraUpdate.newLatLng(currentPosition));
             });
@@ -86,6 +90,7 @@ class _MapScreenState extends State<MapScreen> {
         child: Stack(
           children: [
             _buildLocationWidget(context, currentPosition),
+
             // Positioned(
             //   left: 18,
             //   top: 112,
@@ -97,6 +102,14 @@ class _MapScreenState extends State<MapScreen> {
             //     ],
             //   ),
             // ),
+            Positioned(
+              bottom: 50,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _buildCameraButton(),
+              ),
+            ),
             Positioned(
               bottom: 0,
               left: 0,
@@ -116,6 +129,34 @@ class _MapScreenState extends State<MapScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCameraButton() {
+    return TextButton(
+      child: Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+            color: Colors.grey[500],
+            border: Border.all(color: Theme.of(context).accentColor),
+            borderRadius: BorderRadius.circular(25.0)),
+        child: Icon(Icons.camera_alt_outlined),
+      ),
+      onPressed: () {
+        StateRepo.capturePost['location'] = Location(
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+        );
+        StateRepo.checkHumanRoute = '/capture';
+        StateRepo.cropRoute = '/check_human';
+        StateRepo.goBackRoute = '/map';
+        StateRepo.cropState = CropState.Capture;
+        Navigator.of(context).pushNamed("/camera", arguments: {
+          'route': '/crop_image',
+          'isSquare': true,
+        });
+      },
     );
   }
 
@@ -190,7 +231,10 @@ class _MapScreenState extends State<MapScreen> {
               _buildButton(
                 color: Theme.of(context).accentColor,
                 text: "View Post",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed('/post_widget', arguments: mapPost.post);
+                },
               ),
               SizedBox(
                 width: 12.0,

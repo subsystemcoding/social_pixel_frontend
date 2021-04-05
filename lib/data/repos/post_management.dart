@@ -26,7 +26,8 @@ class PostManagement {
 
   PostManagement._internal();
 
-  Future<bool> sendPost(Post post, String imagePath) async {
+  Future<int> sendPost(Post post, String imagePath) async {
+    String caption = post.caption ?? '';
     String gpsString = '';
     String channelString = '';
     if (post.location != null) {
@@ -56,8 +57,10 @@ class PostManagement {
       fields: {
         'query': '''
           mutation{
-            createPost(caption: "${post.caption}", $channelString$gpsString${hashtags}image: "imageLink"){
-              success
+            createPost(caption: "$caption", $channelString$gpsString${hashtags}image: "imageLink"){
+              post{
+                postId
+              }
             }
           }
           '''
@@ -65,7 +68,8 @@ class PostManagement {
       files: {'imageLink': '$imagePath'},
     );
 
-    return jsonDecode(response)['data']['createPost']['success'];
+    return int.parse(
+        jsonDecode(response)['data']['createPost']['post']['postId']);
   }
 
   Future<List<Game>> fetchGamePosts({int channelId}) {

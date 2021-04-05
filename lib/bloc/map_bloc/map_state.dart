@@ -31,4 +31,6 @@ class SubscribedGamesLoaded extends MapState {
   SubscribedGamesLoaded(this.games);
 }
 
+class MapPostAddedForValidation extends MapState {}
+
 class MapPostError extends MapState {}

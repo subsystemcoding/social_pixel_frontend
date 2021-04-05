@@ -75,8 +75,8 @@ class _CheckLocationScreenState extends State<CheckLocationScreen> {
                     "No Location Data found on the picture. Please select a picture with location data"),
                 CustomButtons.standardButton(context, text: "Okay",
                     onPressed: () {
-                  Navigator.of(context)
-                      .popUntil(ModalRoute.withName('/create_game'));
+                  var route = StateRepo.goBackRoute;
+                  Navigator.of(context).popUntil(ModalRoute.withName(route));
                 }),
                 Expanded(
                   child: Container(),

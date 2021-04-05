@@ -70,7 +70,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       yield PostSending();
       //await postManagement.sendPost(post, PostSending.Successful);
       try {
-        bool res = await postManagement.sendPost(event.post, event.imageLink);
+        await postManagement.sendPost(event.post, event.imageLink);
         yield PostSent();
       } catch (e) {
         print(e);

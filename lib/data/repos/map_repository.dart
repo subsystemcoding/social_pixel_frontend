@@ -8,6 +8,8 @@ import 'package:hive/hive.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:socialpixel/data/graphql_client.dart';
+import 'package:socialpixel/data/models/location.dart';
 import 'package:socialpixel/data/models/mapPost.dart';
 import 'package:socialpixel/data/models/game.dart';
 import 'package:socialpixel/data/models/post.dart';
@@ -28,30 +30,46 @@ class MapRepository {
 
   MapRepository._internal();
 
-  Future<List<MapPost>> fetchFirstPosts({int channelId}) async {
-    final mapPosts = await _fetchPostsFromInternet();
+  Future<List<MapPost>> fetchPostsByLocation(Location location) async {
+    var response = await GraphqlClient().query('''
+    query{
+      postsByLocation(latitude: "${location.latitude}", longitude: "${location.longitude}", precision:ONEKILOMETER){
+        postId
+        author
+        {
+          user{
+            username
+          }
+        }
+        gpsLongitude
+        gpsLatitude
+        image 
+        
+      }
+    }
+    ''');
+
+    var jsonResponse = jsonDecode(response)['data']['postsByLocation'];
+    var mapPosts = List<MapPost>.from(jsonResponse.map((post) {
+      return MapPost(
+        post: Post(
+          postId: int.parse(post['postId']),
+          userName: post['author']['user']['username'],
+          location: Location(
+            latitude: double.parse(post['gpsLatitude']),
+            longitude: double.parse(post['gpsLongitude']),
+          ),
+          userAvatarLink: post['author']['image'],
+          postImageLink: post['image'],
+        ),
+      );
+    }));
 
     //delete and add mapPosts in the background
     // _deleteAllPostInCache().then((_) async {
     //   await _addPostsToCache(mapPosts);
     // });
     await _deleteAllPostInCache();
-    await _addPostsToCache(mapPosts);
-    return mapPosts;
-  }
-
-  Future<List<MapPost>> fetchMorePosts({int channelId}) async {
-    final mapPosts = await _fetchPostsFromInternet();
-
-    //delete and add mapPosts in the background
-    await _addPostsToCache(mapPosts);
-    return mapPosts;
-  }
-
-  Future<List<MapPost>> fetchNewPosts({int channelId}) async {
-    final mapPosts = await _fetchPostsFromInternet();
-
-    //delete and add mapPosts in the background
     await _addPostsToCache(mapPosts);
     return mapPosts;
   }
@@ -76,6 +94,17 @@ class MapRepository {
         return mapPosts.sublist(0, 5);
       },
     );
+  }
+
+  Future<bool> addPostForValidation(int originalPostId, int postId) async {
+    var response = await GraphqlClient().query('''
+    mutation{
+      addPostForValidation(originalPostId: $originalPostId, postId: $postId,){
+        success
+      }
+    }
+    ''');
+    return jsonDecode(response)['data']['addPostForValidation']['success'];
   }
 
   Future<List<MapPost>> fetchCachedPosts() async {
@@ -141,11 +170,13 @@ class MapRepository {
     for (int i = 0; i < mapPosts.length; i++) {
       //convert userAvatarLink to base64
       MapPost mapPost = mapPosts[i];
-      final userAvatar =
-          await Connectivity.networkImageToBytes(mapPost.post.userAvatarLink);
+      final userAvatar = mapPost.post.userAvatarLink != null
+          ? await Connectivity.networkImageToBytes(mapPost.post.userAvatarLink)
+          : null;
       //convert postImageLink to base64
-      final postImage =
-          await Connectivity.networkImageToBytes(mapPost.post.postImageLink);
+      final postImage = mapPost.post.postImageLink != null
+          ? await Connectivity.networkImageToBytes(mapPost.post.postImageLink)
+          : null;
 
       // add the new mapPost to the box
       final newPost = mapPost.post.copyWith(

@@ -11,7 +11,8 @@ import 'package:socialpixel/screens/authorization_screen/forget_screen.dart';
 import 'package:socialpixel/screens/authorization_screen/register_screen.dart';
 import 'package:socialpixel/screens/channel_screen/channel_screen.dart';
 import 'package:socialpixel/screens/channel_screen/leaderboard_screen.dart';
-import 'package:socialpixel/screens/map_screen.dart';
+import 'package:socialpixel/screens/map_games/capture_preview.dart';
+import 'package:socialpixel/screens/map_games/map_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_list_screen.dart';
 import 'package:socialpixel/screens/message_screen/message_screen.dart';
 import 'package:socialpixel/screens/message_screen/preview_message_screen.dart';
@@ -108,6 +109,27 @@ class RouteGenerator {
             builder: (_) => CropImageScreen(
               path: args['path'],
             ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Container(),
+        );
+      case '/check_location':
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => CheckLocationScreen(
+              isCamera: args['isCamera'],
+              path: args['path'],
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Container(),
+        );
+      case '/capture':
+        if (args is Map) {
+          return MaterialPageRoute(
+            builder: (_) => CapturePreview(),
           );
         }
         return MaterialPageRoute(

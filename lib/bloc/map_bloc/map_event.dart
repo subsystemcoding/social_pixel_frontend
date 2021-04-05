@@ -3,7 +3,18 @@ part of 'map_bloc.dart';
 @immutable
 abstract class MapEvent {}
 
-class GetPosts extends MapEvent {}
+class GetPosts extends MapEvent {
+  final Location location;
+
+  GetPosts(this.location);
+}
+
+class AddPostForValidation extends MapEvent {
+  final int originalPostId;
+  final Post post;
+
+  AddPostForValidation(this.originalPostId, this.post);
+}
 
 class AddPostToChecklist extends MapEvent {
   final MapPost mapPost;

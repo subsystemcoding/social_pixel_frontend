@@ -74,10 +74,13 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
             coverImage: coverImage,
             onTapCoverImage: () {
               StateRepo.cropState = CropState.GameImage;
+              StateRepo.goBackRoute = '/create_game';
               StateRepo.cropRoute = '/create_game';
               Navigator.of(context).pushNamed('/camera', arguments: {
                 'route': '/crop_image',
                 'isSquare': false,
+              }).then((_) {
+                setState(() {});
               });
             },
             editCoverImage: true,
@@ -130,11 +133,14 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                             StateRepo.checkHumanRoute = "/create_game";
                             StateRepo.checkLocationRoute = "/crop_image";
                             StateRepo.createGameState['eligible'] = false;
+                            StateRepo.goBackRoute = '/create_game';
                             StateRepo.cropState = CropState.PostImage;
                             Navigator.of(context)
                                 .pushNamed('/camera', arguments: {
                               'route': '/check_location',
                               'isSquare': false,
+                            }).then((_) {
+                              setState(() {});
                             });
                           },
                           title: Text("+ Add Image"),
@@ -172,8 +178,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                             margin: EdgeInsets.all(0.0),
                             onPressed: () {
                               if (_createGame(innerSetState))
-                                Navigator.of(context)
-                                    .popAndPushNamed('/create_channel');
+                                Navigator.of(context).pop();
                             },
                           ),
                         ),

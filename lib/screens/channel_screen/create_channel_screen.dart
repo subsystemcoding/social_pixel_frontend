@@ -86,8 +86,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
             appBar: AppBar(
               leading: TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/home', (route) => false);
+                  Navigator.of(context).pop();
                 },
                 child: Icon(Icons.chevron_left, color: Colors.white),
               ),
@@ -101,18 +100,24 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                   avatarImage: avatarImage,
                   onTapAvatarImage: () {
                     StateRepo.cropState = CropState.ChannelAvatar;
+                    StateRepo.goBackRoute = '/create_channel';
                     StateRepo.cropRoute = '/create_channel';
                     Navigator.of(context).pushNamed('/camera', arguments: {
                       'route': '/crop_image',
                       'isSquare': false,
+                    }).then((_) {
+                      setState(() {});
                     });
                   },
                   onTapCoverImage: () {
                     StateRepo.cropState = CropState.ChannelCover;
+                    StateRepo.goBackRoute = '/create_channel';
                     StateRepo.cropRoute = '/create_channel';
                     Navigator.of(context).pushNamed('/camera', arguments: {
                       'route': '/crop_image',
                       'isSquare': false,
+                    }).then((_) {
+                      setState(() {});
                     });
                   },
                   editCoverImage: true,
@@ -212,13 +217,6 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
                                     margin: EdgeInsets.all(0.0),
                                     onPressed: () {
                                       _createChannel(innerSetState);
-                                      if (channel != null &&
-                                          channel.id != null) {
-                                        Navigator.of(context).pushNamed(
-                                          "/channel",
-                                          arguments: channel.id,
-                                        );
-                                      }
                                     },
                                   ),
                                 ),
@@ -242,7 +240,9 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
     List<Widget> list = [
       ListTile(
         onTap: () {
-          Navigator.of(context).pushNamed('/create_game');
+          Navigator.of(context).pushNamed('/create_game').then((_) {
+            setState(() {});
+          });
         },
         title: Text("+ Add Game"),
       ),
