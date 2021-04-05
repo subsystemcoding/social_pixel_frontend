@@ -302,7 +302,12 @@ class ProfileRepository {
 
   Future<int> _getChatroom(Profile profile) async {
     var authObject = await AuthRepository().getAuth();
+    print("Printing usernames");
+    print("${authObject.username}");
+    print("${profile.username}");
     for (var chatroom in profile.chatrooms) {
+      print("Printing chatroom");
+      print(chatroom.name);
       if (chatroom.name == "${authObject.username}${profile.username}" ||
           chatroom.name == "${profile.username}${authObject.username}") {
         return chatroom.id;
@@ -324,8 +329,8 @@ class ProfileRepository {
       }
     }
     ''');
-      chatroomId =
-          jsonDecode(response)['data']['createChatroom']['chatroom']['id'];
+      chatroomId = int.parse(
+          jsonDecode(response)['data']['createChatroom']['chatroom']['id']);
     }
     return chatroomId;
   }

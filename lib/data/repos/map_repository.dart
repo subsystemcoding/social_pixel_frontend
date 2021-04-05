@@ -107,6 +107,12 @@ class MapRepository {
     return jsonDecode(response)['data']['addPostForValidation']['success'];
   }
 
+  Future<List<Post>> getValidatePost() async {
+    var response = await GraphqlClient().query('''
+    
+    ''');
+  }
+
   Future<List<MapPost>> fetchCachedPosts() async {
     final box = await Hive.openBox('mapPosts');
     List<MapPost> mapPosts = [];
